@@ -1,5 +1,6 @@
+import { useRouter } from "expo-router";
 import React from 'react';
-import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   column:{
@@ -18,11 +19,12 @@ const styles=StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor:'white',
-    borderRadius:40,
+    borderRadius:20,
     height:40,
     overflow:'hidden',
     borderColor:'white',
-    borderWidth:2
+    borderWidth:2,
+    textAlign:'center'
   },
   buttonIcon:{
     height:'100%',
@@ -41,12 +43,13 @@ const styles=StyleSheet.create({
   }
 })
 export default function Index() {
+  const router = useRouter();
   return (
     //ignore system bar for iOS (SafeAreaView) & android (margin & padding)
     <SafeAreaView style={{ flex: 1, backgroundColor: 'rgb(58,58,58)', paddingBottom: StatusBar.currentHeight}}>
       <View style={styles.column}>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-          <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}}></TextInput>
+          <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Search"></TextInput>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
             <Image style={styles.buttonIcon} source={require('../assets/images/add_btn.png')}/>
           </TouchableOpacity>
@@ -57,8 +60,19 @@ export default function Index() {
           <View style={styles.typeFilter}><Text style={styles.boldText}>Dessert</Text></View>
           <View style={{...styles.typeFilter,borderRightWidth:0}}><Text style={styles.boldText}>Other</Text></View>
         </View>
-        <View style={styles.column}>
-          <TouchableOpacity style={{...styles.row,borderBottomWidth:2,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10}}>
+        <ScrollView 
+          style={styles.column}
+          alwaysBounceHorizontal={false}
+          alwaysBounceVertical={false}
+          bounces={false}
+          overScrollMode="never"
+          showsVerticalScrollIndicator={false}
+        >
+          {[...Array(10)].map((e, index) => <TouchableOpacity 
+            key = {index} 
+            style={{...styles.row,borderTopWidth:index!==0?2:0,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10}}
+            onPress={()=>{router.navigate('/recipe')}}
+          >
             <Image style={{
               borderRadius:10,
               width:'25%',
@@ -88,12 +102,12 @@ export default function Index() {
                 </TouchableOpacity>
               </View>
             </View>
-          </TouchableOpacity>
-        </View>
+          </TouchableOpacity>)}
+        </ScrollView>
         <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderTopWidth:2}}>
-          <View style={styles.typeFilter}><Text style={styles.boldText}>Menu</Text></View>
-          <View style={styles.typeFilter}><Text style={styles.boldText}>Plan</Text></View>
-          <View style={{...styles.typeFilter,borderRightWidth:0}}><Text style={styles.boldText}>Grocery</Text></View>
+          <View style={styles.typeFilter}><Text style={{...styles.boldText,textDecorationLine: 'underline'}} onPress={()=>{router.navigate('/menu')}}>Menu</Text></View>
+          <View style={styles.typeFilter}><Text style={styles.boldText} onPress={()=>{router.navigate('/plan')}}>Plan</Text></View>
+          <View style={{...styles.typeFilter,borderRightWidth:0}}><Text style={styles.boldText} onPress={()=>{router.navigate('/grocery')}} >Grocery</Text></View>
         </View>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
           <TouchableOpacity style={{...styles.buttonInput,borderColor:'white',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>

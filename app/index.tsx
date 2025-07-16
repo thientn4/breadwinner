@@ -17,8 +17,8 @@ export default function Index() {
         height:undefined,
         aspectRatio:1
       }} source={require('../assets/images/icon.png')}/>
-      <Text style={{marginBottom:50,marginTop:75}} onPress={()=>{router.navigate('/menu')}}>Click me</Text>
-      <Text style={{color:'rgb(116,116,116)'}}>First time user get{"\n"}1-month free trial</Text>
+      <Text style={{marginBottom:50,marginTop:75}} onPress={()=>{router.navigate('/menu')}}>Login with Google</Text>
+      <Text style={{color:'rgb(116,116,116)',textAlign:'center'}}>First time user get{"\n"}1-month free trial</Text>
     </View>
   );
 }
