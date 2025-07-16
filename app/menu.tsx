@@ -1,4 +1,3 @@
-import { Picker } from '@react-native-picker/picker';
 import React from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -44,7 +43,7 @@ const styles=StyleSheet.create({
 export default function Index() {
   return (
     <View style={styles.column}>
-      <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,paddingTop:100}}>
+      <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
         <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}}></TextInput>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
           <Image style={styles.buttonIcon} source={require('../assets/images/add_btn.png')}/>
@@ -57,7 +56,7 @@ export default function Index() {
         <View style={{...styles.typeFilter,borderRightWidth:0}}><Text style={styles.typeFilterText}>Other</Text></View>
       </View>
       <View style={styles.column}>
-        <View style={{...styles.row,borderBottomWidth:2,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10}}>
+        <TouchableOpacity style={{...styles.row,borderBottomWidth:2,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10}}>
           <Image style={{
             borderRadius:10,
             width:'25%',
@@ -76,14 +75,18 @@ export default function Index() {
               </TouchableOpacity>
             </View>
             <View style={{...styles.row}}>
-              <Picker
-                style={{height: 40,width:'100%',backgroundColor:'rgb(211,211,211)',color:'black'}}
-              >
-                <Picker.Item label="Mon" value={0} />
-              </Picker>
+              <TouchableOpacity style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10}}>
+                <Text style={styles.typeFilterText}>Mon</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>
+                <Text style={styles.typeFilterText}>Breakfast</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{...styles.buttonInput,borderColor:'black',aspectRatio:1}}>
+                <Text style={styles.typeFilterText}>4</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
