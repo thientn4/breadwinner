@@ -1,14 +1,11 @@
 import { Stack } from "expo-router";
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, StatusBar } from "react-native";
 
 export default function RootLayout() {
   return (
     <>
-      {/* ignore system bar for Android */}
-      <StatusBar style="dark" translucent={false} />
-      {/* ignore system bar for iOS */}
-      <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      {/* ignore system bar for iOS (SafeAreaView) & android (marginTop) */}
+      <SafeAreaView style={{ flex: 1, backgroundColor: 'white', marginTop: StatusBar.currentHeight }}>
         <Stack screenOptions={{headerShown: false}}/>
       </SafeAreaView>
     </>
