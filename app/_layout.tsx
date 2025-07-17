@@ -30,6 +30,7 @@ export default function RootLayout() {
   const router = useRouter();
   return (
     <>
+      <StatusBar style="dark" />
       {/* ignore system bar for iOS (SafeAreaView) & android (margin & padding) */}
       <SafeAreaView style={{ flex: 0, backgroundColor: 'white',marginTop: StatusBar.currentHeight}}/>
       <Stack screenOptions={{
