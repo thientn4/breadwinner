@@ -75,7 +75,7 @@ export default function Index() {
                   {index!==0 && ['',''].map((weekday, planIndex) => 
                     <TouchableOpacity key={planIndex} style={{...styles.cellItem,width:screenWidth/2-46}} onPress={()=>{router.navigate('/recipe')}}>
                       <Text><Text style={{...styles.boldText,color:'grey'}}>4x</Text> Vindaloo</Text>
-                      <Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={()=>{alert("hello")}}>remove</Text>
+                      <Text><Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={()=>{alert("hello")}}>remove</Text></Text>
                     </TouchableOpacity>
                   )}
                 </View>
