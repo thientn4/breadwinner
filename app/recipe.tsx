@@ -55,13 +55,9 @@ export default function Index() {
   const router = useRouter();
   return (
     //ignore system bar for iOS (SafeAreaView) & android (margin & padding)
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white', paddingBottom: StatusBar.currentHeight}}>
+    <View style={{ flex: 1}}>
       <ScrollView 
         style={styles.column}
-        alwaysBounceHorizontal={false}
-        alwaysBounceVertical={false}
-        bounces={false}
-        overScrollMode="never"
         showsVerticalScrollIndicator={false}
       >
         <Image style={{
@@ -70,14 +66,14 @@ export default function Index() {
           aspectRatio:3/2
         }} source={{uri:'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
-          <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Recipe name"></TextInput>
+          <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Recipe name"  placeholderTextColor="grey"></TextInput>
         </View>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',paddingLeft:10,paddingRight:10}}>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
             <Image style={styles.buttonIcon} source={require('../assets/images/camera_btn.png')}/>
           </TouchableOpacity>
           <TouchableOpacity style={{...styles.buttonInput, flex:1,marginLeft:10,marginRight:10,paddingLeft:20,paddingRight:20}}><Text style={styles.boldText}>Main</Text></TouchableOpacity>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{alert('We are still working on this premium feature. Check back later for more!')}}>
             <Image style={styles.buttonIcon} source={require('../assets/images/AI_btn.png')}/>
           </TouchableOpacity>
         </View>
@@ -96,9 +92,9 @@ export default function Index() {
           </ScrollView>
         </View>
         <View>
-          <TextInput style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,margin:10}} placeholder="Ingredient"></TextInput>
+          <TextInput style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,margin:10}} placeholder="Ingredient" placeholderTextColor="grey"></TextInput>
           <View style={{...styles.row,flex:1, paddingLeft:10, paddingRight:10}}>
-            <TextInput style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10}} placeholder="Quantity">
+            <TextInput style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10}} placeholder="Quantity" placeholderTextColor="grey">
             </TextInput>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
               <Image style={{...styles.buttonIcon}} source={require('../assets/images/add_btn.png')}/>
@@ -124,17 +120,19 @@ export default function Index() {
           </ScrollView>
           <TextInput 
             style={{...styles.buttonInput, flex:1,margin:10,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:600, marginTop:10,textAlignVertical: 'top'}} 
-            placeholder="Instruction"
+            placeholder="Instruction" 
+            placeholderTextColor="grey"
             multiline = {true}
             numberOfLines = {4}
           ></TextInput>
         </View>
       </ScrollView>
-      <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderTopWidth:2}}>
+      <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,paddingBottom:10,borderTopWidth:2}}>
         <View style={styles.typeFilter}><Text style={styles.boldText} onPress={()=>{router.back()}}>Cancel</Text></View>
         <View style={styles.typeFilter}><Text style={styles.boldText} onPress={()=>{}}>Delete</Text></View>
         <View style={{...styles.typeFilter,borderRightWidth:0}}><Text style={styles.boldText} onPress={()=>{}} >Add</Text></View>
       </View>
-    </SafeAreaView>
+      <SafeAreaView style={{ backgroundColor: 'white',paddingBottom: StatusBar.currentHeight}}/>
+    </View>
   );
 }

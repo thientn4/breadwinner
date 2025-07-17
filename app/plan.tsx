@@ -34,8 +34,6 @@ const styles=StyleSheet.create({
   typeFilter:{
     flex:1,
     alignItems:'center',
-    borderColor:'black',
-    borderRightWidth:2
   },
   boldText:{
     fontWeight:'bold',
@@ -44,7 +42,7 @@ const styles=StyleSheet.create({
   cell:{
     borderColor:'rgb(232,232,232)',
     borderWidth:1,
-    width:60,
+    width:100,
     alignItems:'center'
   },
   cellItem:{
@@ -62,58 +60,50 @@ export default function Index() {
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
   return (
-    //ignore system bar for iOS (SafeAreaView) & android (margin & padding)
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'rgb(58,58,58)', paddingBottom: StatusBar.currentHeight}}>
-      <View style={styles.column}>
+    <View style={{...styles.column,borderTopWidth:2,borderColor:'black'}}>
+      <ScrollView 
+        style={{flex:1}} 
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+      > 
         <ScrollView 
-          style={{flex:1}} 
-          horizontal={true}
-          alwaysBounceHorizontal={false}
-          alwaysBounceVertical={false}
-          bounces={false}
-          overScrollMode="never"
-          showsHorizontalScrollIndicator={false}
-        > 
-          <ScrollView 
-            style={{...styles.column,borderTopWidth:2,borderColor:'black'}}
-            alwaysBounceHorizontal={false}
-            alwaysBounceVertical={false}
-            bounces={false}
-            overScrollMode="never"
-            showsVerticalScrollIndicator={false}
-          >
-            {['','MON','TUE','WED','THU','FRI','SAT','SUN'].map((weekday, index) => 
-              <View key = {index} style={index===0?styles.row:{...styles.row,minHeight:screenHeight/8-10}}>
-                <View style={styles.cell}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
-                {['Breakfast','Lunch','Dinner'].map((mealType, subIndex) => 
-                  <View key={subIndex} style={{...styles.cell,width:screenWidth/2-40}}>
-                    {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}}>{mealType}</Text>}
-                    {index!==0 && ['',''].map((weekday, planIndex) => 
-                      <TouchableOpacity key={planIndex} style={{...styles.cellItem,width:screenWidth/2-46}} onPress={()=>{router.navigate('/recipe')}}>
-                        <Text><Text style={{...styles.boldText,color:'grey'}}>4x</Text> Vindaloo</Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                )}
-                <View style={styles.cell}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
-              </View>
-            )}
-          </ScrollView>
+          style={styles.column}
+          showsVerticalScrollIndicator={false}
+        >
+          {['','MON','TUE','WED','THU','FRI','SAT','SUN'].map((weekday, index) => 
+            <View key = {index} style={index===0?styles.row:{...styles.row,minHeight:screenHeight/8-10}}>
+              <View style={styles.cell}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
+              {['Breakfast','Lunch','Dinner'].map((mealType, subIndex) => 
+                <View key={subIndex} style={{...styles.cell,width:screenWidth/2-40}}>
+                  {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}}>{mealType}</Text>}
+                  {index!==0 && ['',''].map((weekday, planIndex) => 
+                    <TouchableOpacity key={planIndex} style={{...styles.cellItem,width:screenWidth/2-46}} onPress={()=>{router.navigate('/recipe')}}>
+                      <Text><Text style={{...styles.boldText,color:'grey'}}>4x</Text> Vindaloo</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              )}
+              <View style={styles.cell}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
+            </View>
+          )}
         </ScrollView>
-        <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderTopWidth:2}}>
-          <View style={styles.typeFilter}><Text style={styles.boldText} onPress={()=>{router.navigate('/menu')}}>Menu</Text></View>
-          <View style={styles.typeFilter}><Text style={{...styles.boldText,textDecorationLine: 'underline'}} onPress={()=>{router.navigate('/plan')}}>Plan</Text></View>
-          <View style={{...styles.typeFilter,borderRightWidth:0}}><Text style={styles.boldText} onPress={()=>{router.navigate('/grocery')}} >Grocery</Text></View>
-        </View>
-        <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
-          <TouchableOpacity style={{...styles.buttonInput,borderColor:'white',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>
-            <Text style={styles.boldText}>ntmthien01@gmail.com</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
-            <Image style={styles.buttonIcon} source={require('../assets/images/reload_btn.png')}/>
-          </TouchableOpacity>
-        </View>
+      </ScrollView>
+      <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderTopWidth:2}}>
+        <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.navigate('/menu')}}><Text style={styles.boldText}>Menu</Text></TouchableOpacity>
+        <View style={{borderColor:'black',borderRightWidth:2}}></View>
+        <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.navigate('/plan')}}><Text style={{...styles.boldText,textDecorationLine: 'underline'}}>Plan</Text></TouchableOpacity>
+        <View style={{borderColor:'black',borderRightWidth:2}}></View>
+        <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{router.navigate('/grocery')}}><Text style={styles.boldText}>Grocery</Text></TouchableOpacity>
       </View>
-    </SafeAreaView>
+      <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
+        <TouchableOpacity style={{...styles.buttonInput,borderColor:'white',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>
+          <Text style={styles.boldText}>ntmthien01@gmail.com</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
+          <Image style={styles.buttonIcon} source={require('../assets/images/reload_btn.png')}/>
+        </TouchableOpacity>
+      </View>
+      <SafeAreaView style={{ backgroundColor: 'rgb(58,58,58)',paddingBottom: StatusBar.currentHeight}}/>
+    </View>
   );
 }
