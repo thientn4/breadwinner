@@ -54,10 +54,6 @@ export default function TabLayout() {
         tabBarLabelStyle:{
           margin:3
         },
-        tabBarStyle:{
-          borderColor:'black',
-          borderTopWidth:2
-        },
         tabBarItemStyle: {
           //backgroundColor:'yellow'
         }
