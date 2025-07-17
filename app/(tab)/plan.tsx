@@ -56,7 +56,7 @@ export default function Index() {
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
   return (
-    <View style={{...styles.column,borderTopWidth:2,borderBottomWidth:2,borderColor:'black'}}>
+    <View style={{...styles.column,borderTopWidth:2}}>
       <ScrollView 
         style={{flex:1}} 
         horizontal={true}

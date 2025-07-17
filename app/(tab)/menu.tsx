@@ -43,7 +43,7 @@ const styles=StyleSheet.create({
 export default function Index() {
   const router = useRouter();
   return (
-    <View style={{...styles.column,borderColor:'black',borderBottomWidth:2}}>
+    <View style={styles.column}>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
         <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Search" placeholderTextColor="grey"></TextInput>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>

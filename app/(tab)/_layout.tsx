@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Tabs } from 'expo-router';
-import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 const styles=StyleSheet.create({
   column:{
     flex: 1,
@@ -12,17 +12,20 @@ const styles=StyleSheet.create({
     display:'flex',
     flexDirection:'row',
     borderColor:'black',
-    justifyContent:'space-between'
+    borderWidth:2,
+    justifyContent:'space-between',
+    borderRadius:20,
+    height:40,
+    overflow:'hidden',
+    backgroundColor:'white',
+    margin:10,
+    marginTop:0
   },
   buttonInput:{
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor:'white',
-    borderRadius:20,
-    height:40,
+    height:'100%',
     overflow:'hidden',
-    borderColor:'white',
-    borderWidth:2,
     textAlign:'center'
   },
   buttonIcon:{
@@ -38,8 +41,26 @@ const styles=StyleSheet.create({
 export default function TabLayout() {
   return (
     <View style={{flex:1}}>
+      <SafeAreaView style={styles.row}>
+        <TouchableOpacity style={{...styles.buttonInput,paddingLeft:10,paddingRight:10,flex:1}}>
+            <Text style={styles.boldText}>ntmthien01@gmail.com</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{...styles.buttonInput}}>
+            <Image style={styles.buttonIcon} source={require('../../assets/images/reload_btn.png')}/>
+        </TouchableOpacity>
+      </SafeAreaView>
       <Tabs screenOptions={{ 
         tabBarActiveTintColor: 'black', 
+        tabBarLabelStyle:{
+          margin:3
+        },
+        tabBarStyle:{
+          borderColor:'black',
+          borderTopWidth:2
+        },
+        tabBarItemStyle: {
+          //backgroundColor:'yellow'
+        }
       }}>
         <Tabs.Screen
           name="menu"
@@ -66,14 +87,6 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
-      <SafeAreaView style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,paddingBottom:StatusBar.currentHeight}}>
-        <TouchableOpacity style={{...styles.buttonInput,borderColor:'white',paddingLeft:10,paddingRight:10,flex:1,marginRight:10}}>
-            <Text style={styles.boldText}>ntmthien01@gmail.com</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
-            <Image style={styles.buttonIcon} source={require('../../assets/images/reload_btn.png')}/>
-        </TouchableOpacity>
-      </SafeAreaView>
     </View>
   );
 }
