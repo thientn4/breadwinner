@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Tabs } from 'expo-router';
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 const styles=StyleSheet.create({
   column:{
     flex: 1,
@@ -54,12 +54,7 @@ export default function TabLayout() {
       </SafeAreaView>
       <Tabs screenOptions={{ 
         tabBarActiveTintColor: 'black', 
-        tabBarLabelStyle:{
-          margin:3
-        },
-        tabBarItemStyle: {
-          //backgroundColor:'yellow'
-        }
+        tabBarButton: (props) => <Pressable {...props} android_ripple={null} />, // this here
       }}>
         <Tabs.Screen
           name="menu"
