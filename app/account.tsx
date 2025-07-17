@@ -56,6 +56,7 @@ export default function Index() {
   return (
     //ignore system bar for iOS (SafeAreaView) & android (margin & padding)
     <SafeAreaView style={{ flex: 1, backgroundColor: 'rgb(58,58,58)', paddingBottom: StatusBar.currentHeight}}>
+      <SafeAreaView style={{ flex: 0, backgroundColor: 'white',paddingTop: StatusBar.currentHeight}}/>
       <View 
         style={styles.column}
       >

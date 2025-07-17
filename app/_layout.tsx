@@ -31,12 +31,11 @@ export default function RootLayout() {
   return (
     <>
       <StatusBar style="dark" />
-      {/* ignore system bar for iOS (SafeAreaView) & android (margin & padding) */}
-      <SafeAreaView style={{ flex: 0, backgroundColor: 'white',marginTop: StatusBar.currentHeight}}/>
       <Stack screenOptions={{
         animation:'none',
         header: () => (
-          <View style={{...styles.row}}>
+          // ignore system bar for iOS (SafeAreaView) & android (margin & padding)
+          <SafeAreaView style={{...styles.row,paddingTop: StatusBar.currentHeight}}>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{router.navigate('/account')}} >
               <Image style={styles.buttonIcon} source={{uri:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_8Ndh_6Yi1w8G7Yg5iGtCQQVreP5sWLdUbg&s"}}/>
             </TouchableOpacity>
@@ -46,7 +45,7 @@ export default function RootLayout() {
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{alert("hello")}}>
               <Image style={styles.buttonIcon} source={require('../assets/images/question_btn.png')}/>
             </TouchableOpacity>
-          </View>
+          </SafeAreaView>
         ),
       }}>
         <Stack.Screen
