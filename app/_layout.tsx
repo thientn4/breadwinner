@@ -36,7 +36,7 @@ export default function RootLayout() {
         animation:'none',
         header: () => (
           <View style={{...styles.row}}>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{router.navigate('/')}} >
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{router.navigate('/account')}} >
               <Image style={styles.buttonIcon} source={{uri:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_8Ndh_6Yi1w8G7Yg5iGtCQQVreP5sWLdUbg&s"}}/>
             </TouchableOpacity>
             <View style={{...styles.buttonInput,borderRadius:0}}>
@@ -54,6 +54,10 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="recipe"
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="account"
           options={{headerShown: false}}
         />
       </Stack>
