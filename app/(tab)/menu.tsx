@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React from 'react';
-import { Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   column:{
@@ -43,11 +43,11 @@ const styles=StyleSheet.create({
 export default function Index() {
   const router = useRouter();
   return (
-    <View style={styles.column}>
+    <View style={{...styles.column,borderColor:'black',borderBottomWidth:2}}>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
         <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Search" placeholderTextColor="grey"></TextInput>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
-          <Image style={styles.buttonIcon} source={require('../assets/images/add_btn.png')}/>
+          <Image style={styles.buttonIcon} source={require('../../assets/images/add_btn.png')}/>
         </TouchableOpacity>
       </View>
       <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderBottomWidth:2}}>
@@ -79,7 +79,7 @@ export default function Index() {
                 <Text style={{...styles.boldText,color:'grey'}}>{4} ingredients</Text>
               </View>
               <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-                <Image style={{...styles.buttonIcon}} source={require('../assets/images/add_btn.png')}/>
+                <Image style={{...styles.buttonIcon}} source={require('../../assets/images/add_btn.png')}/>
               </TouchableOpacity>
             </View>
             <View style={{...styles.row}}>
@@ -96,22 +96,6 @@ export default function Index() {
           </View>
         </TouchableOpacity>)}
       </ScrollView>
-      <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderTopWidth:2}}>
-        <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.navigate('/menu')}}><Text style={{...styles.boldText,textDecorationLine: 'underline'}}>Menu</Text></TouchableOpacity>
-        <View style={{borderColor:'black',borderRightWidth:2}}></View>
-        <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.navigate('/plan')}}><Text style={styles.boldText}>Plan</Text></TouchableOpacity>
-        <View style={{borderColor:'black',borderRightWidth:2}}></View>
-        <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{router.navigate('/grocery')}}><Text style={styles.boldText}>Grocery</Text></TouchableOpacity>
-      </View>
-      <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
-        <TouchableOpacity style={{...styles.buttonInput,borderColor:'white',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>
-          <Text style={styles.boldText}>ntmthien01@gmail.com</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
-          <Image style={styles.buttonIcon} source={require('../assets/images/reload_btn.png')}/>
-        </TouchableOpacity>
-      </View>
-      <SafeAreaView style={{ backgroundColor: 'rgb(58,58,58)',paddingBottom: StatusBar.currentHeight}}/>
     </View>
   );
 }
