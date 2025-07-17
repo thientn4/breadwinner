@@ -24,7 +24,9 @@ const styles=StyleSheet.create({
     overflow:'hidden',
     borderColor:'white',
     borderWidth:2,
-    textAlign:'center'
+    textAlign:'center',
+    display:'flex',
+    flexDirection:'row'
   },
   buttonIcon:{
     height:'100%',
@@ -75,7 +77,10 @@ export default function Index() {
         )}
       </ScrollView>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
-        <TouchableOpacity style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}}><Text style={styles.boldText}>Filter</Text></TouchableOpacity>
+        <TouchableOpacity style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}}>
+          <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>Filter</Text>
+          <Text style={styles.boldText}>▼</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

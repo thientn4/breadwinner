@@ -26,7 +26,9 @@ const styles=StyleSheet.create({
     alignItems: "center",
     height:'100%',
     overflow:'hidden',
-    textAlign:'center'
+    textAlign:'center',
+    display:'flex',
+    flexDirection:'row'
   },
   buttonIcon:{
     height:'100%',
@@ -43,10 +45,11 @@ export default function TabLayout() {
     <View style={{flex:1}}>
       <SafeAreaView style={styles.row}>
         <TouchableOpacity style={{...styles.buttonInput,paddingLeft:10,paddingRight:10,flex:1}}>
-            <Text style={styles.boldText}>ntmthien01@gmail.com</Text>
+          <Text style={styles.boldText}>▼</Text>
+          <Text style={{...styles.boldText,flex:1,textAlign:'center'}}>ntmthien01@gmail.com</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{...styles.buttonInput}}>
-            <Image style={styles.buttonIcon} source={require('../../assets/images/reload_btn.png')}/>
+          <Image style={styles.buttonIcon} source={require('../../assets/images/reload_btn.png')}/>
         </TouchableOpacity>
       </SafeAreaView>
       <Tabs screenOptions={{ 

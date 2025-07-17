@@ -24,7 +24,9 @@ const styles=StyleSheet.create({
     overflow:'hidden',
     borderColor:'white',
     borderWidth:2,
-    textAlign:'center'
+    textAlign:'center',
+    display:'flex',
+    flexDirection:'row'
   },
   buttonIcon:{
     height:'100%',
@@ -66,28 +68,17 @@ export default function Index() {
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
           <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Recipe name"  placeholderTextColor="grey"></TextInput>
         </View>
-        <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',paddingLeft:10,paddingRight:10}}>
+        <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,paddingTop:0}}>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
             <Image style={styles.buttonIcon} source={require('../assets/images/camera_btn.png')}/>
           </TouchableOpacity>
-          <TouchableOpacity style={{...styles.buttonInput, flex:1,marginLeft:10,marginRight:10,paddingLeft:20,paddingRight:20}}><Text style={styles.boldText}>Main</Text></TouchableOpacity>
+          <TouchableOpacity style={{...styles.buttonInput, flex:1,marginLeft:10,marginRight:10,paddingLeft:20,paddingRight:20}}>
+            <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>Main</Text>
+            <Text style={styles.boldText}>▼</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{alert('We are still working on this premium feature. Check back later for more!')}}>
             <Image style={styles.buttonIcon} source={require('../assets/images/AI_btn.png')}/>
           </TouchableOpacity>
-        </View>
-        <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
-          <ScrollView style={styles.recipeInfoTable} nestedScrollEnabled={true} showsVerticalScrollIndicator={false}>
-            {[...Array(10)].map((e, index) => 
-              <View key = {index} style={{...styles.row,borderTopWidth:index===0?0:2,borderColor:'grey',paddingTop:10,paddingBottom:10}}>
-                <View style={styles.buttonInput}>
-                  <Text style={{...styles.boldText}}><Text style={{...styles.boldText,color:'grey'}}>4x</Text> Monday breakfast</Text>
-                </View>
-                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-                  <Image style={{...styles.buttonIcon}} source={require('../assets/images/delete_btn.png')}/>
-                </TouchableOpacity>
-              </View>
-            )}
-          </ScrollView>
         </View>
         <View>
           <TextInput style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,margin:10}} placeholder="Ingredient" placeholderTextColor="grey"></TextInput>
