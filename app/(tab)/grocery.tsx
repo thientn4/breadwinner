@@ -49,7 +49,7 @@ export default function Index() {
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
         <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Add to grocery" placeholderTextColor="grey"></TextInput>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
-          <Image style={styles.buttonIcon} source={require('../../assets/images/add_btn.png')}/>
+          <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
         </TouchableOpacity>
       </View>
       <ScrollView 

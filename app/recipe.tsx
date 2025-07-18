@@ -70,7 +70,7 @@ export default function Index() {
         </View>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,paddingTop:0}}>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
-            <Image style={styles.buttonIcon} source={require('../assets/images/camera_btn.png')}/>
+            <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../assets/images/camera_btn.png')}/>
           </TouchableOpacity>
           <TouchableOpacity style={{...styles.buttonInput, flex:1,marginLeft:10,marginRight:10}}>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
@@ -82,7 +82,7 @@ export default function Index() {
             </TouchableOpacity>
           </TouchableOpacity>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{alert('We are still working on this premium feature. Check back later for more!')}}>
-            <Image style={styles.buttonIcon} source={require('../assets/images/scan_btn.png')}/>
+            <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../assets/images/qr_btn.png')}/>
           </TouchableOpacity>
         </View>
         <View>
@@ -91,7 +91,7 @@ export default function Index() {
             <TextInput style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10}} placeholder="Quantity" placeholderTextColor="grey">
             </TextInput>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-              <Image style={{...styles.buttonIcon}} source={require('../assets/images/add_btn.png')}/>
+              <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../assets/images/add_btn.png')}/>
             </TouchableOpacity>
           </View>
           <ScrollView style={{

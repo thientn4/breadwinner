@@ -46,11 +46,11 @@ export default function Index() {
     <View style={{...styles.column,borderColor:'black', borderBottomWidth:2}}>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
-          <Image style={styles.buttonIcon} source={require('../../assets/images/scan_btn.png')}/>
+          <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
         </TouchableOpacity>
         <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,marginLeft:10,paddingLeft:20,paddingRight:20}} placeholder="Search" placeholderTextColor="grey"></TextInput>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
-          <Image style={styles.buttonIcon} source={require('../../assets/images/add_btn.png')}/>
+          <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
         </TouchableOpacity>
       </View>
       <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderBottomWidth:2}}>
@@ -82,7 +82,7 @@ export default function Index() {
                 <Text style={{...styles.boldText,color:'grey'}}>{4} ingredients</Text>
               </View>
               <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-                <Image style={{...styles.buttonIcon}} source={require('../../assets/images/add_btn.png')}/>
+                <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
               </TouchableOpacity>
             </View>
             <View style={{...styles.row}}>
