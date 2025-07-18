@@ -49,7 +49,7 @@ export default function Index() {
   return (
     <View style={styles.column}>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-        <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Add to grocery" placeholderTextColor="grey"></TextInput>
+        <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Add to grocery" placeholderTextColor="grey"/>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={Keyboard.dismiss}>
           <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
         </TouchableOpacity>
@@ -98,7 +98,7 @@ export default function Index() {
                   multiline = {true}
                   numberOfLines = {4}
                   onPress ={()=>{flatListRef?.current?.scrollToIndex({ index: index, animated: true })}}
-                ></TextInput>
+                />
               </View>
             )}
           />

@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import React from 'react';
+import React, { useState } from 'react';
 import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
@@ -51,9 +51,16 @@ const styles=StyleSheet.create({
     borderColor:'white'
   }
 })
+const dishTypes=['Appetizer', 'Main', 'Dessert', 'Other']
 export default function Index() {
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
+  const [dishType,setDishType]=useState(0)
+  const [recipeName,setRecipeName]=useState('')
+  const [ingredients,setIngredients]=useState([])
+  const [ingredient,setIngredient]=useState('')
+  const [quantity,setQuantity]=useState('')
+  const [instruction,setInstruction]=useState('')
   return (
     //ignore system bar for iOS (SafeAreaView) & android (margin & padding)
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white',paddingBottom: StatusBar.currentHeight}}>
@@ -69,21 +76,27 @@ export default function Index() {
           <Image style={{
             width:'100%',
             height:undefined,
-            aspectRatio:4/3
+            aspectRatio:3/2
           }} source={{uri:'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
           <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
-            <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Recipe name"  placeholderTextColor="grey"></TextInput>
+            <TextInput 
+              style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} 
+              placeholder="Recipe name"  
+              placeholderTextColor="grey"
+              value={recipeName}
+              onChangeText={(text) => {setRecipeName(text)}}
+            />
           </View>
           <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,paddingTop:0}}>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
               <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../assets/images/camera_btn.png')}/>
             </TouchableOpacity>
             <View style={{...styles.buttonInput, flex:1,marginLeft:10,marginRight:10}}>
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{setDishType(dishType===0?3:(dishType-1))}}>
                 <Text style={styles.boldText}>◀</Text>
               </TouchableOpacity>
-              <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>Appetizer</Text>
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+              <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>{dishTypes[dishType]}</Text>
+              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{setDishType(dishType===3?0:(dishType+1))}}>
                 <Text style={styles.boldText}>▶</Text>
               </TouchableOpacity>
             </View>
@@ -92,10 +105,21 @@ export default function Index() {
             </TouchableOpacity>
           </View>
           <View>
-            <TextInput style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,margin:10}} placeholder="Ingredient" placeholderTextColor="grey"></TextInput>
+            <TextInput 
+              style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,margin:10}} 
+              placeholder="Ingredient" 
+              placeholderTextColor="grey"
+              value={ingredient}
+              onChangeText={(text) => {setIngredient(text)}}
+            />
             <View style={{...styles.row,flex:1, paddingLeft:10, paddingRight:10}}>
-              <TextInput style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10}} placeholder="Quantity" placeholderTextColor="grey">
-              </TextInput>
+              <TextInput 
+                style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10}} 
+                placeholder="Quantity" 
+                placeholderTextColor="grey"
+                value={quantity}
+                onChangeText={(text) => {setQuantity(text)}}
+              />
               <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
                 <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../assets/images/add_btn.png')}/>
               </TouchableOpacity>
@@ -124,7 +148,9 @@ export default function Index() {
               placeholderTextColor="grey"
               multiline = {true}
               numberOfLines = {4}
-            ></TextInput>
+              value={instruction}
+              onChangeText={(text) => {setInstruction(text)}}
+            />
           </View>
         </ScrollView>
         <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
