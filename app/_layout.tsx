@@ -32,6 +32,7 @@ export default function RootLayout() {
     <>
       <StatusBar style="dark" />
       <Stack screenOptions={{
+        gestureEnabled: false,
         animation:'none',
         header: () => (
           // ignore system bar for iOS (SafeAreaView) & android (margin & padding)
