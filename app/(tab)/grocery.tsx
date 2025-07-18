@@ -36,7 +36,11 @@ const styles=StyleSheet.create({
   boldText:{
     fontWeight:'bold',
     fontSize:16
-  }
+  },
+  typeFilter:{
+    flex:1,
+    alignItems:'center'
+  },
 })
 export default function Index() {
   const router = useRouter();
@@ -56,7 +60,7 @@ export default function Index() {
           <View key = {index} style={{...styles.column, padding:10}}>
             <View style={{...styles.row,flex:1, paddingBottom:10}}>
               <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-                <View style={{...styles.buttonInput,aspectRatio:1,backgroundColor:'black', height:20}}/>
+                <View style={{...styles.buttonInput,aspectRatio:1,backgroundColor:'black', height:20,borderColor:'none'}}/>
               </TouchableOpacity>
               <View style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>
                 <Text style={styles.boldText}>curry powder</Text>
@@ -77,10 +81,15 @@ export default function Index() {
         )}
       </ScrollView>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
-        <TouchableOpacity style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}}>
-          <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>Filter</Text>
-          <Text style={styles.boldText}>▼</Text>
-        </TouchableOpacity>
+        <View style={{...styles.buttonInput, flex:1}}>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+            <Text style={styles.boldText}>◀</Text>
+          </TouchableOpacity>
+          <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>All</Text>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+            <Text style={styles.boldText}>▶</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

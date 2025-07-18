@@ -1,14 +1,13 @@
 import { Stack, useRouter } from "expo-router";
-import { Image, SafeAreaView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 
 const styles=StyleSheet.create({
   row:{
     display:'flex',
     flexDirection:'row',
-    borderColor:'black',
     justifyContent:'space-between',
     backgroundColor:'white',
-    padding:10
+    paddingTop: StatusBar.currentHeight
   },
   buttonInput:{
     justifyContent: "center",
@@ -18,7 +17,8 @@ const styles=StyleSheet.create({
     height:40,
     overflow:'hidden',
     borderColor:'white',
-    borderWidth:2
+    borderWidth:2,
+    margin:10
   },
   buttonIcon:{
     height:'100%',
@@ -35,16 +35,15 @@ export default function RootLayout() {
         animation:'none',
         header: () => (
           // ignore system bar for iOS (SafeAreaView) & android (margin & padding)
-          <SafeAreaView style={{...styles.row,paddingTop: StatusBar.currentHeight}}>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{router.navigate('/account')}} >
-              <Image style={styles.buttonIcon} source={{uri:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_8Ndh_6Yi1w8G7Yg5iGtCQQVreP5sWLdUbg&s"}}/>
-            </TouchableOpacity>
+          <SafeAreaView style={styles.row}>
+            <View></View>
             <View style={{...styles.buttonInput,borderRadius:0}}>
               <Image style={{height:'100%',width:undefined, aspectRatio:1.2}} source={require('../assets/images/transparent_icon.png')}/>
             </View>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{alert("hello")}}>
+            <View></View>
+            {/* <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{alert("hello")}}>
               <Image style={styles.buttonIcon} source={require('../assets/images/question_btn.png')}/>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </SafeAreaView>
         ),
       }}>
@@ -54,10 +53,6 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="recipe"
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="account"
           options={{headerShown: false}}
         />
       </Stack>

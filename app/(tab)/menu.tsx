@@ -45,7 +45,10 @@ export default function Index() {
   return (
     <View style={{...styles.column,borderColor:'black', borderBottomWidth:2}}>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-        <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Search" placeholderTextColor="grey"></TextInput>
+        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
+          <Image style={styles.buttonIcon} source={require('../../assets/images/scan_btn.png')}/>
+        </TouchableOpacity>
+        <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,marginLeft:10,paddingLeft:20,paddingRight:20}} placeholder="Search" placeholderTextColor="grey"></TextInput>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
           <Image style={styles.buttonIcon} source={require('../../assets/images/add_btn.png')}/>
         </TouchableOpacity>

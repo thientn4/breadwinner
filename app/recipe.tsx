@@ -42,7 +42,7 @@ const styles=StyleSheet.create({
     fontSize:16
   },
   recipeInfoTable:{
-    maxHeight:200,
+    //maxHeight:200,
     paddingLeft:10,
     paddingRight:10,
     backgroundColor:'white',
@@ -72,12 +72,17 @@ export default function Index() {
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
             <Image style={styles.buttonIcon} source={require('../assets/images/camera_btn.png')}/>
           </TouchableOpacity>
-          <TouchableOpacity style={{...styles.buttonInput, flex:1,marginLeft:10,marginRight:10,paddingLeft:20,paddingRight:20}}>
-            <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>Main</Text>
-            <Text style={styles.boldText}>▼</Text>
+          <TouchableOpacity style={{...styles.buttonInput, flex:1,marginLeft:10,marginRight:10}}>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+              <Text style={styles.boldText}>◀</Text>
+            </TouchableOpacity>
+            <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>Appetizer</Text>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+              <Text style={styles.boldText}>▶</Text>
+            </TouchableOpacity>
           </TouchableOpacity>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{alert('We are still working on this premium feature. Check back later for more!')}}>
-            <Image style={styles.buttonIcon} source={require('../assets/images/AI_btn.png')}/>
+            <Image style={styles.buttonIcon} source={require('../assets/images/scan_btn.png')}/>
           </TouchableOpacity>
         </View>
         <View>
