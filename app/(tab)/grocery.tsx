@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React from 'react';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   column:{
@@ -43,6 +43,7 @@ const styles=StyleSheet.create({
   },
 })
 export default function Index() {
+  const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
   return (
     <View style={styles.column}>
@@ -55,7 +56,7 @@ export default function Index() {
       <KeyboardAvoidingView 
         style={{flex:1}}
         behavior={Platform.OS==="ios"?'padding':undefined}
-        keyboardVerticalOffset={110}
+        keyboardVerticalOffset={screenHeight/8}
       >
         <ScrollView 
           style={styles.column}

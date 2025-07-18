@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React from 'react';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   column:{
@@ -43,12 +43,13 @@ const styles=StyleSheet.create({
   }
 })
 export default function Index() {
+  const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
   return (
     <KeyboardAvoidingView 
-      style={{...styles.column,borderColor:'black', borderBottomWidth:2}}
+      style={{...styles.column,backgroundColor:'rgb(58,58,58)'}}
       behavior={Platform.OS==="ios"?'padding':undefined}
-      keyboardVerticalOffset={110}
+      keyboardVerticalOffset={screenHeight/8}
     >
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
@@ -59,7 +60,7 @@ export default function Index() {
           <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
         </TouchableOpacity>
       </View>
-      <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderBottomWidth:2}}>
+      <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderBottomWidth:2,backgroundColor:'white'}}>
         <View style={styles.typeFilter}><Text style={styles.boldText}>Apps</Text></View>
         <View style={styles.typeFilter}><Text style={styles.boldText}>Main</Text></View>
         <View style={styles.typeFilter}><Text style={styles.boldText}>Dessert</Text></View>
