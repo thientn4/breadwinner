@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   column:{
@@ -52,34 +52,40 @@ export default function Index() {
           <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
         </TouchableOpacity>
       </View>
-      <ScrollView 
-        style={styles.column}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView 
+        style={{flex:1}}
+        behavior={Platform.OS==="ios"?'padding':undefined}
+        keyboardVerticalOffset={110}
       >
-        {[...Array(10)].map((e, index) => 
-          <View key = {index} style={{...styles.column, padding:10}}>
-            <View style={{...styles.row,flex:1, paddingBottom:10}}>
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-                <View style={{...styles.buttonInput,aspectRatio:1,backgroundColor:'black', height:20,borderColor:'none'}}/>
-              </TouchableOpacity>
-              <View style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>
-                <Text style={styles.boldText}>curry powder</Text>
+        <ScrollView 
+          style={styles.column}
+          showsVerticalScrollIndicator={false}
+        >
+          {[...Array(10)].map((e, index) => 
+            <View key = {index} style={{...styles.column, padding:10}}>
+              <View style={{...styles.row,flex:1, paddingBottom:10}}>
+                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
+                  <View style={{...styles.buttonInput,aspectRatio:1,backgroundColor:'black', height:20,borderColor:'none'}}/>
+                </TouchableOpacity>
+                <View style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>
+                  <Text style={styles.boldText}>curry powder</Text>
+                </View>
+                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
+                  <Image style={{...styles.buttonIcon}} source={require('../../assets/images/delete_btn.png')}/>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-                <Image style={{...styles.buttonIcon}} source={require('../../assets/images/delete_btn.png')}/>
-              </TouchableOpacity>
+              {[...Array(3)].map((e, index) => <Text key = {index}  style={{...styles.boldText,color:'grey',paddingLeft:12}}>8x Butter Chicken</Text>)}
+              <TextInput 
+                style={{...styles.buttonInput, flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:100, marginTop:10,textAlignVertical: 'top'}} 
+                placeholder="Note"
+                placeholderTextColor="grey"
+                multiline = {true}
+                numberOfLines = {4}
+              ></TextInput>
             </View>
-            {[...Array(3)].map((e, index) => <Text key = {index}  style={{...styles.boldText,color:'grey',paddingLeft:12}}>8x Butter Chicken</Text>)}
-            <TextInput 
-              style={{...styles.buttonInput, flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:100, marginTop:10,textAlignVertical: 'top'}} 
-              placeholder="Note"
-              placeholderTextColor="grey"
-              multiline = {true}
-              numberOfLines = {4}
-            ></TextInput>
-          </View>
-        )}
-      </ScrollView>
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
         <View style={{...styles.buttonInput, flex:1}}>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>

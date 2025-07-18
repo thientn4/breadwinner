@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   column:{
@@ -45,7 +45,11 @@ const styles=StyleSheet.create({
 export default function Index() {
   const router = useRouter();
   return (
-    <View style={{...styles.column,borderColor:'black', borderBottomWidth:2}}>
+    <KeyboardAvoidingView 
+      style={{...styles.column,borderColor:'black', borderBottomWidth:2}}
+      behavior={Platform.OS==="ios"?'padding':undefined}
+      keyboardVerticalOffset={110}
+    >
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
           <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
@@ -117,6 +121,6 @@ export default function Index() {
           maxLength={2}
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
