@@ -24,7 +24,9 @@ const styles=StyleSheet.create({
     overflow:'hidden',
     borderColor:'white',
     borderWidth:2,
-    textAlign:'center'
+    textAlign:'center',
+    display:'flex',
+    flexDirection:'row'
   },
   buttonIcon:{
     height:'100%',
@@ -75,30 +77,46 @@ export default function Index() {
             aspectRatio:1,
             marginRight:20
           }} source={{uri:'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
-          <View style={{...styles.column, justifyContent:'space-between'}}>
-            <View style={{...styles.row,flex:1}}>
-              <View>
-                <Text style={styles.boldText}>Chile Verde</Text>
-                <Text style={{...styles.boldText,color:'grey'}}>{4} ingredients</Text>
-              </View>
+          <View style={{...styles.row,flex:1}}>
+            <View style={{...styles.column, justifyContent:'center'}}>
+              <Text style={styles.boldText}>Chile Verde</Text>
+              <Text style={{...styles.boldText,color:'grey'}}>{4} ingredients</Text>
+            </View>
+            <View style={{...styles.column, justifyContent:'center',flex:0}}>
               <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
                 <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
-              </TouchableOpacity>
-            </View>
-            <View style={{...styles.row}}>
-              <TouchableOpacity style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10}}>
-                <Text style={styles.boldText}>Mon</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>
-                <Text style={styles.boldText}>Breakfast</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={{...styles.buttonInput,borderColor:'black',aspectRatio:1}}>
-                <Text style={styles.boldText}>4</Text>
               </TouchableOpacity>
             </View>
           </View>
         </TouchableOpacity>)}
       </ScrollView>
+      <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
+        <View style={{...styles.buttonInput,alignSelf: 'flex-start'}}>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+            <Text style={styles.boldText}>◀</Text>
+          </TouchableOpacity>
+          <Text style={{...styles.boldText,width:35, textAlign:'center'}}>Mon</Text>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+            <Text style={styles.boldText}>▶</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{...styles.buttonInput,flex:1, marginLeft:10, marginRight:10}}>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+            <Text style={styles.boldText}>◀</Text>
+          </TouchableOpacity>
+          <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>Breakfast</Text>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+            <Text style={styles.boldText}>▶</Text>
+          </TouchableOpacity>
+        </View>
+        <TextInput 
+          style={{...styles.buttonInput,aspectRatio:1,textAlign:'center'}} 
+          placeholder='#' 
+          placeholderTextColor="grey"
+          keyboardType="numeric"
+          maxLength={2}
+        />
+      </View>
     </View>
   );
 }
