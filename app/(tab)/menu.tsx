@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React from 'react';
-import { Dimensions, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   column:{
@@ -52,19 +52,19 @@ export default function Index() {
       keyboardVerticalOffset={screenHeight/8}
     >
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
+        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={Keyboard.dismiss}>
           <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
         </TouchableOpacity>
         <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,marginLeft:10,paddingLeft:20,paddingRight:20}} placeholder="Search" placeholderTextColor="grey"></TextInput>
-        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
+        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={Keyboard.dismiss}>
           <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
         </TouchableOpacity>
       </View>
       <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderBottomWidth:2,backgroundColor:'white'}}>
-        <View style={styles.typeFilter}><Text style={styles.boldText}>Apps</Text></View>
-        <View style={styles.typeFilter}><Text style={styles.boldText}>Main</Text></View>
-        <View style={styles.typeFilter}><Text style={styles.boldText}>Dessert</Text></View>
-        <View style={{...styles.typeFilter,borderRightWidth:0}}><Text style={styles.boldText}>Other</Text></View>
+        <TouchableOpacity  onPress={Keyboard.dismiss} style={styles.typeFilter}><Text style={styles.boldText}>Apps</Text></TouchableOpacity>
+        <TouchableOpacity  onPress={Keyboard.dismiss} style={styles.typeFilter}><Text style={styles.boldText}>Main</Text></TouchableOpacity>
+        <TouchableOpacity  onPress={Keyboard.dismiss} style={styles.typeFilter}><Text style={styles.boldText}>Dessert</Text></TouchableOpacity>
+        <TouchableOpacity  onPress={Keyboard.dismiss} style={{...styles.typeFilter,borderRightWidth:0}}><Text style={styles.boldText}>Other</Text></TouchableOpacity>
       </View>
       <ScrollView 
         style={styles.column}

@@ -119,7 +119,7 @@ export default function Index() {
               )}
             </ScrollView>
             <TextInput 
-              style={{...styles.buttonInput, flex:1,margin:10,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:600, marginTop:10,textAlignVertical: 'top'}} 
+              style={{...styles.buttonInput, flex:1,margin:10,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:screenHeight/2+40, marginTop:10,textAlignVertical: 'top'}} 
               placeholder="Instruction" 
               placeholderTextColor="grey"
               multiline = {true}
