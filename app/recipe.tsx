@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React from 'react';
-import { Dimensions, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   column:{
@@ -128,7 +128,10 @@ export default function Index() {
           </View>
         </ScrollView>
         <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
-          <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.back()}}><Text style={styles.boldText}>Cancel</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.typeFilter} onPress={()=>{
+            if(Keyboard.isVisible())Keyboard.dismiss()
+            else router.back()
+          }}><Text style={styles.boldText}>Cancel</Text></TouchableOpacity>
           <View style={{borderColor:'black',borderRightWidth:2}}></View>
           <TouchableOpacity style={styles.typeFilter} onPress={()=>{}}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>
           <View style={{borderColor:'black',borderRightWidth:2}}></View>
