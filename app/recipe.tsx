@@ -48,7 +48,8 @@ const styles=StyleSheet.create({
     backgroundColor:'white',
     borderRadius:20,
     borderWidth:2,
-    borderColor:'white'
+    borderColor:'white',
+    overflow:'hidden'
   }
 })
 const dishTypes=['Appetizer', 'Main', 'Dessert', 'Other']
@@ -124,13 +125,15 @@ export default function Index() {
                 <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../assets/images/add_btn.png')}/>
               </TouchableOpacity>
             </View>
-            <ScrollView style={{
+            <View style={{
               ...styles.recipeInfoTable,
               borderColor:'black',
               margin:10,
-              marginBottom:0
-            }} nestedScrollEnabled={true} showsVerticalScrollIndicator={false}>
-              {[...Array(10)].map((e, index) => 
+              marginBottom:0,
+              minHeight:150,
+              opacity:ingredients.length===0?0.3:1
+            }}>
+              {ingredients.map((e, index) => 
                 <View key = {index} style={{...styles.row,borderTopWidth:index===0?0:2,borderColor:'grey',paddingTop:10,paddingBottom:10}}>
                   <View>
                     <Text style={{...styles.boldText}}>curry powder</Text>
@@ -141,7 +144,10 @@ export default function Index() {
                   </TouchableOpacity>
                 </View>
               )}
-            </ScrollView>
+              {ingredients.length===0 && <View style={{...styles.column,justifyContent:'center',alignItems:'center'}}>
+                <Text>Let's add your first ingredients!</Text>
+              </View>}
+            </View>
             <TextInput 
               style={{...styles.buttonInput, flex:1,margin:10,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:screenHeight/2+40, marginTop:10,textAlignVertical: 'top'}} 
               placeholder="Instruction" 
