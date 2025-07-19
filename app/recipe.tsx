@@ -76,82 +76,86 @@ export default function Index() {
           style={styles.column}
           showsVerticalScrollIndicator={false}
         >
-          <Image style={{
-            width:'100%',
-            height:undefined,
-            aspectRatio:3/2
-          }} source={{uri:'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
-          <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
-            <TextInput 
-              style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} 
-              placeholder="Recipe name"  
-              placeholderTextColor="grey"
-              value={recipeName}
-              onChangeText={(text) => {setRecipeName(text)}}
-            />
-          </View>
-          <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,paddingTop:0}}>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
-              <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../assets/images/camera_btn.png')}/>
-            </TouchableOpacity>
-            <View style={{...styles.buttonInput, flex:1,marginLeft:10,marginRight:10}}>
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{setDishType(dishType===0?3:(dishType-1))}}>
-                <Text style={styles.boldText}>◀</Text>
-              </TouchableOpacity>
-              <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>{dishTypes[dishType]}</Text>
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{setDishType(dishType===3?0:(dishType+1))}}>
-                <Text style={styles.boldText}>▶</Text>
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{alert('We are still working on\nQR code generator.\nCheck back later for more!')}}>
-              <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../assets/images/qr_btn.png')}/>
-            </TouchableOpacity>
-          </View>
-          <View>
-            <TextInput 
-              style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,margin:10}} 
-              placeholder="Ingredient" 
-              placeholderTextColor="grey"
-              value={ingredient}
-              onChangeText={(text) => {setIngredient(text)}}
-            />
-            <View style={{...styles.row,flex:1, paddingLeft:10, paddingRight:10}}>
+          {true && <View>
+            <Image style={{
+              width:'100%',
+              height:undefined,
+              aspectRatio:3/2
+            }} source={{uri:'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
+            <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
               <TextInput 
-                style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10}} 
-                placeholder="Quantity" 
+                style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} 
+                placeholder="Recipe name"  
                 placeholderTextColor="grey"
-                value={quantity}
-                onChangeText={(text) => {setQuantity(text)}}
+                value={recipeName}
+                onChangeText={(text) => {setRecipeName(text)}}
               />
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-                <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../assets/images/add_btn.png')}/>
+            </View>
+            <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,paddingTop:0}}>
+              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
+                <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../assets/images/camera_btn.png')}/>
+              </TouchableOpacity>
+              <View style={{...styles.buttonInput, flex:1,marginLeft:10,marginRight:10}}>
+                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{setDishType(dishType===0?3:(dishType-1))}}>
+                  <Text style={styles.boldText}>◀</Text>
+                </TouchableOpacity>
+                <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>{dishTypes[dishType]}</Text>
+                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{setDishType(dishType===3?0:(dishType+1))}}>
+                  <Text style={styles.boldText}>▶</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{alert('We are still working on\nQR code generator.\nCheck back later for more!')}}>
+                <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../assets/images/qr_btn.png')}/>
               </TouchableOpacity>
             </View>
-            <View style={{
-              ...styles.recipeInfoTable,
-              borderColor:'black',
-              margin:10,
-              marginBottom:0,
-              minHeight:150,
-              opacity:ingredients.length===0?0.3:1
-            }}>
-              {ingredients.map((ingredient, index) => 
-                <View key = {index} style={{...styles.row,borderTopWidth:index===0?0:2,borderColor:'grey',paddingTop:10,paddingBottom:10}}>
-                  <View>
-                    <Text style={{...styles.boldText}}>{ingredient.name}</Text>
-                    <Text style={{...styles.boldText,color:'grey'}}>{ingredient.quantity}</Text>
+            <View>
+              <TextInput 
+                style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,margin:10}} 
+                placeholder="Ingredient" 
+                placeholderTextColor="grey"
+                value={ingredient}
+                onChangeText={(text) => {setIngredient(text)}}
+              />
+              <View style={{...styles.row,flex:1, paddingLeft:10, paddingRight:10}}>
+                <TextInput 
+                  style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10}} 
+                  placeholder="Quantity" 
+                  placeholderTextColor="grey"
+                  value={quantity}
+                  onChangeText={(text) => {setQuantity(text)}}
+                />
+                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
+                  <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../assets/images/add_btn.png')}/>
+                </TouchableOpacity>
+              </View>
+              <View style={{
+                ...styles.recipeInfoTable,
+                borderColor:'black',
+                margin:10,
+                marginBottom:0,
+                minHeight:150,
+                opacity:ingredients.length===0?0.3:1
+              }}>
+                {ingredients.map((ingredient, index) => 
+                  <View key = {index} style={{...styles.row,borderTopWidth:index===0?0:2,borderColor:'grey',paddingTop:10,paddingBottom:10}}>
+                    <View>
+                      <Text style={{...styles.boldText}}>{ingredient.name}</Text>
+                      <Text style={{...styles.boldText,color:'grey'}}>{ingredient.quantity}</Text>
+                    </View>
+                    <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
+                      <Image style={{...styles.buttonIcon}} source={require('../assets/images/delete_btn.png')}/>
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-                    <Image style={{...styles.buttonIcon}} source={require('../assets/images/delete_btn.png')}/>
-                  </TouchableOpacity>
-                </View>
-              )}
-              {ingredients.length===0 && <View style={{...styles.column,justifyContent:'center',alignItems:'center'}}>
-                <Text>Let's add your first ingredients!</Text>
-              </View>}
+                )}
+                {ingredients.length===0 && <View style={{...styles.column,justifyContent:'center',alignItems:'center'}}>
+                  <Text>Let's add your first ingredients!</Text>
+                </View>}
+              </View>
             </View>
+          </View>}
+          <View style={{flex:1,maxHeight:screenHeight/2+40,margin:10}}>
             <TextInput 
-              style={{...styles.buttonInput, flex:1,margin:10,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:screenHeight/2+40, marginTop:10,textAlignVertical: 'top'}} 
+              style={{...styles.buttonInput,flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',textAlignVertical: 'top'}} 
               placeholder="Instruction" 
               placeholderTextColor="grey"
               multiline = {true}
