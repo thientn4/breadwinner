@@ -165,7 +165,7 @@ export default function Index() {
           </View>}
           <View style={{flex:1,height:screenHeight/2+40,margin:10}}>
             {/* to open keyboard automatically for instruction input */}
-            <TextInput ref={instructionRef} style={{height:0}}/>
+            <TextInput multiline = {true} ref={instructionRef} style={{height:0}}/>
             <TextInput 
               style={{...styles.buttonInput,flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',textAlignVertical: 'top'}} 
               placeholder="Instruction" 
