@@ -190,7 +190,7 @@ export default function Index() {
           {!instructionActive && <View style={{borderColor:'black',borderRightWidth:2}}></View>}
           {!instructionActive && <TouchableOpacity style={styles.typeFilter} onPress={()=>{}}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>}
           {!instructionActive && <View style={{borderColor:'black',borderRightWidth:2}}></View>}
-          {!instructionActive && <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{}}><Text style={styles.boldText}>Add</Text></TouchableOpacity>}
+          {!instructionActive && <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{}}><Text style={styles.boldText}>{recipe?'Update':'Add'}</Text></TouchableOpacity>}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
