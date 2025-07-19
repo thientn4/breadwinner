@@ -64,6 +64,7 @@ export default function Index() {
   const [ingredient,setIngredient]=useState('')
   const [quantity,setQuantity]=useState('')
   const [instruction,setInstruction]=useState(recipe?recipe.instruction:'')
+  const [instructionActive,setInstructionActive]=useState(false)
   return (
     //ignore system bar for iOS (SafeAreaView) & android (margin & padding)
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white',paddingBottom: StatusBar.currentHeight}}>
@@ -75,8 +76,9 @@ export default function Index() {
         <ScrollView 
           style={styles.column}
           showsVerticalScrollIndicator={false}
+          scrollEnabled={!instructionActive}
         >
-          {true && <View>
+          {!instructionActive && <View>
             <Image style={{
               width:'100%',
               height:undefined,
@@ -153,7 +155,7 @@ export default function Index() {
               </View>
             </View>
           </View>}
-          <View style={{flex:1,maxHeight:screenHeight/2+40,margin:10}}>
+          <View style={{flex:1,height:screenHeight/2+40,margin:10}}>
             <TextInput 
               style={{...styles.buttonInput,flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',textAlignVertical: 'top'}} 
               placeholder="Instruction" 
@@ -163,18 +165,22 @@ export default function Index() {
               value={instruction}
               onChangeText={(text) => {setInstruction(text)}}
               editable={true}
+              onPress={()=>setInstructionActive(true)}
             />
           </View>
         </ScrollView>
         <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
           <TouchableOpacity style={styles.typeFilter} onPress={()=>{
-            if(Keyboard.isVisible())Keyboard.dismiss()
+            if(Keyboard.isVisible()){
+              setInstructionActive(false)
+              Keyboard.dismiss()
+            }
             else router.back()
-          }}><Text style={styles.boldText}>Cancel</Text></TouchableOpacity>
-          <View style={{borderColor:'black',borderRightWidth:2}}></View>
-          <TouchableOpacity style={styles.typeFilter} onPress={()=>{}}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>
-          <View style={{borderColor:'black',borderRightWidth:2}}></View>
-          <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{}}><Text style={styles.boldText}>Add</Text></TouchableOpacity>
+          }}><Text style={styles.boldText}>{instructionActive?'Done':'Cancel'}</Text></TouchableOpacity>
+          {!instructionActive && <View style={{borderColor:'black',borderRightWidth:2}}></View>}
+          {!instructionActive && <TouchableOpacity style={styles.typeFilter} onPress={()=>{}}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>}
+          {!instructionActive && <View style={{borderColor:'black',borderRightWidth:2}}></View>}
+          {!instructionActive && <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{}}><Text style={styles.boldText}>Add</Text></TouchableOpacity>}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
