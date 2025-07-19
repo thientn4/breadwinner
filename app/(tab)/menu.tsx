@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as localStorage from '../../function/localStorage';
 
-const addBtn=require('../../assets/images/add_btn.png')
 const styles=StyleSheet.create({
   column:{
     flex: 1,
@@ -134,7 +133,7 @@ const defaultRecipes=[
     "ingredients": [
       {
         "name": "Pork shoulder",
-        "quantity": "3 lbs, cut into 1.5-inch cubes"
+        "quantity": "3 lbs"
       },
       {
         "name": "White vinegar",
@@ -142,15 +141,15 @@ const defaultRecipes=[
       },
       {
         "name": "Garlic cloves",
-        "quantity": "10-12, peeled"
+        "quantity": "10-12"
       },
       {
         "name": "Fresh ginger",
-        "quantity": "2-inch piece, peeled and roughly chopped"
+        "quantity": "2-inch piece"
       },
       {
-        "name": "Dried red chilies (Kashmiri or Byadgi for color, Arbol for heat)",
-        "quantity": "8-12, stemmed and deseeded if less heat is desired"
+        "name": "Dried red chilies",
+        "quantity": "8-12"
       },
       {
         "name": "Cumin seeds",
@@ -186,11 +185,11 @@ const defaultRecipes=[
       },
       {
         "name": "Salt",
-        "quantity": "1 1/2 tsp, or to taste"
+        "quantity": "1 1/2 tsp"
       },
       {
         "name": "Sugar",
-        "quantity": "1 tsp (optional, to balance flavors)"
+        "quantity": "1 tsp"
       },
       {
         "name": "Vegetable oil or Ghee",
@@ -198,11 +197,11 @@ const defaultRecipes=[
       },
       {
         "name": "Large onion",
-        "quantity": "1, finely chopped"
+        "quantity": "1"
       },
       {
         "name": "Water",
-        "quantity": "1-2 cups, as needed"
+        "quantity": "1-2 cups"
       }
     ],
     "instruction": 
@@ -287,7 +286,9 @@ export default function Index() {
   const [meal,setMeal]=useState(0)
   const [serving,setServing]=useState('1')
   const [filteredRecipes,setFilteredRecipes]=useState([])
+  const [searchQuery,setSearchQuery]=useState('')
   const filter=(dishType)=>{
+    setSearchQuery('')
     Keyboard.dismiss()
     setDishTypeFilter(dishType)
   }
@@ -309,26 +310,21 @@ export default function Index() {
       keyboardVerticalOffset={screenHeight/8}
     >
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={Keyboard.dismiss}>
+        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{Keyboard.dismiss;alert("We are still working on\nrecipe QR code scanner.\nCheck back later!")}}>
           <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
         </TouchableOpacity>
         <TextInput 
           style={{...styles.buttonInput, flex:1,marginRight:10,marginLeft:10,paddingLeft:20,paddingRight:20}} 
           placeholder="Search" 
           placeholderTextColor="grey"
+          value={searchQuery}
           onChangeText={(text)=>{
             setDishTypeFilter(-1)
-            // text=text.trim().toLowerCase()
-            //   console.log(text)
-            // let searchedRecipes=[]
-            // if(text==='')searchedRecipes = recipes.filter((recipe)=>recipe.type===dishTypeFilter)
-            // else searchedRecipes = recipes.filter((recipe)=>recipe.name.toLowerCase().includes(text))
-            //   console.log(JSON.stringify(searchedRecipes.map((recipe)=>recipe.name)))
-            // setFilteredRecipes(searchedRecipes)
+            setSearchQuery(text)
           }}
         />
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{router.navigate('/recipe')}}>
-          <Image style={{...styles.buttonIcon, height:'45%'}} source={addBtn}/>
+          <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
         </TouchableOpacity>
       </View>
       <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderBottomWidth:2,backgroundColor:'white'}}>
@@ -345,8 +341,12 @@ export default function Index() {
         renderItem={({ item, index }) => (
           <TouchableOpacity 
             key = {index} 
-            style={{...styles.row,borderBottomWidth:2,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10,display:(item.type===dishTypeFilter || dishTypeFilter===-1)?'flex':'none'}}
-            onPress={()=>{router.navigate('/recipe')}}
+            style={{
+              ...styles.row,borderBottomWidth:2,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10,
+              display:(item.type===dishTypeFilter || (dishTypeFilter===-1 && item.name.toLowerCase().includes(searchQuery.trim().toLowerCase())))?'flex':'none'
+              //item.name.toLowerCase().includes(searchQuery)
+            }}
+            onPress={()=>{router.push({pathname:'/recipe',params:{recipe:JSON.stringify(item)}})}}
           >
             <Image style={{
               borderRadius:10,
@@ -362,7 +362,7 @@ export default function Index() {
               </View>
               <View style={{...styles.column, justifyContent:'center',flex:0}}>
                 <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-                  <Image style={{...styles.buttonIcon, height:'45%'}} source={addBtn}/>
+                  <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
                 </TouchableOpacity>
               </View>
             </View>

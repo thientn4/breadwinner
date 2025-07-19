@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from 'react';
 import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -56,12 +56,14 @@ const dishTypes=['Appetizer', 'Main', 'Dessert', 'Other']
 export default function Index() {
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
-  const [dishType,setDishType]=useState(0)
-  const [recipeName,setRecipeName]=useState('')
-  const [ingredients,setIngredients]=useState([])
+  const params=useLocalSearchParams();
+  const recipe = params?.recipe?JSON.parse(params.recipe):null;
+  const [dishType,setDishType]=useState(recipe?recipe.type:0)
+  const [recipeName,setRecipeName]=useState(recipe?recipe.name:'')
+  const [ingredients,setIngredients]=useState(recipe?recipe.ingredients:[])
   const [ingredient,setIngredient]=useState('')
   const [quantity,setQuantity]=useState('')
-  const [instruction,setInstruction]=useState('')
+  const [instruction,setInstruction]=useState(recipe?recipe.instruction:'')
   return (
     //ignore system bar for iOS (SafeAreaView) & android (margin & padding)
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white',paddingBottom: StatusBar.currentHeight}}>
@@ -89,7 +91,7 @@ export default function Index() {
             />
           </View>
           <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,paddingTop:0}}>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
               <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../assets/images/camera_btn.png')}/>
             </TouchableOpacity>
             <View style={{...styles.buttonInput, flex:1,marginLeft:10,marginRight:10}}>
@@ -101,7 +103,7 @@ export default function Index() {
                 <Text style={styles.boldText}>▶</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{alert('We are still working on this premium feature. Check back later for more!')}}>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{alert('We are still working on\nQR code generator.\nCheck back later for more!')}}>
               <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../assets/images/qr_btn.png')}/>
             </TouchableOpacity>
           </View>
@@ -133,11 +135,11 @@ export default function Index() {
               minHeight:150,
               opacity:ingredients.length===0?0.3:1
             }}>
-              {ingredients.map((e, index) => 
+              {ingredients.map((ingredient, index) => 
                 <View key = {index} style={{...styles.row,borderTopWidth:index===0?0:2,borderColor:'grey',paddingTop:10,paddingBottom:10}}>
                   <View>
-                    <Text style={{...styles.boldText}}>curry powder</Text>
-                    <Text style={{...styles.boldText,color:'grey'}}>1 teaspoon</Text>
+                    <Text style={{...styles.boldText}}>{ingredient.name}</Text>
+                    <Text style={{...styles.boldText,color:'grey'}}>{ingredient.quantity}</Text>
                   </View>
                   <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
                     <Image style={{...styles.buttonIcon}} source={require('../assets/images/delete_btn.png')}/>
@@ -156,6 +158,7 @@ export default function Index() {
               numberOfLines = {4}
               value={instruction}
               onChangeText={(text) => {setInstruction(text)}}
+              editable={true}
             />
           </View>
         </ScrollView>
