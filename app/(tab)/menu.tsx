@@ -282,7 +282,7 @@ let recipes=[]
 export default function Index() {
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
-  const [dishTypeFilter,setDishTypeFilter]=useState(1)
+  const [dishTypeFilter,setDishTypeFilter]=useState(-1)
   const [weekday,setWeekday]=useState(0)
   const [meal,setMeal]=useState(0)
   const [serving,setServing]=useState('1')
@@ -290,7 +290,6 @@ export default function Index() {
   const filter=(dishType)=>{
     Keyboard.dismiss()
     setDishTypeFilter(dishType)
-    setFilteredRecipes(recipes.filter((recipe)=>recipe.type===dishType))
   }
   useEffect(()=>{
     localStorage.retrieve('recipes').then((data)=>{
@@ -300,7 +299,7 @@ export default function Index() {
         recipes=defaultRecipes
         localStorage.store(JSON.stringify(defaultRecipes))
       }
-      setFilteredRecipes(recipes.filter((recipe)=>recipe.type===dishTypeFilter))
+      setFilteredRecipes(recipes)
     })
   })
   return (
@@ -318,13 +317,14 @@ export default function Index() {
           placeholder="Search" 
           placeholderTextColor="grey"
           onChangeText={(text)=>{
-            text=text.trim().toLowerCase()
-              console.log(text)
-            let searchedRecipes=[]
-            if(text==='')searchedRecipes = recipes.filter((recipe)=>recipe.type===dishTypeFilter)
-            else searchedRecipes = recipes.filter((recipe)=>recipe.name.toLowerCase().includes(text))
-              console.log(JSON.stringify(searchedRecipes.map((recipe)=>recipe.name)))
-            setFilteredRecipes(searchedRecipes)
+            setDishTypeFilter(-1)
+            // text=text.trim().toLowerCase()
+            //   console.log(text)
+            // let searchedRecipes=[]
+            // if(text==='')searchedRecipes = recipes.filter((recipe)=>recipe.type===dishTypeFilter)
+            // else searchedRecipes = recipes.filter((recipe)=>recipe.name.toLowerCase().includes(text))
+            //   console.log(JSON.stringify(searchedRecipes.map((recipe)=>recipe.name)))
+            // setFilteredRecipes(searchedRecipes)
           }}
         />
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{router.navigate('/recipe')}}>
@@ -332,6 +332,7 @@ export default function Index() {
         </TouchableOpacity>
       </View>
       <View style={{...styles.row,paddingTop:10,paddingBottom:10,borderBottomWidth:2,backgroundColor:'white'}}>
+        <TouchableOpacity  onPress={()=>filter(-1)} style={styles.typeFilter}><Text style={{...styles.boldText,color:dishTypeFilter===-1?'black':'grey'}}>All</Text></TouchableOpacity>
         <TouchableOpacity  onPress={()=>filter(0)} style={styles.typeFilter}><Text style={{...styles.boldText,color:dishTypeFilter===0?'black':'grey'}}>Apps</Text></TouchableOpacity>
         <TouchableOpacity  onPress={()=>filter(1)} style={styles.typeFilter}><Text style={{...styles.boldText,color:dishTypeFilter===1?'black':'grey'}}>Main</Text></TouchableOpacity>
         <TouchableOpacity  onPress={()=>filter(2)} style={styles.typeFilter}><Text style={{...styles.boldText,color:dishTypeFilter===2?'black':'grey'}}>Dessert</Text></TouchableOpacity>
@@ -344,7 +345,7 @@ export default function Index() {
         renderItem={({ item, index }) => (
           <TouchableOpacity 
             key = {index} 
-            style={{...styles.row,borderTopWidth:index!==0?2:0,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10}}
+            style={{...styles.row,borderBottomWidth:2,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10,display:(item.type===dishTypeFilter || dishTypeFilter===-1)?'flex':'none'}}
             onPress={()=>{router.navigate('/recipe')}}
           >
             <Image style={{
