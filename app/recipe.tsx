@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
@@ -54,6 +54,7 @@ const styles=StyleSheet.create({
 })
 const dishTypes=['Appetizer', 'Main', 'Dessert', 'Other']
 export default function Index() {
+  const instructionRef = useRef(null);
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
   const params=useLocalSearchParams();
@@ -156,10 +157,14 @@ export default function Index() {
             </View>
             {instruction.trim() && <Text 
               style={{...styles.boldText,color:'grey',textDecorationLine:'underline',marginTop:10,marginBottom:0,marginRight:25,textAlign:'right'}}
-              onPress={()=>setInstructionActive(true)}
+              onPress={()=>{
+                setInstructionActive(true)
+                if (instructionRef.current) instructionRef.current.focus();
+              }}
             >Edit instruction</Text>}
           </View>}
           <View style={{flex:1,height:screenHeight/2+40,margin:10}}>
+            <TextInput ref={instructionRef} style={{height:0}}/>
             <TextInput 
               style={{...styles.buttonInput,flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',textAlignVertical: 'top'}} 
               placeholder="Instruction" 
