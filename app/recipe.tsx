@@ -78,6 +78,7 @@ export default function Index() {
           style={styles.column}
           showsVerticalScrollIndicator={false}
           scrollEnabled={!instructionActive}
+          keyboardShouldPersistTaps={instructionActive?'always':'never'}
         >
           {!instructionActive && <View>
             <Image style={{
@@ -155,15 +156,15 @@ export default function Index() {
                 </View>}
               </View>
             </View>
-            {instruction.trim() && <Text 
-              style={{...styles.boldText,color:'grey',textDecorationLine:'underline',marginTop:10,marginBottom:0,marginRight:25,textAlign:'right'}}
+            {instruction.trim() && <Text style={{...styles.boldText,color:'grey',textDecorationLine:'underline',marginTop:10,marginBottom:0,marginRight:25,textAlign:'right'}}><Text 
               onPress={()=>{
                 setInstructionActive(true)
                 if (instructionRef.current) instructionRef.current.focus();
               }}
-            >Edit instruction</Text>}
+            >Edit instruction</Text></Text>}
           </View>}
           <View style={{flex:1,height:screenHeight/2+40,margin:10}}>
+            {/* to open keyboard automatically for instruction input */}
             <TextInput ref={instructionRef} style={{height:0}}/>
             <TextInput 
               style={{...styles.buttonInput,flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',textAlignVertical: 'top'}} 
