@@ -154,6 +154,10 @@ export default function Index() {
                 </View>}
               </View>
             </View>
+            {instruction.trim() && <Text 
+              style={{...styles.boldText,color:'grey',textDecorationLine:'underline',marginTop:10,marginBottom:0,marginRight:25,textAlign:'right'}}
+              onPress={()=>setInstructionActive(true)}
+            >Edit instruction</Text>}
           </View>}
           <View style={{flex:1,height:screenHeight/2+40,margin:10}}>
             <TextInput 
@@ -164,8 +168,8 @@ export default function Index() {
               numberOfLines = {4}
               value={instruction}
               onChangeText={(text) => {setInstruction(text)}}
-              editable={true}
-              onPress={()=>setInstructionActive(true)}
+              onPress={()=>{if(!instruction.trim())setInstructionActive(true)}}
+              editable={!instruction.trim() || instructionActive}
             />
           </View>
         </ScrollView>
