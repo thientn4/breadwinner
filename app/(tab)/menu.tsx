@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as localStorage from '../../function/localStorage';
 
 const addBtn=require('../../assets/images/add_btn.png')
@@ -313,7 +313,20 @@ export default function Index() {
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={Keyboard.dismiss}>
           <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
         </TouchableOpacity>
-        <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,marginLeft:10,paddingLeft:20,paddingRight:20}} placeholder="Search" placeholderTextColor="grey"/>
+        <TextInput 
+          style={{...styles.buttonInput, flex:1,marginRight:10,marginLeft:10,paddingLeft:20,paddingRight:20}} 
+          placeholder="Search" 
+          placeholderTextColor="grey"
+          onChangeText={(text)=>{
+            text=text.trim().toLowerCase()
+              console.log(text)
+            let searchedRecipes=[]
+            if(text==='')searchedRecipes = recipes.filter((recipe)=>recipe.type===dishTypeFilter)
+            else searchedRecipes = recipes.filter((recipe)=>recipe.name.toLowerCase().includes(text))
+              console.log(JSON.stringify(searchedRecipes.map((recipe)=>recipe.name)))
+            setFilteredRecipes(searchedRecipes)
+          }}
+        />
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{router.navigate('/recipe')}}>
           <Image style={{...styles.buttonIcon, height:'45%'}} source={addBtn}/>
         </TouchableOpacity>
@@ -324,35 +337,37 @@ export default function Index() {
         <TouchableOpacity  onPress={()=>filter(2)} style={styles.typeFilter}><Text style={{...styles.boldText,color:dishTypeFilter===2?'black':'grey'}}>Dessert</Text></TouchableOpacity>
         <TouchableOpacity  onPress={()=>filter(3)} style={{...styles.typeFilter,borderRightWidth:0}}><Text style={{...styles.boldText,color:dishTypeFilter===3?'black':'grey'}}>Other</Text></TouchableOpacity>
       </View>
-      {filteredRecipes.length!==0 && <ScrollView 
+      {filteredRecipes.length!==0 && <FlatList 
         style={styles.column}
         showsVerticalScrollIndicator={false}
-      >
-        {filteredRecipes.map((recipe, index) => <TouchableOpacity 
-          key = {index} 
-          style={{...styles.row,borderTopWidth:index!==0?2:0,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10}}
-          onPress={()=>{router.navigate('/recipe')}}
-        >
-          <Image style={{
-            borderRadius:10,
-            width:'25%',
-            height:undefined,
-            aspectRatio:1,
-            marginRight:20
-          }} source={{uri:'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
-          <View style={{...styles.row,flex:1}}>
-            <View style={{...styles.column, justifyContent:'center'}}>
-              <Text style={styles.boldText}>{recipe.name}</Text>
-              <Text style={{...styles.boldText,color:'grey'}}>{JSON.stringify(recipe.ingredients.length)} ingredients</Text>
+        data={filteredRecipes}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity 
+            key = {index} 
+            style={{...styles.row,borderTopWidth:index!==0?2:0,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10}}
+            onPress={()=>{router.navigate('/recipe')}}
+          >
+            <Image style={{
+              borderRadius:10,
+              width:'25%',
+              height:undefined,
+              aspectRatio:1,
+              marginRight:20
+            }} source={{uri:'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
+            <View style={{...styles.row,flex:1}}>
+              <View style={{...styles.column, justifyContent:'center'}}>
+                <Text style={styles.boldText}>{item.name}</Text>
+                <Text style={{...styles.boldText,color:'grey'}}>{JSON.stringify(item.ingredients.length)} ingredients</Text>
+              </View>
+              <View style={{...styles.column, justifyContent:'center',flex:0}}>
+                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
+                  <Image style={{...styles.buttonIcon, height:'45%'}} source={addBtn}/>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={{...styles.column, justifyContent:'center',flex:0}}>
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
-                <Image style={{...styles.buttonIcon, height:'45%'}} source={addBtn}/>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </TouchableOpacity>)}
-      </ScrollView>}
+          </TouchableOpacity>
+        )}
+      />}
       {filteredRecipes.length===0 && <View style={{...styles.column,justifyContent:'center',alignItems:'center'}}>
         <Text style={{color:'grey'}}  onPress={()=>{router.navigate('/recipe')}}>Let's <Text style={{textDecorationLine:'underline'}}>add</Text> a new recipe!</Text>
       </View>}
