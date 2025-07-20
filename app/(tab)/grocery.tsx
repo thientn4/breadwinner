@@ -63,6 +63,7 @@ export default function Index() {
           <FlatList 
             ref={flatListRef}
             style={styles.column}
+            contentContainerStyle ={{paddingBottom:60}}
             showsVerticalScrollIndicator={false}
             data={[
               { id: '1', title: 'First Item' },
@@ -76,7 +77,7 @@ export default function Index() {
               // ... more items
             ]}
             renderItem={({ item, index }) => (
-              <View  key = {index} style={{...styles.column, padding:10, paddingBottom:index===0?0:(index===7?60:10)}}>
+              <View  key = {index} style={{...styles.column, padding:10, paddingBottom:0}}>
                 <TouchableWithoutFeedback   style={{flex:1}} onPress={Keyboard.dismiss}>
                   <View style={{...styles.row,flex:1, paddingBottom:10}}>
                     <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
