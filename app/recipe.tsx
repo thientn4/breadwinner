@@ -72,7 +72,6 @@ export default function Index() {
       <KeyboardAvoidingView
         style={{flex:1}}
         behavior={Platform.OS==="ios"?'padding':undefined}
-        keyboardVerticalOffset={screenHeight/80}
       >
         <ScrollView 
           style={styles.column}
@@ -179,6 +178,13 @@ export default function Index() {
             />
           </View>
         </ScrollView>
+        {instructionActive && <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2,paddingBottom:10}}>
+          <TouchableOpacity style={styles.typeFilter} onPress={()=>{
+            setInstructionActive(false)
+            Keyboard.dismiss()
+          }}><Text style={styles.boldText}>Done</Text></TouchableOpacity>
+        </View>}
+      </KeyboardAvoidingView>
         {!instructionActive && <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
           <TouchableOpacity style={styles.typeFilter} onPress={()=>{
             if(Keyboard.isVisible()){
@@ -192,13 +198,6 @@ export default function Index() {
           <View style={{borderColor:'black',borderRightWidth:2}}></View>
           <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{}}><Text style={styles.boldText}>{recipe?'Update':'Add'}</Text></TouchableOpacity>
         </View>}
-        {instructionActive && <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
-          <TouchableOpacity style={styles.typeFilter} onPress={()=>{
-            setInstructionActive(false)
-            Keyboard.dismiss()
-          }}><Text style={styles.boldText}>Done</Text></TouchableOpacity>
-        </View>}
-      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
