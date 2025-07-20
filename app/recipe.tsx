@@ -120,6 +120,8 @@ export default function Index() {
       if(data)recipes=JSON.parse(data)
     }
     if(recipes!==null){
+      if(recipeName.trim()==='' || instruction.trim()==='' || ingredients.length===0)
+        return alert('a recipe must have its name, ingredients, instruction')
       if(recipeName!==recipe.name)
         for(let i=0; i<recipes.length; i++)
           if(recipes[i].name===recipeName)
@@ -195,12 +197,14 @@ export default function Index() {
               <View style={{...styles.row,flex:1, paddingLeft:10, paddingRight:10}}>
                 <TextInput 
                   style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10}} 
-                  placeholder="Quantity" 
+                  placeholder="Quantity & note" 
                   placeholderTextColor="grey"
                   value={quantity}
                   onChangeText={(text) => {setQuantity(text)}}
                 />
                 <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
+                  if(ingredient.trim()==='')return
+                  if(ingredient!==ingredient.replace(/[^a-zA-Z]/g, ''))return alert("Keep ingredient name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'")
                   let newIngredients=[
                     {name:ingredient.toLowerCase(),quantity:quantity.toLowerCase()},
                     ...ingredients.filter((item)=>item.name!==ingredient)
