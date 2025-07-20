@@ -81,16 +81,18 @@ export default function Index() {
       if(data)recipes=JSON.parse(data)
     }
     if(recipes!==null){
-      if(recipeName.trim()==='' || instruction.trim()==='' || ingredients.length===0)
+      let processedName=recipeName.trim().replace(/\s+/g, ' ')
+      let processedInstruction=instruction.trim().replace(/\s+/g, ' ')
+      if(processedName==='' || processedInstruction==='' || ingredients.length===0)
         return Alert.alert('A recipe must have its name, ingredients, instruction','')
       for(let i=0; i<recipes.length; i++)
-        if(recipes[i].name.toLowerCase()===recipeName.toLowerCase())
-          return Alert.alert(`You already have a recipe for '${recipeName}'`,'')
+        if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
+          return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
       recipes.push({
-        "name": recipeName.trim(),
+        "name": processedName,
         "type": dishType,
         "ingredients": ingredients,
-        "instruction": instruction.trim()
+        "instruction": processedInstruction
       })
       recipes.sort((a,b)=>a.name.localeCompare(b.name))
       localStorage.store('recipes',JSON.stringify(recipes))
@@ -119,23 +121,24 @@ export default function Index() {
       if(data)recipes=JSON.parse(data)
     }
     if(recipes!==null){
-      if(recipeName.trim()==='' || instruction.trim()==='' || ingredients.length===0)
+      let processedName=recipeName.trim().replace(/\s+/g, ' ')
+      let processedInstruction=instruction.trim().replace(/\s+/g, ' ')
+      if(processedName==='' || processedInstruction==='' || ingredients.length===0)
         return Alert.alert('a recipe must have its name, ingredients, instruction','')
-      if(recipeName.toLowerCase()!==recipe.name.toLowerCase())
+      if(processedName.toLowerCase()!==recipe.name.toLowerCase())
         for(let i=0; i<recipes.length; i++)
-          if(recipes[i].name.toLowerCase()===recipeName.toLowerCase())
+          if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
             return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
       recipes=recipes.filter((item)=>item.name!==recipe.name)
       recipes.push({
-        "name": recipeName,
+        "name": processedName,
         "type": dishType,
         "ingredients": ingredients,
-        "instruction": instruction
+        "instruction": processedInstruction
       })
       recipes.sort((a,b)=>a.name.localeCompare(b.name))
       localStorage.store('recipes',JSON.stringify(recipes))
       Alert.alert('Recipe updated!','')
-      router.back()
     }else{
       Alert.alert('There was an error. Please try again later.','')
     }
@@ -202,13 +205,16 @@ export default function Index() {
                   onChangeText={(text) => {setQuantity(text)}}
                 />
                 <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
-                  if(ingredient.trim()==='')return
-                  if(ingredient!==ingredient.replace(/[^a-zA-Z]/g, ''))return Alert.alert("Keep ingredient name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'",'')
+                  let processedIngredientName=ingredient.toLowerCase().trim().replace(/\s+/g, ' ')
+                  if(processedIngredientName==='')return
+                  if(ingredient!==ingredient.replace(/[^a-zA-Z\s]/g, ''))return Alert.alert("Keep ingredient name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'",'')
                   let newIngredients=[
-                    {name:ingredient.toLowerCase(),quantity:quantity.toLowerCase()},
-                    ...ingredients.filter((item)=>item.name!==ingredient)
+                    {name:processedIngredientName,quantity:quantity.toLowerCase().trim().replace(/\s+/g, ' ')},
+                    ...ingredients.filter((item)=>item.name!==processedIngredientName)
                   ].sort((a,b)=>a.name.localeCompare(b.name))
                   setIngredients(newIngredients)
+                  setIngredient('')
+                  setQuantity('')
                 }}>
                   <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../assets/images/add_btn.png')}/>
                 </TouchableOpacity>
