@@ -154,7 +154,7 @@ export default function Index() {
           style={styles.column}
           showsVerticalScrollIndicator={false}
           scrollEnabled={!instructionActive}
-          keyboardShouldPersistTaps={instructionActive?'always':'never'}
+          keyboardShouldPersistTaps={'always'}
         >
           {!instructionActive && <View>
             <Image style={{
