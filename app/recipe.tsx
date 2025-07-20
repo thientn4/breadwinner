@@ -185,19 +185,19 @@ export default function Index() {
           }}><Text style={styles.boldText}>Done</Text></TouchableOpacity>
         </View>}
       </KeyboardAvoidingView>
-        {!instructionActive && <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
-          <TouchableOpacity style={styles.typeFilter} onPress={()=>{
-            if(Keyboard.isVisible()){
-              setInstructionActive(false)
-              Keyboard.dismiss()
-            }
-            else router.back()
-          }}><Text style={styles.boldText}>Cancel</Text></TouchableOpacity>
-          <View style={{borderColor:'black',borderRightWidth:2}}></View>
-          <TouchableOpacity style={styles.typeFilter} onPress={()=>{}}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>
-          <View style={{borderColor:'black',borderRightWidth:2}}></View>
-          <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{}}><Text style={styles.boldText}>{recipe?'Update':'Add'}</Text></TouchableOpacity>
-        </View>}
+      {!instructionActive && <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
+        <TouchableOpacity style={styles.typeFilter} onPress={()=>{
+          if(Keyboard.isVisible()){
+            setInstructionActive(false)
+            Keyboard.dismiss()
+          }
+          else router.back()
+        }}><Text style={styles.boldText}>Cancel</Text></TouchableOpacity>
+        <View style={{borderColor:'black',borderRightWidth:2}}></View>
+        <TouchableOpacity style={styles.typeFilter} onPress={()=>{}}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>
+        <View style={{borderColor:'black',borderRightWidth:2}}></View>
+        <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{}}><Text style={styles.boldText}>{recipe?'Update':'Add'}</Text></TouchableOpacity>
+      </View>}
     </SafeAreaView>
   );
 }

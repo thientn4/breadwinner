@@ -307,7 +307,7 @@ export default function Index() {
     <KeyboardAvoidingView 
       style={{...styles.column,backgroundColor:'rgb(58,58,58)'}}
       behavior={Platform.OS==="ios"?'padding':undefined}
-      keyboardVerticalOffset={screenHeight/8}
+      keyboardVerticalOffset={100}
     >
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{Keyboard.dismiss;alert("We are still working on\nrecipe QR code scanner.\nCheck back later!")}}>

@@ -48,18 +48,18 @@ export default function Index() {
   const router = useRouter();
   return (
     <View style={styles.column}>
-      <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-        <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Add to grocery" placeholderTextColor="grey"/>
-        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={Keyboard.dismiss}>
-          <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
-        </TouchableOpacity>
-      </View>
       <View style={{flex:1}}>
         <KeyboardAvoidingView 
           style={{flex:1}}
           behavior={Platform.OS==="ios"?'padding':undefined}
-          keyboardVerticalOffset={screenHeight/7}
+          keyboardVerticalOffset={60}
         >
+          <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
+            <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Add to grocery" placeholderTextColor="grey"/>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={Keyboard.dismiss}>
+              <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
+            </TouchableOpacity>
+          </View>
           <FlatList 
             ref={flatListRef}
             style={styles.column}
