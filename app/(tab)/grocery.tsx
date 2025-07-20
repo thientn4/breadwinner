@@ -1,7 +1,8 @@
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useRouter } from "expo-router";
 import React, { useRef } from 'react';
 import { Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const styles=StyleSheet.create({
   column:{
@@ -53,7 +54,7 @@ export default function Index() {
         <KeyboardAvoidingView 
           style={{flex:1}}
           behavior={Platform.OS==="ios"?'padding':undefined}
-          keyboardVerticalOffset={useBottomTabBarHeight()-20}
+          keyboardVerticalOffset={useHeaderHeight()+useSafeAreaInsets().bottom-80}
         >
           <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
             <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Add to grocery" placeholderTextColor="grey"/>

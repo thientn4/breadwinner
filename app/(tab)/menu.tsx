@@ -1,7 +1,8 @@
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as localStorage from '../../function/localStorage';
 
 const styles=StyleSheet.create({
@@ -308,7 +309,7 @@ export default function Index() {
     <KeyboardAvoidingView 
       style={{...styles.column,backgroundColor:'rgb(58,58,58)'}}
       behavior={Platform.OS==="ios"?'padding':undefined}
-      keyboardVerticalOffset={useBottomTabBarHeight()+20}
+      keyboardVerticalOffset={useHeaderHeight()+useSafeAreaInsets().bottom-40}
     >
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{Keyboard.dismiss;alert("We are still working on\nrecipe QR code scanner.\nCheck back later!")}}>
