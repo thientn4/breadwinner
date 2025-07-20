@@ -130,6 +130,59 @@ const defaultRecipes=[
     
   },
   {
+   "name": "Classic Cheesecake",
+   "type": 2,
+   "ingredients": [
+     {
+       "name": "Graham cracker",
+       "quantity": "1 1/2 cups"
+     },
+     {
+       "name": "Sugar",
+       "quantity": "1/4 cup"
+     },
+     {
+       "name": "Unsalted butter",
+       "quantity": "6 tbsp"
+     },
+     {
+       "name": "Cream cheese",
+       "quantity": "32 oz (4 blocks)"
+     },
+     {
+       "name": "Eggs",
+       "quantity": "4"
+     },
+     {
+       "name": "Sour cream",
+       "quantity": "1 cup"
+     },
+     {
+       "name": "Vanilla extract",
+       "quantity": "1 tbsp"
+     },
+     {
+       "name": "Lemon zest",
+       "quantity": "1 tsp"
+     }
+   ],
+   "instruction": 
+    `
+      1. Preheat oven to 325°F (160°C). Grease a 9-inch springform pan.\n
+      2. In a medium bowl, combine graham cracker crumbs, 1/4 cup granulated sugar, and melted butter. Press the mixture firmly into the bottom of the prepared springform pan. Bake for 10 minutes. Remove from oven and let cool.\n
+      3. In a large bowl, using an electric mixer, beat the softened cream cheese until smooth and creamy. Gradually add 1 1/2 cups granulated sugar, beating until well combined.\n
+      4. Beat in the eggs one at a time, mixing well after each addition. Scrape down the sides of the bowl as needed.\n
+      5. Stir in the sour cream, vanilla extract, and lemon zest (if using) until just combined. Do not overmix.\n
+      6. Pour the cream cheese mixture over the cooled crust in the springform pan.\n
+      7. Place the springform pan in a larger roasting pan. Pour hot water into the roasting pan to come halfway up the sides of the springform pan (this is a water bath, which helps prevent cracks).\n
+      8. Bake for 60-75 minutes, or until the edges are set but the center still jiggles slightly when gently shaken. \n
+      9. Turn off the oven, crack the oven door open, and leave the cheesecake in the oven for 1 hour to cool slowly. This also helps prevent cracks.\n
+      10. Remove the cheesecake from the oven and water bath. Let it cool completely on a wire rack at room temperature.\n
+      11. Once completely cool, cover loosely with plastic wrap and refrigerate for at least 4 hours, or preferably overnight, before serving. This allows the cheesecake to firm up and flavors to meld.\n
+      12. Carefully remove the sides of the springform pan before slicing and serving. Top with your favorite fruit, sauces, or whipped cream if desired."
+    `
+  },
+  {
     "name": "Pork Vindaloo",
     "type": 1,
     "ingredients": [
@@ -224,59 +277,6 @@ const defaultRecipes=[
         Stir occasionally to prevent sticking and add a little more water if the sauce becomes too thick. \n
         The goal is a rich, thick sauce, so if it's too watery at the end, remove the lid and simmer uncovered for the last 20-30 minutes to reduce.
       `
-  },
-  {
-   "name": "Classic Cheesecake",
-   "type": 2,
-   "ingredients": [
-     {
-       "name": "Graham cracker",
-       "quantity": "1 1/2 cups"
-     },
-     {
-       "name": "Sugar",
-       "quantity": "1/4 cup"
-     },
-     {
-       "name": "Unsalted butter",
-       "quantity": "6 tbsp"
-     },
-     {
-       "name": "Cream cheese",
-       "quantity": "32 oz (4 blocks)"
-     },
-     {
-       "name": "Eggs",
-       "quantity": "4"
-     },
-     {
-       "name": "Sour cream",
-       "quantity": "1 cup"
-     },
-     {
-       "name": "Vanilla extract",
-       "quantity": "1 tbsp"
-     },
-     {
-       "name": "Lemon zest",
-       "quantity": "1 tsp"
-     }
-   ],
-   "instruction": 
-    `
-      1. Preheat oven to 325°F (160°C). Grease a 9-inch springform pan.\n
-      2. In a medium bowl, combine graham cracker crumbs, 1/4 cup granulated sugar, and melted butter. Press the mixture firmly into the bottom of the prepared springform pan. Bake for 10 minutes. Remove from oven and let cool.\n
-      3. In a large bowl, using an electric mixer, beat the softened cream cheese until smooth and creamy. Gradually add 1 1/2 cups granulated sugar, beating until well combined.\n
-      4. Beat in the eggs one at a time, mixing well after each addition. Scrape down the sides of the bowl as needed.\n
-      5. Stir in the sour cream, vanilla extract, and lemon zest (if using) until just combined. Do not overmix.\n
-      6. Pour the cream cheese mixture over the cooled crust in the springform pan.\n
-      7. Place the springform pan in a larger roasting pan. Pour hot water into the roasting pan to come halfway up the sides of the springform pan (this is a water bath, which helps prevent cracks).\n
-      8. Bake for 60-75 minutes, or until the edges are set but the center still jiggles slightly when gently shaken. \n
-      9. Turn off the oven, crack the oven door open, and leave the cheesecake in the oven for 1 hour to cool slowly. This also helps prevent cracks.\n
-      10. Remove the cheesecake from the oven and water bath. Let it cool completely on a wire rack at room temperature.\n
-      11. Once completely cool, cover loosely with plastic wrap and refrigerate for at least 4 hours, or preferably overnight, before serving. This allows the cheesecake to firm up and flavors to meld.\n
-      12. Carefully remove the sides of the springform pan before slicing and serving. Top with your favorite fruit, sauces, or whipped cream if desired."
-    `
   }
 ]
 let recipes=[]
@@ -295,15 +295,16 @@ export default function Index() {
     setDishTypeFilter(dishType)
   }
   useEffect(()=>{
-    localStorage.retrieve('recipes').then((data)=>{
-      if(data){
-        recipes=JSON.parse(data)
-      }else{
+    const getRecipes = async()=>{
+      let data = await localStorage.retrieve('recipes')
+      if(data)recipes=JSON.parse(data)
+      else{
         recipes=defaultRecipes
-        localStorage.store(JSON.stringify(defaultRecipes))
+        localStorage.store('recipes',JSON.stringify(defaultRecipes))
       }
       setFilteredRecipes(recipes)
-    })
+    }
+    getRecipes()
   })
   return (
     <KeyboardAvoidingView 

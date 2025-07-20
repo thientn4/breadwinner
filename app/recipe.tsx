@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import * as localStorage from '../function/localStorage';
 
 const styles=StyleSheet.create({
   column:{
@@ -52,6 +53,7 @@ const styles=StyleSheet.create({
     overflow:'hidden'
   }
 })
+let recipes=null
 const dishTypes=['Appetizer', 'Main', 'Dessert', 'Other']
 export default function Index() {
   const instructionRef = useRef(null);
@@ -61,11 +63,82 @@ export default function Index() {
   const recipe = params?.recipe?JSON.parse(params.recipe):null;
   const [dishType,setDishType]=useState(recipe?recipe.type:0)
   const [recipeName,setRecipeName]=useState(recipe?recipe.name:'')
-  const [ingredients,setIngredients]=useState(recipe?recipe.ingredients:[])
+  const [ingredients,setIngredients]=useState(recipe?recipe.ingredients.sort((a,b)=>a.name.localeCompare(b.name)):[])
   const [ingredient,setIngredient]=useState('')
   const [quantity,setQuantity]=useState('')
   const [instruction,setInstruction]=useState(recipe?recipe.instruction:'')
   const [instructionActive,setInstructionActive]=useState(false)
+  useEffect(()=>{
+    const getRecipes = async()=>{
+      let data = await localStorage.retrieve('recipes')
+      if(data)recipes=JSON.parse(data)
+    }
+    getRecipes()
+  })
+  const addRecipe=async ()=>{
+    if(recipes===null){
+      let data = await localStorage.retrieve('recipes')
+      if(data)recipes=JSON.parse(data)
+    }
+    if(recipes!==null){
+      if(recipeName.trim()==='' || instruction.trim()==='' || ingredients.length===0)
+        return alert('a recipe must have its name, ingredients, instruction')
+      for(let i=0; i<recipes.length; i++)
+        if(recipes[i].name===recipeName)
+          return alert(`You already have a recipe for '${recipeName}'`)
+      recipes.push({
+        "name": recipeName.trim(),
+        "type": dishType,
+        "ingredients": ingredients,
+        "instruction": instruction.trim()
+      })
+      recipes.sort((a,b)=>a.name.localeCompare(b.name))
+      localStorage.store('recipes',JSON.stringify(recipes))
+      alert('New recipe added!')
+      router.back()
+    }else{
+      alert('There was an error. Please try again later.')
+    }
+  }
+  const deleteRecipe=async ()=>{
+    if(recipes===null){
+      let data = await localStorage.retrieve('recipes')
+      if(data)recipes=JSON.parse(data)
+    }
+    if(recipes!==null){
+      recipes=recipes.filter((item)=>item.name!==recipe.name)
+      localStorage.store('recipes',JSON.stringify(recipes))
+      alert('Recipe removed!')
+      router.back()
+    }else{
+      alert('There was an error. Please try again later.')
+    }
+  }
+  const updateRecipe=async ()=>{
+    if(recipes===null){
+      let data = await localStorage.retrieve('recipes')
+      if(data)recipes=JSON.parse(data)
+    }
+    if(recipes!==null){
+      if(recipeName!==recipe.name)
+        for(let i=0; i<recipes.length; i++)
+          if(recipes[i].name===recipeName)
+            return alert(`You already have a recipe for '${recipeName}'`)
+      recipes=recipes.filter((item)=>item.name!==recipe.name)
+      recipes.push({
+        "name": recipeName,
+        "type": dishType,
+        "ingredients": ingredients,
+        "instruction": instruction
+      })
+      recipes.sort((a,b)=>a.name.localeCompare(b.name))
+      localStorage.store('recipes',JSON.stringify(recipes))
+      alert('Recipe updated!')
+      router.back()
+    }else{
+      alert('There was an error. Please try again later.')
+    }
+  }
   return (
     //ignore system bar for iOS (SafeAreaView) & android (margin & padding)
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white',paddingBottom: StatusBar.currentHeight}}>
@@ -114,7 +187,7 @@ export default function Index() {
             <View>
               <TextInput 
                 style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,margin:10}} 
-                placeholder="Ingredient" 
+                placeholder="Ingredient (short & simple)" 
                 placeholderTextColor="grey"
                 value={ingredient}
                 onChangeText={(text) => {setIngredient(text)}}
@@ -127,7 +200,13 @@ export default function Index() {
                   value={quantity}
                   onChangeText={(text) => {setQuantity(text)}}
                 />
-                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
+                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
+                  let newIngredients=[
+                    {name:ingredient.toLowerCase(),quantity:quantity.toLowerCase()},
+                    ...ingredients.filter((item)=>item.name!==ingredient)
+                  ].sort((a,b)=>a.name.localeCompare(b.name))
+                  setIngredients(newIngredients)
+                }}>
                   <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../assets/images/add_btn.png')}/>
                 </TouchableOpacity>
               </View>
@@ -139,13 +218,15 @@ export default function Index() {
                 minHeight:150,
                 opacity:ingredients.length===0?0.3:1
               }}>
-                {ingredients.map((ingredient, index) => 
+                {ingredients.map((item, index) => 
                   <View key = {index} style={{...styles.row,borderTopWidth:index===0?0:2,borderColor:'grey',paddingTop:10,paddingBottom:10}}>
                     <View>
-                      <Text style={{...styles.boldText}}>{ingredient.name}</Text>
-                      <Text style={{...styles.boldText,color:'grey'}}>{ingredient.quantity}</Text>
+                      <Text style={{...styles.boldText}}>{item.name}</Text>
+                      <Text style={{...styles.boldText,color:'grey'}}>{item.quantity}</Text>
                     </View>
-                    <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
+                    <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
+                      setIngredients(ingredients.filter((itemFilter)=>item.name!==itemFilter.name))
+                    }}>
                       <Image style={{...styles.buttonIcon}} source={require('../assets/images/delete_btn.png')}/>
                     </TouchableOpacity>
                   </View>
@@ -194,9 +275,12 @@ export default function Index() {
           else router.back()
         }}><Text style={styles.boldText}>Cancel</Text></TouchableOpacity>
         <View style={{borderColor:'black',borderRightWidth:2}}></View>
-        <TouchableOpacity style={styles.typeFilter} onPress={()=>{}}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>
-        <View style={{borderColor:'black',borderRightWidth:2}}></View>
-        <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{}}><Text style={styles.boldText}>{recipe?'Update':'Add'}</Text></TouchableOpacity>
+        {recipe && <TouchableOpacity style={styles.typeFilter} onPress={()=>{deleteRecipe()}}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>}
+        {recipe && <View style={{borderColor:'black',borderRightWidth:2}}></View>}
+        <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{
+          if(!recipe)addRecipe()
+          else updateRecipe()
+        }}><Text style={styles.boldText}>{recipe?'Update':'Add'}</Text></TouchableOpacity>
       </View>}
     </SafeAreaView>
   );
