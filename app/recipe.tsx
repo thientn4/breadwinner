@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as localStorage from '../function/localStorage';
 
 const styles=StyleSheet.create({
@@ -82,10 +82,10 @@ export default function Index() {
     }
     if(recipes!==null){
       if(recipeName.trim()==='' || instruction.trim()==='' || ingredients.length===0)
-        return alert('a recipe must have its name, ingredients, instruction')
+        return Alert.alert('A recipe must have its name, ingredients, instruction','')
       for(let i=0; i<recipes.length; i++)
-        if(recipes[i].name===recipeName)
-          return alert(`You already have a recipe for '${recipeName}'`)
+        if(recipes[i].name.toLowerCase()===recipeName.toLowerCase())
+          return Alert.alert(`You already have a recipe for '${recipeName}'`,'')
       recipes.push({
         "name": recipeName.trim(),
         "type": dishType,
@@ -94,10 +94,10 @@ export default function Index() {
       })
       recipes.sort((a,b)=>a.name.localeCompare(b.name))
       localStorage.store('recipes',JSON.stringify(recipes))
-      alert('New recipe added!')
+      Alert.alert('New recipe added!','')
       router.back()
     }else{
-      alert('There was an error. Please try again later.')
+      Alert.alert('There was an error. Please try again later.','')
     }
   }
   const deleteRecipe=async ()=>{
@@ -108,10 +108,9 @@ export default function Index() {
     if(recipes!==null){
       recipes=recipes.filter((item)=>item.name!==recipe.name)
       localStorage.store('recipes',JSON.stringify(recipes))
-      alert('Recipe removed!')
       router.back()
     }else{
-      alert('There was an error. Please try again later.')
+      Alert.alert('There was an error. Please try again later.','')
     }
   }
   const updateRecipe=async ()=>{
@@ -121,11 +120,11 @@ export default function Index() {
     }
     if(recipes!==null){
       if(recipeName.trim()==='' || instruction.trim()==='' || ingredients.length===0)
-        return alert('a recipe must have its name, ingredients, instruction')
-      if(recipeName!==recipe.name)
+        return Alert.alert('a recipe must have its name, ingredients, instruction','')
+      if(recipeName.toLowerCase()!==recipe.name.toLowerCase())
         for(let i=0; i<recipes.length; i++)
-          if(recipes[i].name===recipeName)
-            return alert(`You already have a recipe for '${recipeName}'`)
+          if(recipes[i].name.toLowerCase()===recipeName.toLowerCase())
+            return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
       recipes=recipes.filter((item)=>item.name!==recipe.name)
       recipes.push({
         "name": recipeName,
@@ -135,10 +134,10 @@ export default function Index() {
       })
       recipes.sort((a,b)=>a.name.localeCompare(b.name))
       localStorage.store('recipes',JSON.stringify(recipes))
-      alert('Recipe updated!')
+      Alert.alert('Recipe updated!','')
       router.back()
     }else{
-      alert('There was an error. Please try again later.')
+      Alert.alert('There was an error. Please try again later.','')
     }
   }
   return (
@@ -182,7 +181,7 @@ export default function Index() {
                   <Text style={styles.boldText}>▶</Text>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{alert('We are still working on\nQR code generator.\nCheck back later for more!')}}>
+              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{Alert.alert('We are still working on\nQR code generator.\nCheck back later for more!','')}}>
                 <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../assets/images/qr_btn.png')}/>
               </TouchableOpacity>
             </View>
@@ -204,7 +203,7 @@ export default function Index() {
                 />
                 <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
                   if(ingredient.trim()==='')return
-                  if(ingredient!==ingredient.replace(/[^a-zA-Z]/g, ''))return alert("Keep ingredient name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'")
+                  if(ingredient!==ingredient.replace(/[^a-zA-Z]/g, ''))return Alert.alert("Keep ingredient name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'",'')
                   let newIngredients=[
                     {name:ingredient.toLowerCase(),quantity:quantity.toLowerCase()},
                     ...ingredients.filter((item)=>item.name!==ingredient)
@@ -279,7 +278,21 @@ export default function Index() {
           else router.back()
         }}><Text style={styles.boldText}>Cancel</Text></TouchableOpacity>
         <View style={{borderColor:'black',borderRightWidth:2}}></View>
-        {recipe && <TouchableOpacity style={styles.typeFilter} onPress={()=>{deleteRecipe()}}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>}
+        {recipe && <TouchableOpacity style={styles.typeFilter} onPress={()=>{
+          Alert.alert(
+            "Are you sure you want to delete this recipe?","",
+            [
+              {
+                text: "No",
+              },
+              {
+                text: "Yes",
+                onPress: () => deleteRecipe(),
+              },
+            ],
+            { cancelable: false } // Optional: prevents dismissing the alert by tapping outside (Android only)
+          );
+        }}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>}
         {recipe && <View style={{borderColor:'black',borderRightWidth:2}}></View>}
         <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{
           if(!recipe)addRecipe()
