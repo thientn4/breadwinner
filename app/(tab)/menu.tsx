@@ -1,10 +1,11 @@
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
-import { Alert, Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import defaultData from '../../support/defaultData';
 import * as longTermStorage from '../../support/longTermStorage';
+import * as tempStorage from '../../support/tempStorage';
 
 const styles=StyleSheet.create({
   column:{
@@ -48,8 +49,6 @@ const styles=StyleSheet.create({
 })
 const weekdays=['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
 const meals=['Breakfast','Lunch','Dinner']
-let recipes=[]
-let plan=[[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]]
 export default function Index() {
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
@@ -62,17 +61,16 @@ export default function Index() {
   const addPlan=async (recipeName)=>{
     // plan=[[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]]
     // longTermStorage.remove('plan')
-
-    let planSlot=plan[weekday][meal]
+    let planSlot=tempStorage.plan[weekday][meal]
     for(let i=0; i<planSlot.length; i++)
       if(planSlot[i].name===recipeName){
-        plan[weekday][meal][i].serving+=parseInt(serving)
-        longTermStorage.store('plan',JSON.stringify(plan))
+        tempStorage.plan[weekday][meal][i].serving+=parseInt(serving)
+        longTermStorage.store('plan',JSON.stringify(tempStorage.plan))
         Alert.alert('plan updated!','')
         return
       }
-    plan[weekday][meal].push({name:recipeName, serving:parseInt(serving)})
-    longTermStorage.store('plan',JSON.stringify(plan))
+    tempStorage.plan[weekday][meal].push({name:recipeName, serving:parseInt(serving)})
+    longTermStorage.store('plan',JSON.stringify(tempStorage.plan))
     Alert.alert('plan updated!','')
   }
   const filter=(dishType)=>{
@@ -83,19 +81,19 @@ export default function Index() {
   useEffect(()=>{
     const getRecipes = async()=>{
       let data = await longTermStorage.retrieve('recipes')
-      if(data)recipes=JSON.parse(data)
+      if(data)tempStorage.recipes=JSON.parse(data)
       else{
-        recipes=defaultData.defaultRecipes
+        tempStorage.recipes=defaultData.defaultRecipes
         longTermStorage.store('recipes',JSON.stringify(defaultData.defaultRecipes))
       }
-      setFilteredRecipes(recipes.sort((a,b)=>a.name.localeCompare(b.name)))
+      setFilteredRecipes(tempStorage.recipes.sort((a,b)=>a.name.localeCompare(b.name)))
 
       data=await longTermStorage.retrieve('plan')
-      if(!data) longTermStorage.store('plan',JSON.stringify(plan))
-      else plan=JSON.parse(data)
+      if(!data) longTermStorage.store('plan',JSON.stringify(tempStorage.plan))
+      else tempStorage.plan=JSON.parse(data)
     }
     getRecipes()
-  },[])
+  },[tempStorage.recipes])
   return (
     <KeyboardAvoidingView 
       style={{...styles.column,backgroundColor:'white'}}

@@ -1,3 +1,4 @@
+import { tempStorage } from "@/support/tempStorage";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -59,14 +60,13 @@ export default function Index() {
   const [plan,setPlan]=useState([[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]])
   useEffect(()=>{
     const getPlan = async()=>{
-      let data = await longTermStorage.retrieve('plan')
-      if(data){
-        setPlan(JSON.parse(data))
-      }
-      console.log(JSON.parse(data))
+      let data=await longTermStorage.retrieve('plan')
+      if(!data) longTermStorage.store('plan',JSON.stringify(tempStorage.plan))
+      else tempStorage.plan=JSON.parse(data)
+      setPlan(tempStorage.plan)
     }
     getPlan()
-  },[])
+  },[tempStorage.plan])
   return (
     <View style={{...styles.column,borderTopWidth:2, borderBottomWidth:2}}>
       <ScrollView 

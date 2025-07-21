@@ -2,6 +2,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as longTermStorage from '../support/longTermStorage';
+import * as tempStorage from '../support/tempStorage';
 
 const styles=StyleSheet.create({
   column:{
@@ -53,7 +54,6 @@ const styles=StyleSheet.create({
     overflow:'hidden'
   }
 })
-let recipes=null
 const dishTypes=['Appetizer', 'Main', 'Dessert', 'Other']
 export default function Index() {
   const instructionRef = useRef(null);
@@ -71,31 +71,31 @@ export default function Index() {
   useEffect(()=>{
     const getRecipes = async()=>{
       let data = await longTermStorage.retrieve('recipes')
-      if(data)recipes=JSON.parse(data)
+      if(data)tempStorage.recipes=JSON.parse(data)
     }
     getRecipes()
   })
   const addRecipe=async ()=>{
-    if(recipes===null){
+    if(tempStorage.recipes===null){
       let data = await longTermStorage.retrieve('recipes')
-      if(data)recipes=JSON.parse(data)
+      if(data)tempStorage.recipes=JSON.parse(data)
     }
-    if(recipes!==null){
+    if(tempStorage.recipes!==null){
       let processedName=recipeName.trim().replace(/\s+/g, ' ')
       let processedInstruction=instruction.trim().replace(/\s+/g, ' ')
       if(processedName==='' || processedInstruction==='' || ingredients.length===0)
         return Alert.alert('A recipe must have its name, ingredients, instruction','')
-      for(let i=0; i<recipes.length; i++)
-        if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
-          return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
-      recipes.push({
+      for(let i=0; i<tempStorage.recipes.length; i++)
+        if(tempStorage.recipes[i].name.toLowerCase()===processedName.toLowerCase())
+          return Alert.alert(`You already have a recipe for '${tempStorage.recipes[i].name}'`,'')
+      tempStorage.recipes.push({
         "name": processedName,
         "type": dishType,
         "ingredients": ingredients,
         "instruction": processedInstruction
       })
-      recipes.sort((a,b)=>a.name.localeCompare(b.name))
-      longTermStorage.store('recipes',JSON.stringify(recipes))
+      tempStorage.recipes.sort((a,b)=>a.name.localeCompare(b.name))
+      longTermStorage.store('recipes',JSON.stringify(tempStorage.recipes))
       Alert.alert('New recipe added!','')
       router.back()
     }else{
@@ -103,41 +103,41 @@ export default function Index() {
     }
   }
   const deleteRecipe=async ()=>{
-    if(recipes===null){
+    if(tempStorage.recipes===null){
       let data = await longTermStorage.retrieve('recipes')
-      if(data)recipes=JSON.parse(data)
+      if(data)tempStorage.recipes=JSON.parse(data)
     }
-    if(recipes!==null){
-      recipes=recipes.filter((item)=>item.name!==recipe.name)
-      longTermStorage.store('recipes',JSON.stringify(recipes))
+    if(tempStorage.recipes!==null){
+      tempStorage.recipes=tempStorage.recipes.filter((item)=>item.name!==recipe.name)
+      longTermStorage.store('recipes',JSON.stringify(tempStorage.recipes))
       router.back()
     }else{
       Alert.alert('There was an error. Please try again later.','')
     }
   }
   const updateRecipe=async ()=>{
-    if(recipes===null){
+    if(tempStorage.recipes===null){
       let data = await longTermStorage.retrieve('recipes')
-      if(data)recipes=JSON.parse(data)
+      if(data)tempStorage.recipes=JSON.parse(data)
     }
-    if(recipes!==null){
+    if(tempStorage.recipes!==null){
       let processedName=recipeName.trim().replace(/\s+/g, ' ')
       let processedInstruction=instruction.trim().replace(/\s+/g, ' ')
       if(processedName==='' || processedInstruction==='' || ingredients.length===0)
         return Alert.alert('a recipe must have its name, ingredients, instruction','')
       if(processedName.toLowerCase()!==recipe.name.toLowerCase())
-        for(let i=0; i<recipes.length; i++)
-          if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
-            return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
-      recipes=recipes.filter((item)=>item.name!==recipe.name)
-      recipes.push({
+        for(let i=0; i<tempStorage.recipes.length; i++)
+          if(tempStorage.recipes[i].name.toLowerCase()===processedName.toLowerCase())
+            return Alert.alert(`You already have a recipe for '${tempStorage.recipes[i].name}'`,'')
+      tempStorage.recipes=tempStorage.recipes.filter((item)=>item.name!==recipe.name)
+      tempStorage.recipes.push({
         "name": processedName,
         "type": dishType,
         "ingredients": ingredients,
         "instruction": processedInstruction
       })
-      recipes.sort((a,b)=>a.name.localeCompare(b.name))
-      longTermStorage.store('recipes',JSON.stringify(recipes))
+      tempStorage.recipes.sort((a,b)=>a.name.localeCompare(b.name))
+      longTermStorage.store('recipes',JSON.stringify(tempStorage.recipes))
       Alert.alert('Recipe updated!','')
     }else{
       Alert.alert('There was an error. Please try again later.','')
