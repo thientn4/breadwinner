@@ -110,6 +110,14 @@ export default function Index() {
     if(tempStorage.recipes!==null){
       tempStorage.recipes=tempStorage.recipes.filter((item)=>item.name!==recipe.name)
       longTermStorage.store('recipes',JSON.stringify(tempStorage.recipes))
+      let plan=JSON.parse(await longTermStorage.retrieve('plan'))
+      for(let i=0; i<plan.length; i++){
+        for(let j=0; j<plan[i].length; j++){
+          plan[i][j]=plan[i][j].filter((item)=>item.name!==recipe.name)
+        }
+      }
+      longTermStorage.store('plan',JSON.stringify(plan))
+      tempStorage.plan=plan
       router.back()
     }else{
       Alert.alert('There was an error. Please try again later.','')
