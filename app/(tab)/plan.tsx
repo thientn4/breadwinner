@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import * as longTermStorage from '../../support/longTermStorage';
 
 const styles=StyleSheet.create({
   column:{
@@ -55,6 +56,17 @@ export default function Index() {
   const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
+  const [plan,setPlan]=useState([[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]])
+  useEffect(()=>{
+    const getPlan = async()=>{
+      let data = await longTermStorage.retrieve('plan')
+      if(data){
+        setPlan(JSON.parse(data))
+      }
+      console.log(JSON.parse(data))
+    }
+    getPlan()
+  },[])
   return (
     <View style={{...styles.column,borderTopWidth:2, borderBottomWidth:2}}>
       <ScrollView 
@@ -71,10 +83,10 @@ export default function Index() {
               <View style={styles.cell}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
               {['Breakfast','Lunch','Dinner'].map((mealType, subIndex) => 
                 <View key={subIndex} style={{...styles.cell,width:screenWidth/2-40}}>
-                  {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}}>{mealType}</Text>}
-                  {index!==0 && ['',''].map((weekday, planIndex) => 
+                  {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}} onPress={async ()=>{console.log(`hello ${(await longTermStorage.retrieve('plan'))}`)}}>{mealType}</Text>}
+                  {index!==0 && plan[index-1][subIndex].map((weekday, planIndex) => 
                     <TouchableOpacity key={planIndex} style={{...styles.cellItem,width:screenWidth/2-46}} onPress={()=>{router.navigate('/recipe')}}>
-                      <Text><Text style={{...styles.boldText,color:'grey'}}>4x</Text> Vindaloo</Text>
+                      <Text><Text style={{...styles.boldText,color:'grey'}}>{weekday.serving}x</Text> {weekday.name}</Text>
                       <Text><Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={()=>{}}>remove</Text></Text>
                     </TouchableOpacity>
                   )}

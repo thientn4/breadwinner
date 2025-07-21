@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import defaultData from '../../support/defaultData';
-import * as localStorage from '../../support/localStorage';
+import * as longTermStorage from '../../support/longTermStorage';
 
 const styles=StyleSheet.create({
   column:{
@@ -49,6 +49,7 @@ const styles=StyleSheet.create({
 const weekdays=['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
 const meals=['Breakfast','Lunch','Dinner']
 let recipes=[]
+let plan=[[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]]
 export default function Index() {
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
@@ -58,6 +59,22 @@ export default function Index() {
   const [serving,setServing]=useState('1')
   const [filteredRecipes,setFilteredRecipes]=useState([])
   const [searchQuery,setSearchQuery]=useState('')
+  const addPlan=async (recipeName)=>{
+    // plan=[[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]]
+    // longTermStorage.remove('plan')
+
+    let planSlot=plan[weekday][meal]
+    for(let i=0; i<planSlot.length; i++)
+      if(planSlot[i].name===recipeName){
+        plan[weekday][meal][i].serving+=parseInt(serving)
+        longTermStorage.store('plan',JSON.stringify(plan))
+        Alert.alert('plan updated!','')
+        return
+      }
+    plan[weekday][meal].push({name:recipeName, serving:parseInt(serving)})
+    longTermStorage.store('plan',JSON.stringify(plan))
+    Alert.alert('plan updated!','')
+  }
   const filter=(dishType)=>{
     setSearchQuery('')
     Keyboard.dismiss()
@@ -65,16 +82,20 @@ export default function Index() {
   }
   useEffect(()=>{
     const getRecipes = async()=>{
-      let data = await localStorage.retrieve('recipes')
+      let data = await longTermStorage.retrieve('recipes')
       if(data)recipes=JSON.parse(data)
       else{
         recipes=defaultData.defaultRecipes
-        localStorage.store('recipes',JSON.stringify(defaultData.defaultRecipes))
+        longTermStorage.store('recipes',JSON.stringify(defaultData.defaultRecipes))
       }
       setFilteredRecipes(recipes.sort((a,b)=>a.name.localeCompare(b.name)))
+
+      data=await longTermStorage.retrieve('plan')
+      if(!data) longTermStorage.store('plan',JSON.stringify(plan))
+      else plan=JSON.parse(data)
     }
     getRecipes()
-  })
+  },[])
   return (
     <KeyboardAvoidingView 
       style={{...styles.column,backgroundColor:'white'}}
@@ -134,7 +155,7 @@ export default function Index() {
                 <Text style={{...styles.boldText,color:'grey',marginTop:10}}>{JSON.stringify(item.ingredients.length)} ingredients</Text>
               </View>
               <View style={{...styles.column, justifyContent:'center',flex:0}}>
-                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
+                <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>addPlan(item.name)}>
                   <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
                 </TouchableOpacity>
               </View>

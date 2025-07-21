@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import * as localStorage from '../support/localStorage';
+import * as longTermStorage from '../support/longTermStorage';
 
 const styles=StyleSheet.create({
   column:{
@@ -70,14 +70,14 @@ export default function Index() {
   const [instructionActive,setInstructionActive]=useState(false)
   useEffect(()=>{
     const getRecipes = async()=>{
-      let data = await localStorage.retrieve('recipes')
+      let data = await longTermStorage.retrieve('recipes')
       if(data)recipes=JSON.parse(data)
     }
     getRecipes()
   })
   const addRecipe=async ()=>{
     if(recipes===null){
-      let data = await localStorage.retrieve('recipes')
+      let data = await longTermStorage.retrieve('recipes')
       if(data)recipes=JSON.parse(data)
     }
     if(recipes!==null){
@@ -95,7 +95,7 @@ export default function Index() {
         "instruction": processedInstruction
       })
       recipes.sort((a,b)=>a.name.localeCompare(b.name))
-      localStorage.store('recipes',JSON.stringify(recipes))
+      longTermStorage.store('recipes',JSON.stringify(recipes))
       Alert.alert('New recipe added!','')
       router.back()
     }else{
@@ -104,12 +104,12 @@ export default function Index() {
   }
   const deleteRecipe=async ()=>{
     if(recipes===null){
-      let data = await localStorage.retrieve('recipes')
+      let data = await longTermStorage.retrieve('recipes')
       if(data)recipes=JSON.parse(data)
     }
     if(recipes!==null){
       recipes=recipes.filter((item)=>item.name!==recipe.name)
-      localStorage.store('recipes',JSON.stringify(recipes))
+      longTermStorage.store('recipes',JSON.stringify(recipes))
       router.back()
     }else{
       Alert.alert('There was an error. Please try again later.','')
@@ -117,7 +117,7 @@ export default function Index() {
   }
   const updateRecipe=async ()=>{
     if(recipes===null){
-      let data = await localStorage.retrieve('recipes')
+      let data = await longTermStorage.retrieve('recipes')
       if(data)recipes=JSON.parse(data)
     }
     if(recipes!==null){
@@ -137,7 +137,7 @@ export default function Index() {
         "instruction": processedInstruction
       })
       recipes.sort((a,b)=>a.name.localeCompare(b.name))
-      localStorage.store('recipes',JSON.stringify(recipes))
+      longTermStorage.store('recipes',JSON.stringify(recipes))
       Alert.alert('Recipe updated!','')
     }else{
       Alert.alert('There was an error. Please try again later.','')
