@@ -1,7 +1,7 @@
 import { tempStorage } from "@/support/tempStorage";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as longTermStorage from '../../support/longTermStorage';
 
 const styles=StyleSheet.create({
@@ -85,7 +85,21 @@ export default function Index() {
                 <View key={subIndex} style={{...styles.cell,width:screenWidth/2-40}}>
                   {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}} onPress={async ()=>{console.log(`hello ${(await longTermStorage.retrieve('plan'))}`)}}>{mealType}</Text>}
                   {index!==0 && plan[index-1][subIndex].map((weekday, planIndex) => 
-                    <TouchableOpacity key={planIndex} style={{...styles.cellItem,width:screenWidth/2-46}} onPress={()=>{router.navigate('/recipe')}}>
+                    <TouchableOpacity key={planIndex} style={{...styles.cellItem,width:screenWidth/2-46}} onPress={async ()=>{
+                      if(tempStorage.recipes===null){
+                        let data = await longTermStorage.retrieve('recipes')
+                        if(data)tempStorage.recipes=JSON.parse(data)
+                      }
+                      if(tempStorage.recipes!==null){
+                        for(let i=0; i<tempStorage.recipes.length; i++){
+                          if(tempStorage.recipes[i].name===weekday.name){
+                            router.push({pathname:'/recipe',params:{recipe:JSON.stringify(tempStorage.recipes[i])}})
+                            return
+                          }
+                        }
+                      }
+                      Alert.alert('This recipe is not available','')
+                    }}>
                       <Text><Text style={{...styles.boldText,color:'grey'}}>{weekday.serving}x</Text> {weekday.name}</Text>
                       <Text><Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={()=>{}}>remove</Text></Text>
                     </TouchableOpacity>
