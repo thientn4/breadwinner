@@ -83,7 +83,7 @@ export default function Index() {
               <View style={styles.cell}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
               {['Breakfast','Lunch','Dinner'].map((mealType, subIndex) => 
                 <View key={subIndex} style={{...styles.cell,width:screenWidth/2-40}}>
-                  {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}} onPress={async ()=>{console.log(`hello ${(await longTermStorage.retrieve('plan'))}`)}}>{mealType}</Text>}
+                  {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}}>{mealType}</Text>}
                   {index!==0 && plan[index-1][subIndex].map((weekday, planIndex) => 
                     <TouchableOpacity key={planIndex} style={{...styles.cellItem,width:screenWidth/2-46}} onPress={async ()=>{
                       if(tempStorage.recipes===null){
@@ -101,7 +101,10 @@ export default function Index() {
                       Alert.alert('This recipe is not available','')
                     }}>
                       <Text><Text style={{...styles.boldText,color:'grey'}}>{weekday.serving}x</Text> {weekday.name}</Text>
-                      <Text><Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={()=>{}}>remove</Text></Text>
+                      <Text><Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={()=>{
+                        tempStorage.plan[index-1][subIndex]=tempStorage.plan[index-1][subIndex].filter((item) => item.name !== weekday.name)
+                        longTermStorage.store('plan',JSON.stringify(tempStorage.plan))
+                      }}>remove</Text></Text>
                     </TouchableOpacity>
                   )}
                 </View>
