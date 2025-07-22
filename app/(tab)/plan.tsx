@@ -86,18 +86,16 @@ export default function Index() {
                   {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}}>{mealType}</Text>}
                   {index!==0 && plan[index-1][subIndex].map((weekday, planIndex) => 
                     <TouchableOpacity key={planIndex} style={{...styles.cellItem,width:screenWidth/2-46}} onPress={async ()=>{
-                      if(tempStorage.recipes===null){
-                        let data = await longTermStorage.retrieve('recipes')
-                        if(data)tempStorage.recipes=JSON.parse(data)
-                      }
-                      if(tempStorage.recipes!==null){
-                        for(let i=0; i<tempStorage.recipes.length; i++){
-                          if(tempStorage.recipes[i].name===weekday.name){
-                            router.push({pathname:'/recipe',params:{recipe:JSON.stringify(tempStorage.recipes[i])}})
+                      let data = await longTermStorage.retrieve('recipes')
+                      if(data){
+                        data=JSON.parse(data)
+                        for(let i=0; i<data.length; i++){
+                          if(data[i].name===weekday.name){
+                            router.push({pathname:'/recipe',params:{recipe:JSON.stringify(data[i])}})
                             return
                           }
                         }
-                      }
+                      }  
                       Alert.alert('This recipe is not available','')
                     }}>
                       <Text><Text style={{...styles.boldText,color:'grey'}}>{weekday.serving}x</Text> {weekday.name}</Text>
