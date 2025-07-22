@@ -1,5 +1,4 @@
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useRouter } from "expo-router";
 import React, { useRef } from 'react';
 import { Alert, Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -47,7 +46,7 @@ const styles=StyleSheet.create({
 export default function Index() {
   const flatListRef = useRef(null);
   const screenHeight = Dimensions.get('window').height;
-  const router = useRouter();
+  const [updated,setUpdated] = React.useState(true);
   return (
     <View style={styles.column}>
       <View style={{flex:1}}>
@@ -68,7 +67,7 @@ export default function Index() {
           <FlatList 
             ref={flatListRef}
             style={styles.column}
-            contentContainerStyle ={{paddingBottom:60}}
+            contentContainerStyle ={{paddingBottom:updated?10:60}}
             showsVerticalScrollIndicator={false}
             data={[
               { id: '1', title: 'First Item' },
@@ -104,16 +103,17 @@ export default function Index() {
                   multiline = {true}
                   numberOfLines = {4}
                   onPress ={()=>{flatListRef?.current?.scrollToIndex({ index: index, animated: true })}}
+                  onChange={()=>setUpdated(false)}
                 />
               </View>
             )}
           />
         </KeyboardAvoidingView>
-        <View style={{...styles.row,width:'100%', position:'absolute',bottom:0,alignSelf: 'flex-start',justifyContent:'center'}}>
-          <TouchableOpacity style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',paddingLeft:20,paddingRight:20, margin:10, marginTop:0,borderWidth:0,alignSelf: 'flex-start'}}>
+        {!updated && <View style={{...styles.row,width:'100%', position:'absolute',bottom:0,alignSelf: 'flex-start',justifyContent:'center'}}>
+          <TouchableOpacity style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',paddingLeft:20,paddingRight:20, margin:10, marginTop:0,borderWidth:0,alignSelf: 'flex-start'}} onPress={()=>{setUpdated(true)}}>
             <Text style={{...styles.boldText,color:'white'}}>update +</Text>
           </TouchableOpacity>
-        </View>
+        </View>}
       </View>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\nshopping list QR code scanner.\nCheck back later!",'')}}>
