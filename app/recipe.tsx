@@ -146,6 +146,13 @@ export default function Index() {
       })
       tempStorage.recipes.sort((a,b)=>a.name.localeCompare(b.name))
       longTermStorage.store('recipes',JSON.stringify(tempStorage.recipes))
+      let plan=JSON.parse(await longTermStorage.retrieve('plan'))
+      for(let i=0; i<plan.length; i++)
+        for(let j=0; j<plan[i].length; j++)
+          for(let k=0;k<plan[i][j].length;k++)
+            if(plan[i][j][k].name===recipe.name)plan[i][j][k].name=processedName
+      longTermStorage.store('plan',JSON.stringify(plan))
+      tempStorage.plan=plan
       Alert.alert('Recipe updated!','')
     }else{
       Alert.alert('There was an error. Please try again later.','')
