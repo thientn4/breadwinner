@@ -233,9 +233,9 @@ export default function Index() {
               }}>
                 {ingredients.map((item, index) => 
                   <View key = {index} style={{...styles.row,borderTopWidth:index===0?0:2,borderColor:'grey',paddingTop:10,paddingBottom:10}}>
-                    <View>
+                    <View style={{display:'flex',flexDirection:'column',flex:1,justifyContent:'center'}}>
                       <Text style={{...styles.boldText}}>{item.name}</Text>
-                      <Text style={{...styles.boldText,color:'grey'}}>{item.quantity}</Text>
+                      {item.quantity && <Text style={{...styles.boldText,color:'grey'}}>{item.quantity}</Text>}
                     </View>
                     <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
                       setIngredients(ingredients.filter((itemFilter)=>item.name!==itemFilter.name))

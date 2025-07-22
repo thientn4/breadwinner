@@ -40,7 +40,8 @@ const styles=StyleSheet.create({
   },
   cell:{
     borderColor:'rgb(232,232,232)',
-    borderWidth:1,
+    borderTopWidth:2,
+    borderRightWidth:2,
     width:100,
     alignItems:'center'
   },
@@ -84,9 +85,9 @@ export default function Index() {
         >
           {['','MON','TUE','WED','THU','FRI','SAT','SUN'].map((weekday, index) => 
             <View key = {index} style={index===0?styles.row:{...styles.row,minHeight:screenHeight/8-10}}>
-              <View style={styles.cell}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
+              <View style={{...styles.cell,borderTopWidth:index===0?0:2}}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
               {['Breakfast','Lunch','Dinner'].map((mealType, subIndex) => 
-                <View key={subIndex} style={{...styles.cell,width:screenWidth/2-40}}>
+                <View key={subIndex} style={{...styles.cell,width:screenWidth/2-40,borderTopWidth:index===0?0:2}}>
                   {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}}>{mealType}</Text>}
                   {index!==0 && planItems[index-1][subIndex].map((weekday, planIndex) => 
                     <TouchableOpacity key={planIndex} style={{...styles.cellItem,width:screenWidth/2-46}} onPress={async ()=>{
@@ -102,23 +103,26 @@ export default function Index() {
                       }  
                       Alert.alert('This recipe is not available','')
                     }}>
-                      <Text><Text style={{...styles.boldText,color:'grey'}}>{weekday.serving}x</Text> {weekday.name}</Text>
-                      <Text><Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={async ()=>{
-                        let plan=await longTermStorage.retrieve('plan')
-                        if(plan){
-                          plan=JSON.parse(plan)
-                          plan[index-1][subIndex]=plan[index-1][subIndex].filter((item) => item.name !== weekday.name)
-                          longTermStorage.store('plan',JSON.stringify(plan))
-                          setPlanItems(plan)
-                        }else{
-                          Alert.alert('There was an error. Please try again later.','')
-                        }
-                      }}>remove</Text></Text>
+                      <Text>{weekday.name}</Text>
+                      <View style={styles.row}>
+                        <Text style={{...styles.boldText,color:'grey'}}>{weekday.serving}x</Text>
+                        <Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={async ()=>{
+                          let plan=await longTermStorage.retrieve('plan')
+                          if(plan){
+                            plan=JSON.parse(plan)
+                            plan[index-1][subIndex]=plan[index-1][subIndex].filter((item) => item.name !== weekday.name)
+                            longTermStorage.store('plan',JSON.stringify(plan))
+                            setPlanItems(plan)
+                          }else{
+                            Alert.alert('There was an error. Please try again later.','')
+                          }
+                        }}>remove</Text>
+                      </View>
                     </TouchableOpacity>
                   )}
                 </View>
               )}
-              <View style={styles.cell}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
+              <View style={{...styles.cell,borderRightWidth:0,borderTopWidth:index===0?0:2}}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
             </View>
           )}
         </ScrollView>
