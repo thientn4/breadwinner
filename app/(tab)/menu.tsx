@@ -1,11 +1,11 @@
 import { useHeaderHeight } from '@react-navigation/elements';
+import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import defaultData from '../../support/defaultData';
 import * as longTermStorage from '../../support/longTermStorage';
-import * as tempStorage from '../../support/tempStorage';
 
 const styles=StyleSheet.create({
   column:{
@@ -59,41 +59,45 @@ export default function Index() {
   const [filteredRecipes,setFilteredRecipes]=useState([])
   const [searchQuery,setSearchQuery]=useState('')
   const addPlan=async (recipeName)=>{
-    // plan=[[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]]
-    // longTermStorage.remove('plan')
-    let planSlot=tempStorage.plan[weekday][meal]
-    for(let i=0; i<planSlot.length; i++)
-      if(planSlot[i].name===recipeName){
-        tempStorage.plan[weekday][meal][i].serving+=parseInt(serving)
-        longTermStorage.store('plan',JSON.stringify(tempStorage.plan))
-        Alert.alert('plan updated!','')
-        return
-      }
-    tempStorage.plan[weekday][meal].push({name:recipeName, serving:parseInt(serving)})
-    longTermStorage.store('plan',JSON.stringify(tempStorage.plan))
-    Alert.alert('plan updated!','')
+    let plan=await longTermStorage.retrieve('plan')
+    if(plan){
+      plan=JSON.parse(plan)
+      let planSlot=plan[weekday][meal]
+      for(let i=0; i<planSlot.length; i++)
+        if(planSlot[i].name===recipeName){
+          plan[weekday][meal][i].serving+=parseInt(serving)
+          longTermStorage.store('plan',JSON.stringify(plan))
+          Alert.alert('plan updated!','')
+          return
+        }
+      plan[weekday][meal].push({name:recipeName, serving:parseInt(serving)})
+      longTermStorage.store('plan',JSON.stringify(plan))
+      Alert.alert('plan updated!','')
+    }else{
+      Alert.alert('There was an error. Please try again later.','')
+    }
   }
   const filter=(dishType)=>{
     setSearchQuery('')
     Keyboard.dismiss()
     setDishTypeFilter(dishType)
   }
-  useEffect(()=>{
+  useEffect(() => {
     const getRecipes = async()=>{
-      let data = await longTermStorage.retrieve('recipes')
-      if(data)tempStorage.recipes=JSON.parse(data)
-      else{
-        tempStorage.recipes=defaultData.defaultRecipes
+      let plan=await longTermStorage.retrieve('plan')
+      if(!plan) longTermStorage.store('plan',JSON.stringify(defaultData.defaultPlan))
+
+      let recipes = await longTermStorage.retrieve('recipes')
+      if(recipes){
+        recipes=JSON.parse(recipes)
+      }else{
+        recipes=defaultData.defaultRecipes
         longTermStorage.store('recipes',JSON.stringify(defaultData.defaultRecipes))
       }
-      setFilteredRecipes(tempStorage.recipes.sort((a,b)=>a.name.localeCompare(b.name)))
-
-      data=await longTermStorage.retrieve('plan')
-      if(!data) longTermStorage.store('plan',JSON.stringify(tempStorage.plan))
-      else tempStorage.plan=JSON.parse(data)
+      setFilteredRecipes(recipes.sort((a,b)=>a.name.localeCompare(b.name)))
     }
     getRecipes()
-  },[tempStorage.recipes])
+  },[useIsFocused()])
   return (
     <KeyboardAvoidingView 
       style={{...styles.column,backgroundColor:'white'}}

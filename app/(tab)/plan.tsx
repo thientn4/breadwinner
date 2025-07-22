@@ -1,7 +1,8 @@
-import { tempStorage } from "@/support/tempStorage";
+import { useIsFocused } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
 import { Alert, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import defaultData from "../../support/defaultData";
 import * as longTermStorage from '../../support/longTermStorage';
 
 const styles=StyleSheet.create({
@@ -57,16 +58,19 @@ export default function Index() {
   const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
-  const [plan,setPlan]=useState([[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]])
+  const [planItems,setPlanItems]=useState([[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]])
   useEffect(()=>{
     const getPlan = async()=>{
-      let data=await longTermStorage.retrieve('plan')
-      if(!data) longTermStorage.store('plan',JSON.stringify(tempStorage.plan))
-      else tempStorage.plan=JSON.parse(data)
-      setPlan(tempStorage.plan)
+      let plan=await longTermStorage.retrieve('plan')
+      if(plan)plan=JSON.parse(plan)
+      else {
+        plan=defaultData.defaultPlan
+        longTermStorage.store('plan',JSON.stringify(defaultData.defaultPlan))
+      }
+      setPlanItems(plan)
     }
     getPlan()
-  },[tempStorage.plan])
+  },[useIsFocused()])
   return (
     <View style={{...styles.column,borderTopWidth:2, borderBottomWidth:2}}>
       <ScrollView 
@@ -84,7 +88,7 @@ export default function Index() {
               {['Breakfast','Lunch','Dinner'].map((mealType, subIndex) => 
                 <View key={subIndex} style={{...styles.cell,width:screenWidth/2-40}}>
                   {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}}>{mealType}</Text>}
-                  {index!==0 && plan[index-1][subIndex].map((weekday, planIndex) => 
+                  {index!==0 && planItems[index-1][subIndex].map((weekday, planIndex) => 
                     <TouchableOpacity key={planIndex} style={{...styles.cellItem,width:screenWidth/2-46}} onPress={async ()=>{
                       let data = await longTermStorage.retrieve('recipes')
                       if(data){
@@ -99,9 +103,16 @@ export default function Index() {
                       Alert.alert('This recipe is not available','')
                     }}>
                       <Text><Text style={{...styles.boldText,color:'grey'}}>{weekday.serving}x</Text> {weekday.name}</Text>
-                      <Text><Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={()=>{
-                        tempStorage.plan[index-1][subIndex]=tempStorage.plan[index-1][subIndex].filter((item) => item.name !== weekday.name)
-                        longTermStorage.store('plan',JSON.stringify(tempStorage.plan))
+                      <Text><Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={async ()=>{
+                        let plan=await longTermStorage.retrieve('plan')
+                        if(plan){
+                          plan=JSON.parse(plan)
+                          plan[index-1][subIndex]=plan[index-1][subIndex].filter((item) => item.name !== weekday.name)
+                          longTermStorage.store('plan',JSON.stringify(plan))
+                          setPlanItems(plan)
+                        }else{
+                          Alert.alert('There was an error. Please try again later.','')
+                        }
                       }}>remove</Text></Text>
                     </TouchableOpacity>
                   )}

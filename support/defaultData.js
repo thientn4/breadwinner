@@ -136,5 +136,14 @@ export default {
                 Garnish with fresh chopped parsley or cilantro. Serve hot, directly from the skillet, with optional crumbled feta cheese and crusty bread for dipping.
             `
         }
+    ],
+    defaultPlan:[
+        [[],[],[]],
+        [[],[],[]],
+        [[],[],[]],
+        [[],[],[]],
+        [[],[],[]],
+        [[],[],[]],
+        [[],[],[]]
     ]
 }
