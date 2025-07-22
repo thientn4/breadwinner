@@ -57,8 +57,11 @@ export default function Index() {
           keyboardVerticalOffset={useHeaderHeight()+useSafeAreaInsets().bottom-80}
         >
           <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-            <TextInput style={{...styles.buttonInput, flex:1,marginRight:10,paddingLeft:20,paddingRight:20}} placeholder="Add to grocery" placeholderTextColor="grey"/>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={Keyboard.dismiss}>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{}}>
+              <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../../assets/images/trash_btn.png')}/>
+            </TouchableOpacity>
+            <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Add to list" placeholderTextColor="grey"/>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={Keyboard.dismiss}>
               <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
             </TouchableOpacity>
           </View>
@@ -120,7 +123,7 @@ export default function Index() {
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
             <Text style={styles.boldText}>◀</Text>
           </TouchableOpacity>
-          <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>List 1</Text>
+          <Text style={{...styles.boldText,flex:1, textAlign:'center'}}>List 1/2</Text>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{}}>
             <Text style={styles.boldText}>▶</Text>
           </TouchableOpacity>
