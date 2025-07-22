@@ -286,7 +286,7 @@ export default function Index() {
             Keyboard.dismiss()
           }
           else router.back()
-        }}><Text style={styles.boldText}>Cancel</Text></TouchableOpacity>
+        }}><Text style={styles.boldText}>{'Back'}</Text></TouchableOpacity>
         <View style={{borderColor:'black',borderRightWidth:2}}></View>
         {recipe && <TouchableOpacity style={styles.typeFilter} onPress={()=>{
           Alert.alert(
