@@ -154,7 +154,7 @@ export default function Index() {
                     </TouchableOpacity>
                   </View>
                 </TouchableWithoutFeedback  >
-                {item.recipes.map((e, subIndex) => <Text key = {subIndex}  style={{...styles.boldText,color:'grey',paddingLeft:12}}>8x Butter Chicken</Text>)}
+                {item.recipes.map((ingredientRecipe, subIndex) => <Text key = {subIndex}  style={{...styles.boldText,color:'grey',paddingLeft:12}}>{ingredientRecipe}</Text>)}
                 <TextInput 
                   style={{...styles.buttonInput, flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:100, marginTop:10,textAlignVertical: 'top'}} 
                   placeholder="Note"
@@ -162,7 +162,10 @@ export default function Index() {
                   multiline = {true}
                   numberOfLines = {4}
                   onPress ={()=>{flatListRef?.current?.scrollToIndex({ index: index, animated: true })}}
-                  onChangeText={()=>setUpdated(false)}
+                  onChangeText={(text)=>{
+                    groceries[groceryIndex][index].note = text
+                    setUpdated(false)
+                  }}
                 />
               </View>
             )}
@@ -172,7 +175,10 @@ export default function Index() {
           </View>}
         </KeyboardAvoidingView>
         {!updated && <View style={{...styles.row,width:'100%', position:'absolute',bottom:0,alignSelf: 'flex-start',justifyContent:'center'}}>
-          <TouchableOpacity style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',paddingLeft:20,paddingRight:20, margin:10, marginTop:0,borderWidth:0,alignSelf: 'flex-start'}} onPress={()=>{setUpdated(true)}}>
+          <TouchableOpacity style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',paddingLeft:20,paddingRight:20, margin:10, marginTop:0,borderWidth:0,alignSelf: 'flex-start'}} onPress={()=>{
+            longTermStorage.store('groceries',JSON.stringify(groceries))
+            setUpdated(true)
+          }}>
             <Text style={{...styles.boldText,color:'white'}}>update +</Text>
           </TouchableOpacity>
         </View>}
@@ -215,7 +221,51 @@ export default function Index() {
             <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/add_btn.png')}/>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{}}>
+        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={async ()=>{
+          let recipes=await longTermStorage.retrieve('recipes')
+          if(recipes)recipes=JSON.parse(recipes)
+          let plan=await longTermStorage.retrieve('plan')
+          if(plan)plan=JSON.parse(plan)
+          if(recipes && plan){
+            let plannedServings={}
+            for(let i=0;i<plan.length;i++){
+              for(let j=0;j<plan[i].length;j++){
+                for(let k=0;k<plan[i][j].length;k++){
+                  if(!plannedServings[plan[i][j][k].name]){
+                    plannedServings[plan[i][j][k].name]=0
+                  }
+                  plannedServings[plan[i][j][k].name]+=plan[i][j][k].serving
+                }
+              }
+            }
+            recipes=recipes.filter((recipe)=>plannedServings[recipe.name])
+            let groceryList=[]
+            let groceryListIndex={}
+            for(let i=0;i<recipes.length;i++){
+              for(let j=0;j<recipes[i].ingredients.length;j++){
+                let ingredient=recipes[i].ingredients[j]
+                if(ingredient.name in groceryListIndex){
+                  groceryList[groceryListIndex[ingredient.name]].recipes.push(`${plannedServings[recipes[i].name]}x ${recipes[i].name}`)
+                }else{
+                  groceryListIndex[ingredient.name]=groceryList.length
+                  groceryList.push({
+                    name:ingredient.name,
+                    recipes:[`${plannedServings[recipes[i].name]}x ${recipes[i].name}`],
+                    note:'',
+                    checked:false
+                  })
+                }
+              }
+            }
+            groceries[groceryIndex]=groceryList
+            setGrocery(groceryList)
+            longTermStorage.store('groceries',JSON.stringify(groceries))
+            setUpdated(true)
+
+          }else{
+            return Alert.alert("Failed to collect recipes and plan to build grocery list. Try again later!",'')
+          }
+        }}>
           <Image style={{...styles.buttonIcon, height:'65%'}} source={require('../../assets/images/build_btn.png')}/>
         </TouchableOpacity>
       </View>
