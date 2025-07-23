@@ -78,7 +78,7 @@ export default function Index() {
           <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{
               Alert.alert(
-                "Are you sure you want to clear all items from this grocery list?","",
+                "Are you sure you want to clear all items and delete this grocery list?","",
                 [
                   {
                     text: "No",
@@ -86,9 +86,14 @@ export default function Index() {
                   {
                     text: "Yes",
                     onPress: () => {
-                      setGrocery([])
-                      groceries[groceryIndex]=[]
+                      if(groceries.length===1)
+                        groceries=[[]]
+                      else
+                        groceries.splice(groceryIndex, 1);
                       longTermStorage.store('groceries',JSON.stringify(groceries))
+                      setGrocery(groceries[0])
+                      setGroceryIndex(0)
+                      setGroceriesCount(groceries.length)
                     },
                   },
                 ],
@@ -100,15 +105,18 @@ export default function Index() {
             <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{
               Keyboard.dismiss()
+              let processedItem=newItem.trim().replace(/\s+/g, ' ').toLowerCase()
+              if(processedItem==='')return
               for(let i=0; i<grocery.length; i++)
-                if(grocery[i].name===newItem.trim().replace(/\s+/g, ' ').toLowerCase())
+                if(grocery[i].name===processedItem)
                   return Alert.alert(`You have already added '${grocery[i].name}'`,'')
-              groceries[groceryIndex].push({
-                name:newItem.trim().replace(/\s+/g, ' ').toLowerCase(),
+              let newItemObj={
+                name:processedItem,
                 recipes:[],
                 note:'',
                 checked:false
-              })
+              }
+              groceries[groceryIndex]=[newItemObj,...groceries[groceryIndex]]
               setGrocery(groceries[groceryIndex])
               longTermStorage.store('groceries',JSON.stringify(groceries))
             }}>
