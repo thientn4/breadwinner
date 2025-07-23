@@ -133,7 +133,13 @@ export default function Index() {
               <View  key = {index} style={{...styles.column, padding:10, paddingBottom:0}}>
                 <TouchableWithoutFeedback   style={{flex:1}} onPress={Keyboard.dismiss}>
                   <View style={{...styles.row,flex:1, paddingBottom:10}}>
-                    <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}}>
+                    <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
+                      for(let i=0; i<grocery.length; i++)
+                        if(grocery[i].name===item.name)
+                          groceries[groceryIndex][i].checked=!groceries[groceryIndex][i].checked
+                      setGrocery([...groceries[groceryIndex]])
+                      longTermStorage.store('groceries',JSON.stringify(groceries))
+                    }}>
                       {item.checked && <View style={{...styles.buttonInput,aspectRatio:1,backgroundColor:'black', height:20,borderColor:'none'}}/>}
                     </TouchableOpacity>
                     <View style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>
