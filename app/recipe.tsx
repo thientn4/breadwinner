@@ -67,7 +67,7 @@ export default function Index() {
   const [ingredient,setIngredient]=useState('')
   const [quantity,setQuantity]=useState('')
   const [instruction,setInstruction]=useState(recipe?recipe.instruction:'')
-  const [image,setImage]=useState(recipe?.image||'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg')
+  const [image,setImage]=useState(recipe?.image)
   const [instructionActive,setInstructionActive]=useState(false)
   const addRecipe=async ()=>{
     let recipes = await longTermStorage.retrieve('recipes')
@@ -81,6 +81,7 @@ export default function Index() {
         if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
           return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
       recipes.push({
+        "image": (await updateImage()),
         "name": processedName,
         "type": dishType,
         "ingredients": ingredients,
@@ -97,6 +98,14 @@ export default function Index() {
   const deleteRecipe=async ()=>{
     let recipes = await longTermStorage.retrieve('recipes')
     if(recipes){
+      if (recipe?.image && recipe?.image?.startsWith('file://')) {
+        try {
+          const fileInfo = await FileSystem.getInfoAsync(recipe?.image);
+          if (fileInfo.exists) await FileSystem.deleteAsync(recipe?.image);
+        } catch (error) {
+          return Alert.alert('There was an error. Please try again later.','')
+        }
+      }
       recipes=JSON.parse(recipes)
       longTermStorage.store('recipes',JSON.stringify(recipes.filter((item)=>item.name!==recipe.name)))
       let plan=await longTermStorage.retrieve('plan')
@@ -163,14 +172,14 @@ export default function Index() {
     if (!result.canceled && result.assets && result.assets.length > 0) setImage(result.assets[0].uri);
   }
   const updateImage = async()=>{
-    if (image === recipe.image) return recipe.image
+    if (image === recipe?.image) return recipe?.image
     // Step 1: Delete the old image if it existed and was stored in the FileSystem
-    if (recipe.image && recipe.image.startsWith('file://')) {
+    if (recipe?.image && recipe?.image?.startsWith('file://')) {
       try {
-        const fileInfo = await FileSystem.getInfoAsync(recipe.image);
-        if (fileInfo.exists) await FileSystem.deleteAsync(recipe.image);
+        const fileInfo = await FileSystem.getInfoAsync(recipe?.image);
+        if (fileInfo.exists) await FileSystem.deleteAsync(recipe?.image);
       } catch (error) {
-        return recipe.image; // If deletion fails, return the old image path
+        return recipe?.image; // If deletion fails, return the old image path
       }
     }
 
@@ -209,7 +218,7 @@ export default function Index() {
               width:'100%',
               height:undefined,
               aspectRatio:3/2
-            }} source={{uri:image}}/>
+            }} source={{uri:image ||'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
             <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
               <TextInput 
                 style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} 
