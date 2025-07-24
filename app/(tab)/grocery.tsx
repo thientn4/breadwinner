@@ -151,7 +151,7 @@ export default function Index() {
                 </TouchableWithoutFeedback  >
                 {item.recipes.map((ingredientRecipe, subIndex) => <Text key = {subIndex}  style={{...styles.boldText,color:'grey',paddingLeft:12}}>{ingredientRecipe}</Text>)}
                 <TextInput 
-                  style={{...styles.buttonInput, flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:100, marginTop:10,textAlignVertical: 'top'}} 
+                  style={{...styles.buttonInput, flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:100, marginTop:item.recipes.length===0?0:10,textAlignVertical: 'top'}} 
                   placeholder="Note"
                   placeholderTextColor="grey"
                   multiline = {true}
