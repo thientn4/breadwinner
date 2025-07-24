@@ -254,8 +254,7 @@ export default function Index() {
             >Edit instruction</Text></Text>}
           </View>}
           <View style={{flex:1,minHeight:screenHeight/3,margin:10}}>
-            {/* to open keyboard automatically for instruction input */}
-            <TextInput 
+            {(instructionActive || !instruction.trim()) && <TextInput 
               style={{...styles.buttonInput,flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',textAlignVertical: 'top'}} 
               placeholder="Instruction" 
               placeholderTextColor="grey"
@@ -263,9 +262,11 @@ export default function Index() {
               numberOfLines = {4}
               value={instruction}
               onChangeText={(text) => {setInstruction(text)}}
-              onPress={()=>{if(!instruction.trim())setInstructionActive(true)}}
-              editable={!instruction.trim() || instructionActive}
-            />
+              onPress={()=>{setInstructionActive(true)}}
+            />}
+            {!instructionActive && instruction.trim() && <Text 
+              style={{flex:1,borderRadius:20, padding:15, backgroundColor:'rgb(232,232,232)'}}
+            >{instruction.trim().replace(/(\s)\1+/g, '$1')}</Text>}
           </View>
         </ScrollView>
         {instructionActive && <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2,paddingBottom:10}}>
