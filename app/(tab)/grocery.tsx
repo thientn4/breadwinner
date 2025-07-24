@@ -180,7 +180,7 @@ export default function Index() {
         </View>}
       </View>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
-        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\nshopping list QR code scanner.\nCheck back later!",'')}}>
+        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\ngrocery QR code scanner.\nCheck back later!",'')}}>
           <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
         </TouchableOpacity>
         <View style={{...styles.buttonInput, flex:1}}>

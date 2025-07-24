@@ -1,7 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
-import { Dimensions, FlatList, Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, FlatList, Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import defaultData from '../../support/defaultData';
 import * as longTermStorage from '../../support/longTermStorage';
 
