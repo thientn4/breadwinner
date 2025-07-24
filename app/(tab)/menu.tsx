@@ -68,6 +68,7 @@ export default function Index() {
           Alert.alert('plan updated!','')
           return
         }
+      if(plan[weekday][meal].length>=5)return Alert.alert('You reached the limit of 5 recipes per meal','')
       plan[weekday][meal].push({name:recipeName, serving:parseInt(serving)})
       longTermStorage.store('plan',JSON.stringify(plan))
       Alert.alert('plan updated!','')

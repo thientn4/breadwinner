@@ -67,32 +67,6 @@ export default function Index() {
     <View style={styles.column}>
       <View style={{flex:1}}>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{
-            Alert.alert(
-              "Are you sure you want to delete this grocery list?","",
-              [
-                {
-                  text: "No",
-                },
-                {
-                  text: "Yes",
-                  onPress: () => {
-                    if(groceries.length===1)
-                      groceries=[[]]
-                    else
-                      groceries.splice(groceryIndex, 1);
-                    longTermStorage.store('groceries',JSON.stringify(groceries))
-                    setGrocery(groceries[0])
-                    setGroceryIndex(0)
-                    setGroceriesCount(groceries.length)
-                  },
-                },
-              ],
-              { cancelable: false } // Optional: prevents dismissing the alert by tapping outside (Android only)
-            );
-          }}>
-            <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../../assets/images/trash_btn.png')}/>
-          </TouchableOpacity>
           <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{
             setNewItem('')
@@ -180,8 +154,34 @@ export default function Index() {
         </View>}
       </View>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
+        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{
+          Alert.alert(
+            `Are you sure you want to delete grocery list #${groceryIndex+1}?`,"",
+            [
+              {
+                text: "No",
+              },
+              {
+                text: "Yes",
+                onPress: () => {
+                  if(groceries.length===1)
+                    groceries=[[]]
+                  else
+                    groceries.splice(groceryIndex, 1);
+                  longTermStorage.store('groceries',JSON.stringify(groceries))
+                  setGrocery(groceries[0])
+                  setGroceryIndex(0)
+                  setGroceriesCount(groceries.length)
+                },
+              },
+            ],
+            { cancelable: false } // Optional: prevents dismissing the alert by tapping outside (Android only)
+          );
+        }}>
+          <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../../assets/images/trash_btn.png')}/>
+        </TouchableOpacity>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\ngrocery QR code scanner.\nCheck back later!",'')}}>
-          <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
+          <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/qr_btn.png')}/>
         </TouchableOpacity>
         <View style={{...styles.buttonInput, flex:1}}>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,opacity:groceryIndex<=0?0.3:1}} onPress={()=>{
@@ -218,6 +218,9 @@ export default function Index() {
             <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/add_btn.png')}/>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\ngrocery QR code scanner.\nCheck back later!",'')}}>
+          <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
+        </TouchableOpacity>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={async ()=>{
           Alert.alert(
             "Are you sure, you want to rebuild this grocery list?","",
