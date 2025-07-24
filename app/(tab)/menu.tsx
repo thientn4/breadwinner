@@ -131,7 +131,7 @@ export default function Index() {
           <TouchableOpacity 
             key = {index} 
             style={{
-              ...styles.row,borderBottomWidth:2,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10,
+              ...styles.row,borderTopWidth:index===0?0:2,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10,
               display:(item.type===dishTypeFilter || (dishTypeFilter===-1 && item.name.toLowerCase().includes(searchQuery.trim().toLowerCase())))?'flex':'none'
               //item.name.toLowerCase().includes(searchQuery)
             }}
@@ -143,7 +143,7 @@ export default function Index() {
               height:undefined,
               aspectRatio:1,
               marginRight:20
-            }} source={{uri:'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
+            }} source={{uri:item?.image || 'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
             <View style={{...styles.row,flex:1}}>
               <View style={{...styles.column, justifyContent:'center'}}>
                 <Text style={styles.boldText}>{item.name}</Text>
