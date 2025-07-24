@@ -135,7 +135,7 @@ export default function Index() {
                       setGrocery([...groceries[groceryIndex]])
                       longTermStorage.store('groceries',JSON.stringify(groceries))
                     }}>
-                      {item.checked && <View style={{...styles.buttonInput,aspectRatio:1,backgroundColor:'black', height:20,borderColor:'none'}}/>}
+                      {item.checked && <View style={{...styles.buttonInput,aspectRatio:1,backgroundColor:'rgb(58,58,58)', height:20,borderWidth:0}}/>}
                     </TouchableOpacity>
                     <View style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10,marginLeft:10}}>
                       <Text style={styles.boldText}>{item.name}</Text>
