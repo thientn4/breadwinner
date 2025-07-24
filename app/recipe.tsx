@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as longTermStorage from '../support/longTermStorage';
 
@@ -55,7 +55,6 @@ const styles=StyleSheet.create({
 })
 const dishTypes=['Appetizer', 'Main', 'Dessert', 'Other']
 export default function Index() {
-  const instructionRef = useRef(null);
   const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
   const params=useLocalSearchParams();
@@ -149,10 +148,10 @@ export default function Index() {
   }
   return (
     //ignore system bar for iOS (SafeAreaView) & android (margin & padding)
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white',paddingBottom: StatusBar.currentHeight}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white',paddingBottom: StatusBar.currentHeight, paddingTop: (instructionActive?StatusBar.currentHeight:0)}}>
       <KeyboardAvoidingView
         style={{flex:1}}
-        behavior={Platform.OS==="ios"?'padding':undefined}
+        behavior={Platform.OS==="ios"?'padding':'height'}
       >
         <ScrollView 
           style={styles.column}
@@ -251,15 +250,11 @@ export default function Index() {
               </View>
             </View>
             {instruction.trim() && <Text style={{...styles.boldText,color:'grey',textDecorationLine:'underline',marginTop:10,marginBottom:0,marginRight:25,textAlign:'right'}}><Text 
-              onPress={()=>{
-                setInstructionActive(true)
-                if (instructionRef.current) instructionRef.current.focus();
-              }}
+              onPress={()=>{setInstructionActive(true)}}
             >Edit instruction</Text></Text>}
           </View>}
-          <View style={{flex:1,minHeight:screenHeight/2,margin:10}}>
+          <View style={{flex:1,minHeight:screenHeight/3,margin:10}}>
             {/* to open keyboard automatically for instruction input */}
-            <TextInput multiline = {true} ref={instructionRef} style={{height:0,width:0}}/>
             <TextInput 
               style={{...styles.buttonInput,flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',textAlignVertical: 'top'}} 
               placeholder="Instruction" 
@@ -281,13 +276,7 @@ export default function Index() {
         </View>}
       </KeyboardAvoidingView>
       {!instructionActive && <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
-        <TouchableOpacity style={styles.typeFilter} onPress={()=>{
-          if(Keyboard.isVisible()){
-            setInstructionActive(false)
-            Keyboard.dismiss()
-          }
-          else router.back()
-        }}><Text style={styles.boldText}>{'Back'}</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.back()}}><Text style={styles.boldText}>{'Back'}</Text></TouchableOpacity>
         <View style={{borderColor:'black',borderRightWidth:2}}></View>
         {recipe && <TouchableOpacity style={styles.typeFilter} onPress={()=>{
           Alert.alert(
