@@ -1,8 +1,7 @@
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
-import { Alert, Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Alert, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import * as longTermStorage from '../../support/longTermStorage';
 
 const styles=StyleSheet.create({
@@ -48,7 +47,6 @@ const styles=StyleSheet.create({
 let groceries=[[]]
 export default function Index() {
   const flatListRef = useRef(null);
-  const screenHeight = Dimensions.get('window').height;
   const [newItem,setNewItem] = React.useState('');
   const [updated,setUpdated] = React.useState(true);
   const [grocery,setGrocery] = React.useState([]);
@@ -68,60 +66,60 @@ export default function Index() {
   return (
     <View style={styles.column}>
       <View style={{flex:1}}>
+        <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{
+            Alert.alert(
+              "Are you sure you want to delete this grocery list?","",
+              [
+                {
+                  text: "No",
+                },
+                {
+                  text: "Yes",
+                  onPress: () => {
+                    if(groceries.length===1)
+                      groceries=[[]]
+                    else
+                      groceries.splice(groceryIndex, 1);
+                    longTermStorage.store('groceries',JSON.stringify(groceries))
+                    setGrocery(groceries[0])
+                    setGroceryIndex(0)
+                    setGroceriesCount(groceries.length)
+                  },
+                },
+              ],
+              { cancelable: false } // Optional: prevents dismissing the alert by tapping outside (Android only)
+            );
+          }}>
+            <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../../assets/images/trash_btn.png')}/>
+          </TouchableOpacity>
+          <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{
+            setNewItem('')
+            Keyboard.dismiss()
+            let processedItem=newItem.trim().replace(/\s+/g, ' ').toLowerCase()
+            if(processedItem==='')return
+            for(let i=0; i<grocery.length; i++)
+              if(grocery[i].name===processedItem)
+                return Alert.alert(`You have already added '${grocery[i].name}'`,'')
+            let newItemObj={
+              name:processedItem,
+              recipes:[],
+              note:'',
+              checked:false
+            }
+            groceries[groceryIndex]=[newItemObj,...groceries[groceryIndex]]
+            setGrocery(groceries[groceryIndex])
+            longTermStorage.store('groceries',JSON.stringify(groceries))
+          }}>
+            <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
+          </TouchableOpacity>
+        </View>
         <KeyboardAvoidingView 
           style={{flex:1}}
           behavior={Platform.OS==="ios"?'padding':undefined}
-          keyboardVerticalOffset={useHeaderHeight()+useSafeAreaInsets().bottom-30}
+          keyboardVerticalOffset={useHeaderHeight()}
         >
-          <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{
-              Alert.alert(
-                "Are you sure you want to delete this grocery list?","",
-                [
-                  {
-                    text: "No",
-                  },
-                  {
-                    text: "Yes",
-                    onPress: () => {
-                      if(groceries.length===1)
-                        groceries=[[]]
-                      else
-                        groceries.splice(groceryIndex, 1);
-                      longTermStorage.store('groceries',JSON.stringify(groceries))
-                      setGrocery(groceries[0])
-                      setGroceryIndex(0)
-                      setGroceriesCount(groceries.length)
-                    },
-                  },
-                ],
-                { cancelable: false } // Optional: prevents dismissing the alert by tapping outside (Android only)
-              );
-            }}>
-              <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../../assets/images/trash_btn.png')}/>
-            </TouchableOpacity>
-            <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{
-              setNewItem('')
-              Keyboard.dismiss()
-              let processedItem=newItem.trim().replace(/\s+/g, ' ').toLowerCase()
-              if(processedItem==='')return
-              for(let i=0; i<grocery.length; i++)
-                if(grocery[i].name===processedItem)
-                  return Alert.alert(`You have already added '${grocery[i].name}'`,'')
-              let newItemObj={
-                name:processedItem,
-                recipes:[],
-                note:'',
-                checked:false
-              }
-              groceries[groceryIndex]=[newItemObj,...groceries[groceryIndex]]
-              setGrocery(groceries[groceryIndex])
-              longTermStorage.store('groceries',JSON.stringify(groceries))
-            }}>
-              <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
-            </TouchableOpacity>
-          </View>
           {grocery.length!==0 && <FlatList 
             ref={flatListRef}
             style={styles.column}
