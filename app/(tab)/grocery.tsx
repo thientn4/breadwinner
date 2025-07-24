@@ -134,9 +134,7 @@ export default function Index() {
                 <TouchableWithoutFeedback   style={{flex:1}} onPress={Keyboard.dismiss}>
                   <View style={{...styles.row,flex:1, paddingBottom:10}}>
                     <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
-                      for(let i=0; i<grocery.length; i++)
-                        if(grocery[i].name===item.name)
-                          groceries[groceryIndex][i].checked=!groceries[groceryIndex][i].checked
+                      groceries[groceryIndex][index].checked=!groceries[groceryIndex][index].checked
                       setGrocery([...groceries[groceryIndex]])
                       longTermStorage.store('groceries',JSON.stringify(groceries))
                     }}>
@@ -162,6 +160,7 @@ export default function Index() {
                   multiline = {true}
                   numberOfLines = {4}
                   onPress ={()=>{flatListRef?.current?.scrollToIndex({ index: index, animated: true })}}
+                  defaultValue={item.note}
                   onChangeText={(text)=>{
                     groceries[groceryIndex][index].note = text
                     setUpdated(false)
