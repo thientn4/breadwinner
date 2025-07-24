@@ -1,7 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
-import { Alert, Dimensions, FlatList, Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import defaultData from '../../support/defaultData';
 import * as longTermStorage from '../../support/longTermStorage';
 
@@ -48,7 +48,6 @@ const styles=StyleSheet.create({
 const weekdays=['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
 const meals=['Breakfast','Lunch','Dinner']
 export default function Index() {
-  const screenHeight = Dimensions.get('window').height;
   const router = useRouter();
   const [dishTypeFilter,setDishTypeFilter]=useState(-1)
   const [weekday,setWeekday]=useState(0)
@@ -127,7 +126,12 @@ export default function Index() {
       {filteredRecipes.length!==0 && <FlatList 
         style={styles.column}
         showsVerticalScrollIndicator={false}
-        data={filteredRecipes}
+        data={filteredRecipes.map((recipe)=>({
+          'name': recipe.name,
+          'type': recipe.type,
+          'ingredientsCount': recipe.ingredients.length,
+          'image': recipe.image
+        }))}
         renderItem={({ item, index }) => (
           <TouchableOpacity 
             key = {index} 
@@ -136,7 +140,7 @@ export default function Index() {
               display:(item.type===dishTypeFilter || (dishTypeFilter===-1 && item.name.toLowerCase().includes(searchQuery.trim().toLowerCase())))?'flex':'none'
               //item.name.toLowerCase().includes(searchQuery)
             }}
-            onPress={()=>{router.push({pathname:'/recipe',params:{recipe:JSON.stringify(item)}})}}
+            onPress={()=>{router.push({pathname:'/recipe',params:{recipe:JSON.stringify(filteredRecipes[index])}})}}
           >
             <Image style={{
               borderRadius:10,
@@ -149,7 +153,7 @@ export default function Index() {
               <View style={{...styles.column, justifyContent:'center'}}>
                 <Text style={styles.boldText}>{item.name}</Text>
                 <Text>{['Appetizer','Main course','Dessert'][item.type]}</Text>
-                <Text style={{...styles.boldText,color:'grey',marginTop:10}}>{JSON.stringify(item.ingredients.length)} ingredients</Text>
+                <Text style={{...styles.boldText,color:'grey',marginTop:10}}>{item.ingredientsCount} ingredient{item.ingredientsCount>1?'s':''}</Text>
               </View>
               <View style={{...styles.column, justifyContent:'center',flex:0}}>
                 <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>addPlan(item.name)}>
