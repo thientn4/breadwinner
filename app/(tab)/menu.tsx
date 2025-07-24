@@ -1,9 +1,7 @@
-import { useHeaderHeight } from '@react-navigation/elements';
 import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
-import { Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Dimensions, FlatList, Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import defaultData from '../../support/defaultData';
 import * as longTermStorage from '../../support/longTermStorage';
 
@@ -99,11 +97,7 @@ export default function Index() {
     getRecipes()
   },[useIsFocused()])
   return (
-    <KeyboardAvoidingView 
-      style={{...styles.column,backgroundColor:'white'}}
-      behavior={Platform.OS==="ios"?'padding':undefined}
-      keyboardVerticalOffset={useHeaderHeight()+useSafeAreaInsets().bottom-35}
-    >
+    <View style={styles.column}>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\nrecipe QR code scanner.\nCheck back later!",'')}}>
           <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
@@ -197,6 +191,6 @@ export default function Index() {
           onChangeText={(text) => {setServing(text.replace(/[^0-9]/g, ''))}}
         />
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }

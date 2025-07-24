@@ -57,13 +57,11 @@ export default function Index() {
   useEffect(() => {
     const getGroceries = async()=>{
       let data = await longTermStorage.retrieve('groceries')
-      if(data){
-        groceries=JSON.parse(data)
-      }else{
-        longTermStorage.store('groceries',JSON.stringify(groceries))
-      }
+      if(data) groceries=JSON.parse(data)
+      else longTermStorage.store('groceries',JSON.stringify(groceries))
       setGrocery(groceries[groceryIndex])
       setGroceriesCount(groceries.length)
+      setUpdated(true)
     }
     getGroceries()
   },[useIsFocused()])
@@ -78,7 +76,7 @@ export default function Index() {
           <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{
               Alert.alert(
-                "Are you sure you want to clear all items and delete this grocery list?","",
+                "Are you sure you want to delete this grocery list?","",
                 [
                   {
                     text: "No",
@@ -104,6 +102,7 @@ export default function Index() {
             </TouchableOpacity>
             <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{
+              setNewItem('')
               Keyboard.dismiss()
               let processedItem=newItem.trim().replace(/\s+/g, ' ').toLowerCase()
               if(processedItem==='')return
@@ -187,7 +186,7 @@ export default function Index() {
           <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
         </TouchableOpacity>
         <View style={{...styles.buttonInput, flex:1}}>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,opacity:groceryIndex<=0?0.3:1}} onPress={()=>{
             if(groceryIndex<=0)return
             setGrocery(groceries[groceryIndex-1])
             setGroceryIndex(groceryIndex-1)
@@ -202,7 +201,8 @@ export default function Index() {
           }}>
             <Text style={styles.boldText}>▶</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,display:groceryIndex===groceriesCount-1?'flex':'none'}} onPress={()=>{
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,display:groceryIndex===groceriesCount-1?'flex':'none',opacity:groceries.length>=5?0.3:1}} onPress={()=>{
+            if(groceries.length>=5)return
             for(let i=0;i<groceries.length;i++){
               if(groceries[i].length===0){
                 Alert.alert(`List #${i+1} is still empty. Please use it first!`)
@@ -221,49 +221,63 @@ export default function Index() {
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={async ()=>{
-          let recipes=await longTermStorage.retrieve('recipes')
-          if(recipes)recipes=JSON.parse(recipes)
-          let plan=await longTermStorage.retrieve('plan')
-          if(plan)plan=JSON.parse(plan)
-          if(recipes && plan){
-            let plannedServings={}
-            for(let i=0;i<plan.length;i++){
-              for(let j=0;j<plan[i].length;j++){
-                for(let k=0;k<plan[i][j].length;k++){
-                  if(!plannedServings[plan[i][j][k].name]){
-                    plannedServings[plan[i][j][k].name]=0
+          Alert.alert(
+            "Are you sure, you want to rebuild this grocery list?","",
+            [
+              {
+                text: "No",
+              },
+              {
+                text: "Yes",
+                onPress: async () => {
+                  let recipes=await longTermStorage.retrieve('recipes')
+                  if(recipes)recipes=JSON.parse(recipes)
+                  let plan=await longTermStorage.retrieve('plan')
+                  if(plan)plan=JSON.parse(plan)
+                  if(recipes && plan){
+                    let plannedServings={}
+                    for(let i=0;i<plan.length;i++){
+                      for(let j=0;j<plan[i].length;j++){
+                        for(let k=0;k<plan[i][j].length;k++){
+                          if(!plannedServings[plan[i][j][k].name]){
+                            plannedServings[plan[i][j][k].name]=0
+                          }
+                          plannedServings[plan[i][j][k].name]+=plan[i][j][k].serving
+                        }
+                      }
+                    }
+                    let groceryList=[]
+                    let groceryListIndex={}
+                    for(let i=0;i<recipes.length;i++){
+                      if(!plannedServings[recipes[i].name])continue
+                      for(let j=0;j<recipes[i].ingredients.length;j++){
+                        let ingredient=recipes[i].ingredients[j]
+                        if(ingredient.name in groceryListIndex){
+                          groceryList[groceryListIndex[ingredient.name]].recipes.push(`${plannedServings[recipes[i].name]}x ${recipes[i].name}`)
+                        }else{
+                          groceryListIndex[ingredient.name]=groceryList.length
+                          groceryList.push({
+                            name:ingredient.name,
+                            recipes:[`${plannedServings[recipes[i].name]}x ${recipes[i].name}`],
+                            note:'',
+                            checked:false
+                          })
+                        }
+                      }
+                    }
+                    if(groceryList.length===0)return Alert.alert("We found no meal plan to build grocery list",'')
+                    groceries[groceryIndex]=groceryList
+                    setGrocery(groceryList)
+                    longTermStorage.store('groceries',JSON.stringify(groceries))
+                    setUpdated(true)
+                  }else{
+                    return Alert.alert("Failed to collect recipes and plan to build grocery list. Try again later!",'')
                   }
-                  plannedServings[plan[i][j][k].name]+=plan[i][j][k].serving
-                }
-              }
-            }
-            recipes=recipes.filter((recipe)=>plannedServings[recipe.name])
-            let groceryList=[]
-            let groceryListIndex={}
-            for(let i=0;i<recipes.length;i++){
-              for(let j=0;j<recipes[i].ingredients.length;j++){
-                let ingredient=recipes[i].ingredients[j]
-                if(ingredient.name in groceryListIndex){
-                  groceryList[groceryListIndex[ingredient.name]].recipes.push(`${plannedServings[recipes[i].name]}x ${recipes[i].name}`)
-                }else{
-                  groceryListIndex[ingredient.name]=groceryList.length
-                  groceryList.push({
-                    name:ingredient.name,
-                    recipes:[`${plannedServings[recipes[i].name]}x ${recipes[i].name}`],
-                    note:'',
-                    checked:false
-                  })
-                }
-              }
-            }
-            groceries[groceryIndex]=groceryList
-            setGrocery(groceryList)
-            longTermStorage.store('groceries',JSON.stringify(groceries))
-            setUpdated(true)
-
-          }else{
-            return Alert.alert("Failed to collect recipes and plan to build grocery list. Try again later!",'')
-          }
+                },
+              },
+            ],
+            { cancelable: false } // Optional: prevents dismissing the alert by tapping outside (Android only)
+          );
         }}>
           <Image style={{...styles.buttonIcon, height:'65%'}} source={require('../../assets/images/build_btn.png')}/>
         </TouchableOpacity>
