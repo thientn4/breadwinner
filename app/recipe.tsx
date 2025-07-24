@@ -159,6 +159,7 @@ export default function Index() {
           showsVerticalScrollIndicator={false}
           scrollEnabled={!instructionActive}
           keyboardShouldPersistTaps={'always'}
+          contentContainerStyle={{flexGrow:1}}
         >
           {!instructionActive && <View>
             <Image style={{
@@ -256,7 +257,7 @@ export default function Index() {
               }}
             >Edit instruction</Text></Text>}
           </View>}
-          <View style={{flex:1,height:screenHeight/2+40,margin:10}}>
+          <View style={{flex:1,minHeight:screenHeight/2,margin:10}}>
             {/* to open keyboard automatically for instruction input */}
             <TextInput multiline = {true} ref={instructionRef} style={{height:0,width:0}}/>
             <TextInput 
