@@ -117,7 +117,7 @@ export default function Index() {
     if(recipes){
       recipes=JSON.parse(recipes)
       let processedName=recipeName.trim().replace(/\s+/g, ' ')
-      let processedInstruction=instruction.trim().replace(/\s+/g, ' ')
+      let processedInstruction=instruction.trim().replace(/(\s)\1+/g, '$1')
       if(processedName==='' || processedInstruction==='' || ingredients.length===0)
         return Alert.alert('a recipe must have its name, ingredients, instruction','')
       if(processedName.toLowerCase()!==recipe.name.toLowerCase())

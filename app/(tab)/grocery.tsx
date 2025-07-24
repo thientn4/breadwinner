@@ -159,7 +159,7 @@ export default function Index() {
                   onPress ={()=>{flatListRef?.current?.scrollToIndex({ index: index, animated: true })}}
                   defaultValue={item.note}
                   onChangeText={(text)=>{
-                    groceries[groceryIndex][index].note = text
+                    groceries[groceryIndex][index].note = text.replace(/(\s)\1+/g, '$1')
                     setUpdated(false)
                   }}
                 />
