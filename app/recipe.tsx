@@ -71,94 +71,85 @@ export default function Index() {
   const [instructionActive,setInstructionActive]=useState(false)
   const addRecipe=async ()=>{
     let recipes = await longTermStorage.retrieve('recipes')
-    if(recipes){
-      recipes=JSON.parse(recipes)
-      let processedName=recipeName.trim().replace(/\s+/g, ' ')
-      let processedInstruction=instruction.trim().replace(/\s+/g, ' ')
-      if(processedName==='' || processedInstruction==='' || ingredients.length===0)
-        return Alert.alert('A recipe must have its name, ingredients, instruction','')
-      for(let i=0; i<recipes.length; i++)
-        if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
-          return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
-      recipes.push({
-        "image": (await updateImage()),
-        "name": processedName,
-        "type": dishType,
-        "ingredients": ingredients,
-        "instruction": processedInstruction
-      })
-      recipes.sort((a,b)=>a.name.localeCompare(b.name))
-      longTermStorage.store('recipes',JSON.stringify(recipes))
-      Alert.alert('New recipe added!','')
-      router.back()
-    }else{
-      Alert.alert('There was an error. Please try again later.','')
-    }
+    if(!recipes) return Alert.alert('There was an error. Please try again later.','')
+    recipes=JSON.parse(recipes)
+    let processedName=recipeName.trim().replace(/\s+/g, ' ')
+    let processedInstruction=instruction.trim().replace(/\s+/g, ' ')
+    if(processedName==='' || processedInstruction==='' || ingredients.length===0)
+      return Alert.alert('A recipe must have its name, ingredients, instruction','')
+    for(let i=0; i<recipes.length; i++)
+      if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
+        return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
+    recipes.push({
+      "image": (await updateImage()),
+      "name": processedName,
+      "type": dishType,
+      "ingredients": ingredients,
+      "instruction": processedInstruction
+    })
+    recipes.sort((a,b)=>a.name.localeCompare(b.name))
+    longTermStorage.store('recipes',JSON.stringify(recipes))
+    Alert.alert('New recipe added!','')
+    router.back()
   }
   const deleteRecipe=async ()=>{
     let recipes = await longTermStorage.retrieve('recipes')
-    if(recipes){
-      if (recipe?.image && recipe?.image?.startsWith('file://')) {
-        try {
-          await FileSystem.deleteAsync(recipe?.image, { idempotent: true });
-        } catch (error) {
-          return Alert.alert('There was an error. Please try again later.','')
-        }
+    if(!recipes) return Alert.alert('There was an error. Please try again later.','')
+    if (recipe?.image && recipe?.image?.startsWith('file://')) {
+      try {
+        await FileSystem.deleteAsync(recipe?.image, { idempotent: true });
+      } catch (error) {
+        return Alert.alert('There was an error. Please try again later.','')
       }
-      recipes=JSON.parse(recipes)
-      longTermStorage.store('recipes',JSON.stringify(recipes.filter((item)=>item.name!==recipe.name)))
-      let plan=await longTermStorage.retrieve('plan')
-      if(plan){
-        plan=JSON.parse(plan)
-        for(let i=0; i<plan.length; i++){
-          for(let j=0; j<plan[i].length; j++){
-            plan[i][j]=plan[i][j].filter((item)=>item.name!==recipe.name)
-          }
-        }
-        longTermStorage.store('plan',JSON.stringify(plan))
-      }
-      router.back()
-    }else{
-      Alert.alert('There was an error. Please try again later.','')
     }
+    recipes=JSON.parse(recipes)
+    longTermStorage.store('recipes',JSON.stringify(recipes.filter((item)=>item.name!==recipe.name)))
+    let plan=await longTermStorage.retrieve('plan')
+    if(plan){
+      plan=JSON.parse(plan)
+      for(let i=0; i<plan.length; i++){
+        for(let j=0; j<plan[i].length; j++){
+          plan[i][j]=plan[i][j].filter((item)=>item.name!==recipe.name)
+        }
+      }
+      longTermStorage.store('plan',JSON.stringify(plan))
+    }
+    router.back()
   }
   const updateRecipe=async ()=>{
     let recipes = await longTermStorage.retrieve('recipes')
-    if(recipes){
-      recipes=JSON.parse(recipes)
-      ///////////////////////////////////// VALIDATE INPUT TEXT UPDATE ///////////////////////////////////////
-      let processedName=recipeName.trim().replace(/\s+/g, ' ')
-      let processedInstruction=instruction.trim().replace(/(\s)\1+/g, '$1')
-      if(processedName==='' || processedInstruction==='' || ingredients.length===0)
-        return Alert.alert('a recipe must have its name, ingredients, instruction','')
-      if(processedName.toLowerCase()!==recipe.name.toLowerCase())
-        for(let i=0; i<recipes.length; i++)
-          if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
-            return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
-      ///////////////////////////////////////// UPDATE RECIPE ///////////////////////////////////////////////
-      recipes=recipes.filter((item)=>item.name!==recipe.name)
-      recipes.push({
-        "image": (await updateImage()),
-        "name": processedName,
-        "type": dishType,
-        "ingredients": ingredients,
-        "instruction": processedInstruction
-      })
-      recipes.sort((a,b)=>a.name.localeCompare(b.name))
-      longTermStorage.store('recipes',JSON.stringify(recipes))
-      let plan=await longTermStorage.retrieve('plan')
-      if(plan){
-        plan=JSON.parse(plan)
-        for(let i=0; i<plan.length; i++)
-          for(let j=0; j<plan[i].length; j++)
-            for(let k=0;k<plan[i][j].length;k++)
-              if(plan[i][j][k].name===recipe.name)plan[i][j][k].name=processedName
-        longTermStorage.store('plan',JSON.stringify(plan))
-      }
-      Alert.alert('Recipe updated!','')
-    }else{
-      Alert.alert('There was an error. Please try again later.','')
+    if(!recipes)return Alert.alert('There was an error. Please try again later.','')
+    recipes=JSON.parse(recipes)
+    ///////////////////////////////////// VALIDATE INPUT TEXT UPDATE ///////////////////////////////////////
+    let processedName=recipeName.trim().replace(/\s+/g, ' ')
+    let processedInstruction=instruction.trim().replace(/(\s)\1+/g, '$1')
+    if(processedName==='' || processedInstruction==='' || ingredients.length===0)
+      return Alert.alert('a recipe must have its name, ingredients, instruction','')
+    if(processedName.toLowerCase()!==recipe.name.toLowerCase())
+      for(let i=0; i<recipes.length; i++)
+        if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
+          return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
+    ///////////////////////////////////////// UPDATE RECIPE ///////////////////////////////////////////////
+    recipes=recipes.filter((item)=>item.name!==recipe.name)
+    recipes.push({
+      "image": (await updateImage()),
+      "name": processedName,
+      "type": dishType,
+      "ingredients": ingredients,
+      "instruction": processedInstruction
+    })
+    recipes.sort((a,b)=>a.name.localeCompare(b.name))
+    longTermStorage.store('recipes',JSON.stringify(recipes))
+    let plan=await longTermStorage.retrieve('plan')
+    if(plan){
+      plan=JSON.parse(plan)
+      for(let i=0; i<plan.length; i++)
+        for(let j=0; j<plan[i].length; j++)
+          for(let k=0;k<plan[i][j].length;k++)
+            if(plan[i][j][k].name===recipe.name)plan[i][j][k].name=processedName
+      longTermStorage.store('plan',JSON.stringify(plan))
     }
+    Alert.alert('Recipe updated!','')
   }
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library

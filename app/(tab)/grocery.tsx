@@ -218,10 +218,9 @@ export default function Index() {
             if(groceries.length>=5)return
             for(let i=0;i<groceries.length;i++){
               if(groceries[i].length===0){
-                Alert.alert(`List #${i+1} is still empty. Please use it first!`)
                 setGrocery(groceries[i])
                 setGroceryIndex(i)
-                return
+                return Alert.alert(`List #${i+1} is still empty. Please use it first!`)
               }
             }
             groceries.push([])
@@ -244,48 +243,45 @@ export default function Index() {
                 text: "Yes",
                 onPress: async () => {
                   let recipes=await longTermStorage.retrieve('recipes')
-                  if(recipes)recipes=JSON.parse(recipes)
                   let plan=await longTermStorage.retrieve('plan')
-                  if(plan)plan=JSON.parse(plan)
-                  if(recipes && plan){
-                    let plannedServings={}
-                    for(let i=0;i<plan.length;i++){
-                      for(let j=0;j<plan[i].length;j++){
-                        for(let k=0;k<plan[i][j].length;k++){
-                          if(!plannedServings[plan[i][j][k].name]){
-                            plannedServings[plan[i][j][k].name]=0
-                          }
-                          plannedServings[plan[i][j][k].name]+=plan[i][j][k].serving
+                  if(!recipes || !plan)return Alert.alert("Failed to collect recipes and plan to build grocery list. Try again later!",'')
+                  recipes=JSON.parse(recipes)
+                  plan=JSON.parse(plan)
+                  let plannedServings={}
+                  for(let i=0;i<plan.length;i++){
+                    for(let j=0;j<plan[i].length;j++){
+                      for(let k=0;k<plan[i][j].length;k++){
+                        if(!plannedServings[plan[i][j][k].name]){
+                          plannedServings[plan[i][j][k].name]=0
                         }
+                        plannedServings[plan[i][j][k].name]+=plan[i][j][k].serving
                       }
                     }
-                    let groceryList=[]
-                    let groceryListIndex={}
-                    for(let i=0;i<recipes.length;i++){
-                      if(!plannedServings[recipes[i].name])continue
-                      for(let j=0;j<recipes[i].ingredients.length;j++){
-                        let ingredient=recipes[i].ingredients[j]
-                        if(ingredient.name in groceryListIndex){
-                          groceryList[groceryListIndex[ingredient.name]].recipes.push(`${plannedServings[recipes[i].name]}x ${recipes[i].name}`)
-                        }else{
-                          groceryListIndex[ingredient.name]=groceryList.length
-                          groceryList.push({
-                            name:ingredient.name,
-                            recipes:[`${plannedServings[recipes[i].name]}x ${recipes[i].name}`],
-                            note:'',
-                            checked:false
-                          })
-                        }
-                      }
-                    }
-                    if(groceryList.length===0)return Alert.alert("We found no meal plan to build grocery list",'')
-                    groceries[groceryIndex]=groceryList
-                    setGrocery(groceryList)
-                    longTermStorage.store('groceries',JSON.stringify(groceries))
-                    setUpdated(true)
-                  }else{
-                    return Alert.alert("Failed to collect recipes and plan to build grocery list. Try again later!",'')
                   }
+                  let groceryList=[]
+                  let groceryListIndex={}
+                  for(let i=0;i<recipes.length;i++){
+                    if(!plannedServings[recipes[i].name])continue
+                    for(let j=0;j<recipes[i].ingredients.length;j++){
+                      let ingredient=recipes[i].ingredients[j]
+                      if(ingredient.name in groceryListIndex){
+                        groceryList[groceryListIndex[ingredient.name]].recipes.push(`${plannedServings[recipes[i].name]}x ${recipes[i].name}`)
+                      }else{
+                        groceryListIndex[ingredient.name]=groceryList.length
+                        groceryList.push({
+                          name:ingredient.name,
+                          recipes:[`${plannedServings[recipes[i].name]}x ${recipes[i].name}`],
+                          note:'',
+                          checked:false
+                        })
+                      }
+                    }
+                  }
+                  if(groceryList.length===0)return Alert.alert("We found no meal plan to build grocery list",'')
+                  groceries[groceryIndex]=groceryList
+                  setGrocery(groceryList)
+                  longTermStorage.store('groceries',JSON.stringify(groceries))
+                  setUpdated(true)
                 },
               },
             ],

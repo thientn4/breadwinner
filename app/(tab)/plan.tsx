@@ -122,21 +122,18 @@ export default function Index() {
                           }
                         }
                       }  
-                      Alert.alert('This recipe is not available','')
+                      Alert.alert('Cannot find this recipe!','')
                     }}>
                       <Text>{weekday.name}</Text>
                       <View style={styles.row}>
                         <Text style={{...styles.boldText,color:'grey'}}>{weekday.serving}x</Text>
                         <Text style={{...styles.boldText,color:'grey',paddingTop:0,textAlign:'right'}} onPress={async ()=>{
                           let plan=await longTermStorage.retrieve('plan')
-                          if(plan){
-                            plan=JSON.parse(plan)
-                            plan[index-1][subIndex]=plan[index-1][subIndex].filter((item) => item.name !== weekday.name)
-                            longTermStorage.store('plan',JSON.stringify(plan))
-                            setPlanItems(plan)
-                          }else{
-                            Alert.alert('There was an error. Please try again later.','')
-                          }
+                          if(!plan)return Alert.alert('There was an error. Please try again later.','')
+                          plan=JSON.parse(plan)
+                          plan[index-1][subIndex]=plan[index-1][subIndex].filter((item) => item.name !== weekday.name)
+                          longTermStorage.store('plan',JSON.stringify(plan))
+                          setPlanItems(plan)
                         }}>remove</Text>
                       </View>
                     </TouchableOpacity>
