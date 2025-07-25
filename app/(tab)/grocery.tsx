@@ -68,29 +68,36 @@ export default function Index() {
     <View style={styles.column}>
       <View style={{flex:1}}>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-          <View style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}><Text>{grocery.length<99?grocery.length:'99+'}</Text></View>
-          <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{
-            setNewItem('')
-            Keyboard.dismiss()
-            let processedItem=newItem.trim().replace(/\s+/g, ' ').toLowerCase()
-            if(processedItem==='')return
-            if(processedItem!==processedItem.replace(/[^\p{L}\s]/gu, ''))return Alert.alert("Keep item name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'",'')
-            for(let i=0; i<grocery.length; i++)
-              if(grocery[i].name===processedItem)
-                return Alert.alert(`You have already added '${grocery[i].name}'`,'')
-            let newItemObj={
-              name:processedItem,
-              recipes:[],
-              note:'',
-              checked:false
-            }
-            groceries[groceryIndex]=[newItemObj,...groceries[groceryIndex]]
-            groceries[groceryIndex].sort((a,b)=>a.name.localeCompare(b.name))
-            setGrocery(groceries[groceryIndex])
-            longTermStorage.store('groceries',JSON.stringify(groceries))
-          }}>
-            <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\ngrocery QR code scanner.\nCheck back later!",'')}}>
+            <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/qr_btn.png')}/>
+          </TouchableOpacity>
+          <View style={{...styles.buttonInput, flex:1}}>
+            <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{
+              setNewItem('')
+              Keyboard.dismiss()
+              let processedItem=newItem.trim().replace(/\s+/g, ' ').toLowerCase()
+              if(processedItem==='')return
+              if(processedItem!==processedItem.replace(/[^\p{L}\s]/gu, ''))return Alert.alert("Keep item name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'",'')
+              for(let i=0; i<grocery.length; i++)
+                if(grocery[i].name===processedItem)
+                  return Alert.alert(`You have already added '${grocery[i].name}'`,'')
+              let newItemObj={
+                name:processedItem,
+                recipes:[],
+                note:'',
+                checked:false
+              }
+              groceries[groceryIndex]=[newItemObj,...groceries[groceryIndex]]
+              groceries[groceryIndex].sort((a,b)=>a.name.localeCompare(b.name))
+              setGrocery(groceries[groceryIndex])
+              longTermStorage.store('groceries',JSON.stringify(groceries))
+            }}>
+              <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
+          </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\ngrocery QR code scanner.\nCheck back later!",'')}}>
+            <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
           </TouchableOpacity>
         </View>
         <KeyboardAvoidingView 
@@ -190,9 +197,6 @@ export default function Index() {
         }}>
           <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../../assets/images/trash_btn.png')}/>
         </TouchableOpacity>
-        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\ngrocery QR code scanner.\nCheck back later!",'')}}>
-          <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/qr_btn.png')}/>
-        </TouchableOpacity>
         <View style={{...styles.buttonInput, flex:1}}>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,opacity:groceryIndex<=0?0.3:1}} onPress={()=>{
             if(groceryIndex<=0)return
@@ -228,9 +232,6 @@ export default function Index() {
             <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/add_btn.png')}/>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\ngrocery QR code scanner.\nCheck back later!",'')}}>
-          <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
-        </TouchableOpacity>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={async ()=>{
           Alert.alert(
             "Are you sure, you want to rebuild this grocery list?","",
