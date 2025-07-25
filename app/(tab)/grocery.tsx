@@ -52,6 +52,7 @@ export default function Index() {
   const [grocery,setGrocery] = React.useState([]);
   const [groceryIndex,setGroceryIndex] = React.useState(0); 
   const [groceriesCount,setGroceriesCount] = React.useState(groceries.length); 
+  const [todoOnly,setTodoOnly] = React.useState(false); 
   useEffect(() => {
     const getGroceries = async()=>{
       let data = await longTermStorage.retrieve('groceries')
@@ -100,11 +101,11 @@ export default function Index() {
           {grocery.length!==0 && <FlatList 
             ref={flatListRef}
             style={styles.column}
-            contentContainerStyle ={{paddingBottom:updated?10:60}}
+            contentContainerStyle ={{paddingBottom:60}}
             showsVerticalScrollIndicator={false}
             data={grocery}
             renderItem={({ item, index }) => (
-              <View  key = {index} style={{...styles.column, padding:10, paddingBottom:0}}>
+              <View  key = {index} style={{...styles.column, padding:10, paddingBottom:0, display:(todoOnly && item.checked)?'none':'flex'}}>
                 <TouchableWithoutFeedback   style={{flex:1}} onPress={Keyboard.dismiss}>
                   <View style={{...styles.row,flex:1, paddingBottom:10}}>
                     <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
@@ -147,14 +148,20 @@ export default function Index() {
             <Text style={{color:'grey'}}>Empty grocery list</Text>
           </View>}
         </KeyboardAvoidingView>
-        {!updated && <View style={{...styles.row,width:'100%', position:'absolute',bottom:0,alignSelf: 'flex-start',justifyContent:'center'}}>
-          <TouchableOpacity style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',paddingLeft:20,paddingRight:20, margin:10, marginTop:0,borderWidth:0,alignSelf: 'flex-start'}} onPress={()=>{
+        <View style={{...styles.row,width:'100%', position:'absolute',bottom:0,alignSelf: 'flex-start',justifyContent:'center'}}>
+          <TouchableOpacity style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)', margin:10, marginTop:0,borderWidth:0,alignSelf: 'flex-start',maxWidth:'50%'}} onPress={()=>{
+            if(updated)return
             longTermStorage.store('groceries',JSON.stringify(groceries))
             setUpdated(true)
           }}>
-            <Text style={{...styles.boldText,color:'white'}}>update +</Text>
+            {!updated && <Text style={{...styles.boldText,color:'white',paddingLeft:20,paddingRight:20}}>update +</Text>}
+            {updated && <View style={styles.row}>
+              <Text style={{...styles.boldText,flex:1, textAlign:'center',color:todoOnly?'white':'grey'}} onPress={()=>{setTodoOnly(true)}}>{grocery.filter((item)=>!item.checked).length}</Text>
+              <Text style={{...styles.boldText, textAlign:'center',color:'white'}}>/</Text>
+              <Text style={{...styles.boldText,flex:1, textAlign:'center',color:todoOnly?'grey':'white'}} onPress={()=>{setTodoOnly(false)}}>{grocery.length}</Text>
+            </View>}
           </TouchableOpacity>
-        </View>}
+        </View>
       </View>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{
