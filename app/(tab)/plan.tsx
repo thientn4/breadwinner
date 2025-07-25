@@ -82,9 +82,8 @@ export default function Index() {
         {
           text: "Yes",
           onPress: async () => {
-            let renewedPlan=[[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]]
-            longTermStorage.store('plan',JSON.stringify(renewedPlan))
-            setPlanItems(renewedPlan)
+            longTermStorage.store('plan',JSON.stringify(defaultData.defaultPlan))
+            setPlanItems(defaultData.defaultPlan)
           },
         },
       ],

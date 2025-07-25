@@ -171,7 +171,11 @@ export default function Index() {
           )}
         />}
         {filteredRecipes.length===0 && <View style={{...styles.column,justifyContent:'center',alignItems:'center'}}>
-          <Text style={{color:'grey'}}  onPress={()=>{router.navigate('/recipe')}}>Let's <Text style={{textDecorationLine:'underline'}}>add</Text> a new recipe!</Text>
+          <Text style={{color:'grey'}}  onPress={()=>{
+            if(filteredRecipes.length>0)return
+            longTermStorage.store('recipes',JSON.stringify(defaultData.defaultRecipes))
+            setFilteredRecipes(defaultData.defaultRecipes.sort((a,b)=>a.name.localeCompare(b.name)))
+          }}>Click to try our <Text style={{textDecorationLine:'underline'}}>sample recipe</Text>?</Text>
         </View>}
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
           <View style={{...styles.buttonInput,alignSelf: 'flex-start'}}>
