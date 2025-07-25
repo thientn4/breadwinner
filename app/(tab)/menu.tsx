@@ -148,7 +148,7 @@ export default function Index() {
               height:undefined,
               aspectRatio:1,
               marginRight:20
-            }} source={{uri:item?.image || 'https://static01.nyt.com/images/2024/10/10/multimedia/KC-Pork-Chile-Verderex-kzbh/KC-Pork-Chile-Verderex-kzbh-mediumSquareAt3X.jpg'}}/>
+            }} source={item?.image?{uri:item?.image}:require('../../assets/images/photo-placeholder.png')}/>
             <View style={{...styles.row,flex:1}}>
               <View style={{...styles.column, justifyContent:'center'}}>
                 <Text style={styles.boldText}>{item.name}</Text>

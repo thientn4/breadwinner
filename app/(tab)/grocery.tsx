@@ -67,6 +67,7 @@ export default function Index() {
     <View style={styles.column}>
       <View style={{flex:1}}>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
+          <View style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}><Text>{grocery.length<99?grocery.length:'99+'}</Text></View>
           <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{
             setNewItem('')
@@ -83,6 +84,7 @@ export default function Index() {
               checked:false
             }
             groceries[groceryIndex]=[newItemObj,...groceries[groceryIndex]]
+            groceries[groceryIndex].sort((a,b)=>a.name.localeCompare(b.name))
             setGrocery(groceries[groceryIndex])
             longTermStorage.store('groceries',JSON.stringify(groceries))
           }}>
