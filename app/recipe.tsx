@@ -100,8 +100,7 @@ export default function Index() {
     if(recipes){
       if (recipe?.image && recipe?.image?.startsWith('file://')) {
         try {
-          const fileInfo = await FileSystem.getInfoAsync(recipe?.image);
-          if (fileInfo.exists) await FileSystem.deleteAsync(recipe?.image);
+          await FileSystem.deleteAsync(recipe?.image, { idempotent: true });
         } catch (error) {
           return Alert.alert('There was an error. Please try again later.','')
         }
@@ -176,8 +175,7 @@ export default function Index() {
     // Step 1: Delete the old image if it existed and was stored in the FileSystem
     if (recipe?.image && recipe?.image?.startsWith('file://')) {
       try {
-        const fileInfo = await FileSystem.getInfoAsync(recipe?.image);
-        if (fileInfo.exists) await FileSystem.deleteAsync(recipe?.image);
+        await FileSystem.deleteAsync(recipe?.image, { idempotent: true });
       } catch (error) {
         return recipe?.image; // If deletion fails, return the old image path
       }
