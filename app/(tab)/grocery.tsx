@@ -91,6 +91,7 @@ export default function Index() {
               groceries[groceryIndex]=[newItemObj,...groceries[groceryIndex]]
               groceries[groceryIndex].sort((a,b)=>a.name.localeCompare(b.name))
               setGrocery(groceries[groceryIndex])
+              setTodoOnly(false)
               longTermStorage.store('groceries',JSON.stringify(groceries))
             }}>
               <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
@@ -156,7 +157,7 @@ export default function Index() {
             <Text style={{color:'grey'}}>Empty grocery list</Text>
           </View>}
         </KeyboardAvoidingView>
-        <View style={{...styles.row,width:'100%', position:'absolute',bottom:0,alignSelf: 'flex-start',justifyContent:'center'}}>
+        {grocery.length!==0 && <View style={{...styles.row,width:'100%', position:'absolute',bottom:0,alignSelf: 'flex-start',justifyContent:'center'}}>
           <TouchableOpacity activeOpacity={updated?1:0.2} style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)', margin:10, marginTop:0,borderWidth:0,alignSelf: 'flex-start',maxWidth:'50%'}} onPress={()=>{
             if(updated)return
             longTermStorage.store('groceries',JSON.stringify(groceries))
@@ -169,7 +170,7 @@ export default function Index() {
               <Text suppressHighlighting={true} style={{...styles.boldText,flex:1, textAlign:'center',color:todoOnly?'grey':'white'}} onPress={()=>{setTodoOnly(false)}}>{grocery.length}</Text>
             </View>}
           </TouchableOpacity>
-        </View>
+        </View>}
       </View>
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{
@@ -188,6 +189,7 @@ export default function Index() {
                     groceries.splice(groceryIndex, 1);
                   longTermStorage.store('groceries',JSON.stringify(groceries))
                   setGrocery(groceries[0])
+                  setTodoOnly(false)
                   setGroceryIndex(0)
                   setGroceriesCount(groceries.length)
                 },
@@ -202,6 +204,7 @@ export default function Index() {
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,opacity:groceryIndex<=0?0.3:1}} onPress={()=>{
             if(groceryIndex<=0)return
             setGrocery(groceries[groceryIndex-1])
+            setTodoOnly(false)
             setGroceryIndex(groceryIndex-1)
           }}>
             <Text style={styles.boldText}>◀</Text>
@@ -210,12 +213,14 @@ export default function Index() {
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,display:groceryIndex<groceriesCount-1?'flex':'none'}} onPress={()=>{
             if(groceryIndex>=groceriesCount-1)return
             setGrocery(groceries[groceryIndex+1])
+            setTodoOnly(false)
             setGroceryIndex(groceryIndex+1)
           }}>
             <Text style={styles.boldText}>▶</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,display:groceryIndex===groceriesCount-1?'flex':'none',opacity:groceries.length>=5?0.3:1}} onPress={()=>{
             if(groceries.length>=5)return
+            setTodoOnly(false)
             for(let i=0;i<groceries.length;i++){
               if(groceries[i].length===0){
                 setGrocery(groceries[i])
