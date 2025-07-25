@@ -219,6 +219,7 @@ export default function Index() {
             }} source={image?{uri:image}:require('../assets/images/photo-placeholder.png')}/>
             <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
               <TextInput 
+                maxLength={50}
                 style={{...styles.buttonInput, flex:1,paddingLeft:20,paddingRight:20}} 
                 placeholder="Recipe name"  
                 placeholderTextColor="grey"
@@ -245,6 +246,7 @@ export default function Index() {
             </View>
             <View>
               <TextInput 
+                maxLength={50}
                 style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,margin:10}} 
                 placeholder="Ingredient (short & simple)" 
                 placeholderTextColor="grey"
@@ -253,6 +255,7 @@ export default function Index() {
               />
               <View style={{...styles.row,flex:1, paddingLeft:10, paddingRight:10}}>
                 <TextInput 
+                  maxLength={100}
                   style={{...styles.buttonInput,borderColor:'black',paddingLeft:10,paddingRight:10,flex:1,marginRight:10}} 
                   placeholder="Quantity & note" 
                   placeholderTextColor="grey"
@@ -306,6 +309,7 @@ export default function Index() {
           </View>}
           <View style={{flex:1,minHeight:screenHeight/3,margin:10}}>
             {(instructionActive || !instruction.trim()) && <TextInput 
+              maxLength={8000}
               style={{...styles.buttonInput,flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',textAlignVertical: 'top'}} 
               placeholder="Instruction" 
               placeholderTextColor="grey"

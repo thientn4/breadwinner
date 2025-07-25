@@ -72,7 +72,7 @@ export default function Index() {
             <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/qr_btn.png')}/>
           </TouchableOpacity>
           <View style={{...styles.buttonInput, flex:1}}>
-            <TextInput style={{...styles.buttonInput, flex:1,paddingLeft:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
+            <TextInput maxLength={50} style={{...styles.buttonInput, flex:1,paddingLeft:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}}  onPress={()=>{
               setNewItem('')
               Keyboard.dismiss()
@@ -136,6 +136,7 @@ export default function Index() {
                 </TouchableWithoutFeedback  >
                 {item.recipes.map((ingredientRecipe, subIndex) => <Text key = {subIndex}  style={{...styles.boldText,color:'grey',paddingLeft:12}}>{ingredientRecipe}</Text>)}
                 <TextInput 
+                  maxLength={300}
                   style={{...styles.buttonInput, flex:1,padding:15,textAlign:'left',backgroundColor:'rgb(232,232,232)',height:100, marginTop:item.recipes.length===0?0:10,textAlignVertical: 'top'}} 
                   placeholder="Note"
                   placeholderTextColor="grey"
