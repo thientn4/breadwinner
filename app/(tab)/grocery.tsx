@@ -156,16 +156,16 @@ export default function Index() {
           </View>}
         </KeyboardAvoidingView>
         <View style={{...styles.row,width:'100%', position:'absolute',bottom:0,alignSelf: 'flex-start',justifyContent:'center'}}>
-          <TouchableOpacity style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)', margin:10, marginTop:0,borderWidth:0,alignSelf: 'flex-start',maxWidth:'50%'}} onPress={()=>{
+          <TouchableOpacity activeOpacity={updated?1:0.2} style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)', margin:10, marginTop:0,borderWidth:0,alignSelf: 'flex-start',maxWidth:'50%'}} onPress={()=>{
             if(updated)return
             longTermStorage.store('groceries',JSON.stringify(groceries))
             setUpdated(true)
           }}>
             {!updated && <Text style={{...styles.boldText,color:'white',paddingLeft:20,paddingRight:20}}>update +</Text>}
             {updated && <View style={styles.row}>
-              <Text style={{...styles.boldText,flex:1, textAlign:'center',color:todoOnly?'white':'grey'}} onPress={()=>{setTodoOnly(true)}}>{grocery.filter((item)=>!item.checked).length}</Text>
+              <Text suppressHighlighting={true} style={{...styles.boldText,flex:1, textAlign:'center',color:todoOnly?'white':'grey'}} onPress={()=>{setTodoOnly(true)}}>{grocery.filter((item)=>!item.checked).length}</Text>
               <Text style={{...styles.boldText, textAlign:'center',color:'white'}}>/</Text>
-              <Text style={{...styles.boldText,flex:1, textAlign:'center',color:todoOnly?'grey':'white'}} onPress={()=>{setTodoOnly(false)}}>{grocery.length}</Text>
+              <Text suppressHighlighting={true} style={{...styles.boldText,flex:1, textAlign:'center',color:todoOnly?'grey':'white'}} onPress={()=>{setTodoOnly(false)}}>{grocery.length}</Text>
             </View>}
           </TouchableOpacity>
         </View>
