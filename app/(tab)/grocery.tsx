@@ -74,6 +74,7 @@ export default function Index() {
             Keyboard.dismiss()
             let processedItem=newItem.trim().replace(/\s+/g, ' ').toLowerCase()
             if(processedItem==='')return
+            if(processedItem!==processedItem.replace(/[^\p{L}\s]/gu, ''))return Alert.alert("Keep item name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'",'')
             for(let i=0; i<grocery.length; i++)
               if(grocery[i].name===processedItem)
                 return Alert.alert(`You have already added '${grocery[i].name}'`,'')

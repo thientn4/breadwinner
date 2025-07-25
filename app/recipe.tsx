@@ -262,7 +262,7 @@ export default function Index() {
                 <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
                   let processedIngredientName=ingredient.toLowerCase().trim().replace(/\s+/g, ' ')
                   if(processedIngredientName==='')return
-                  if(ingredient!==ingredient.replace(/[^a-zA-Z\s]/g, ''))return Alert.alert("Keep ingredient name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'",'')
+                  if(ingredient!==ingredient.replace(/[^\p{L}\s]/gu, ''))return Alert.alert("Keep ingredient name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'",'')
                   let newIngredients=[
                     {name:processedIngredientName,quantity:quantity.toLowerCase().trim().replace(/\s+/g, ' ')},
                     ...ingredients.filter((item)=>item.name!==processedIngredientName)

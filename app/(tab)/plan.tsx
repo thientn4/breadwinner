@@ -72,6 +72,25 @@ export default function Index() {
     }
     getPlan()
   },[useIsFocused()])
+  const clearPlan=()=>{
+    Alert.alert(
+      "Are you sure, you want to clear your current plan?","",
+      [
+        {
+          text: "No",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            let renewedPlan=[[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]]
+            longTermStorage.store('plan',JSON.stringify(renewedPlan))
+            setPlanItems(renewedPlan)
+          },
+        },
+      ],
+      { cancelable: false } // Optional: prevents dismissing the alert by tapping outside (Android only)
+    );
+  }
   return (
     <View style={{...styles.column,borderTopWidth:2, borderBottomWidth:2}}>
       <ScrollView 
@@ -83,9 +102,11 @@ export default function Index() {
           style={styles.column}
           showsVerticalScrollIndicator={false}
         >
-          {['','MON','TUE','WED','THU','FRI','SAT','SUN'].map((weekday, index) => 
+          {['Clear','MON','TUE','WED','THU','FRI','SAT','SUN'].map((weekday, index) => 
             <View key = {index} style={index===0?styles.row:{...styles.row,minHeight:screenHeight/8-10}}>
-              <View style={{...styles.cell,borderTopWidth:index===0?0:2}}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
+              <View style={{...styles.cell,borderTopWidth:index===0?0:2}}>
+                <Text style={{...styles.boldText,color:'grey',padding:10,textDecorationLine:index===0?'underline':'none'}} onPress={()=>{if(index===0)clearPlan()}}>{weekday}</Text>
+              </View>
               {['Breakfast','Lunch','Dinner'].map((mealType, subIndex) => 
                 <View key={subIndex} style={{...styles.cell,width:screenWidth/2-40,borderTopWidth:index===0?0:2}}>
                   {index===0 && <Text style={{...styles.boldText,color:'grey',padding:10}}>{mealType}</Text>}
@@ -122,7 +143,9 @@ export default function Index() {
                   )}
                 </View>
               )}
-              <View style={{...styles.cell,borderRightWidth:0,borderTopWidth:index===0?0:2}}><Text style={{...styles.boldText,color:'grey',padding:10}}>{weekday}</Text></View>
+              <View style={{...styles.cell,borderRightWidth:0,borderTopWidth:index===0?0:2}}>
+                <Text style={{...styles.boldText,color:'grey',padding:10,textDecorationLine:index===0?'underline':'none'}}  onPress={()=>{if(index===0)clearPlan()}}>{weekday}</Text>
+              </View>
             </View>
           )}
         </ScrollView>
