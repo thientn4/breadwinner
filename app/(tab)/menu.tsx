@@ -125,6 +125,7 @@ export default function Index() {
       </View>
       {filteredRecipes.length!==0 && <FlatList 
         style={styles.column}
+        contentContainerStyle={{ paddingBottom: 10 }}
         showsVerticalScrollIndicator={false}
         data={filteredRecipes.map((recipe)=>({
           'name': recipe.name,
@@ -136,7 +137,7 @@ export default function Index() {
           <TouchableOpacity 
             key = {index} 
             style={{
-              ...styles.row,borderTopWidth:index===0?0:2,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10,
+              ...styles.row,borderBottomWidth:2,borderColor:'grey',marginLeft:10,marginRight:10,paddingTop:10,paddingBottom:10,
               display:(item.type===dishTypeFilter || (dishTypeFilter===-1 && item.name.toLowerCase().includes(searchQuery.trim().toLowerCase())))?'flex':'none'
               //item.name.toLowerCase().includes(searchQuery)
             }}
