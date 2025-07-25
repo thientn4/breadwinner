@@ -175,7 +175,7 @@ export default function Index() {
             if(filteredRecipes.length>0)return
             longTermStorage.store('recipes',JSON.stringify(defaultData.defaultRecipes))
             setFilteredRecipes(defaultData.defaultRecipes.sort((a,b)=>a.name.localeCompare(b.name)))
-          }}>Click to try our <Text style={{textDecorationLine:'underline'}}>sample recipe</Text>?</Text>
+          }}>Click to try our <Text style={{textDecorationLine:'underline'}}>sample recipes</Text></Text>
         </View>}
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
           <View style={{...styles.buttonInput,alignSelf: 'flex-start'}}>
