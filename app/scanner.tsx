@@ -42,6 +42,7 @@ export default function Index() {
   let finalData=""
   let timestampId=null
   const params=useLocalSearchParams();
+  let scanned = false
   const [enableCamera,setEnableCamera]=React.useState(false)
   const [progress,setProgress]=React.useState(0)
   const [total,setTotal]=React.useState(0)
@@ -52,26 +53,45 @@ export default function Index() {
         alert('Please enable camera permission in Settings')
     }
   }
+  const alert=(warning)=>{
+    Alert.alert(
+      warning, // Title
+      '',
+      [
+        {
+          text: 'OK', // Text for the button
+          onPress: () => {
+            scanned=false
+          },
+        },
+      ],
+      { cancelable: false } // Optional: prevents closing by tapping outside or back button
+    );
+  }
   const handleBarCodeScanned = ({ type, data }) => {
+    if(scanned)return
+    scanned = true;
+    scanned = true;
     try{
       const divider = data.indexOf('@');
-      if (divider === -1) return Alert.alert('Invalid QR code','')
+      if (divider === -1) return alert('Invalid QR code')
       const header = data.substring(0, divider).split('-')
       const qrTimestampId=header[0]
-      const qrTotal=header[1]
-      const qrIndex=header[2]
-      if(!(qrTimestampId && qrTotal && qrIndex)) return Alert.alert('Invalid QR code','')
+      const qrTotal=parseInt(header[1])
+      const qrIndex=parseInt(header[2])+1
+      if(!(qrTimestampId && qrTotal && qrIndex)) return alert('Invalid QR code')
       if(!timestampId)timestampId=qrTimestampId
-      if(timestampId!==qrTimestampId) return Alert.alert('Invalid QR code','')
-      if(total===0 && qrIndex!==0) return Alert.alert('Please scan in order','')
+      if(timestampId!==qrTimestampId) return alert('Invalid QR code')
+      if(total===0 && qrIndex!==0) return alert('Please scan in order')
       if(total===0)setTotal(parseInt(qrTotal))
-      if(qrIndex!==progress+1) return Alert.alert('Please scan in order','')
-      setProgress(parseInt(qrIndex+1))
+      if(qrIndex!==progress+1) return alert('Please scan in order')
+      setProgress(qrIndex+1)
       const payload = data.substring(divider + 1)
       finalData+=payload
       setProgress(progress+1)
+      alert('Scan success')
     }catch(error){
-      Alert.alert('Invalid QR code','')
+      alert('Invalid QR code')
     }
   }
   useEffect(() => {
