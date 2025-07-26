@@ -230,7 +230,11 @@ export default function Index() {
                   <Text style={styles.boldText}>▶</Text>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{router.push({pathname:'/qr',params:{codeData:JSON.stringify(recipe)}})}}>
+              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{
+                let scanRecipe={...recipe}
+                delete scanRecipe.image
+                router.push({pathname:'/qr',params:{codeData:JSON.stringify(scanRecipe)}})
+              }}>
                 <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../assets/images/qr_btn.png')}/>
               </TouchableOpacity>
             </View>
