@@ -84,7 +84,7 @@ export default function Index() {
       if(total===0 && qrIndex!==1) return alert('Please start with the first QR code')
       if(total===0)setTotal(parseInt(qrTotal))
       if(qrIndex<progress+1) return alert(`QR code #${qrIndex} is already scanned. Please use #${progress+1}`)
-      if(qrIndex>progress+1) return alert(`This is QR code #${qrIndex}. Please use #${progress+1}`)
+      if(qrIndex>progress+1) return alert(`This is QR code #${qrIndex}. Please continue with #${progress+1}`)
       const payload = data.substring(divider + 1)
       finalData+=payload
       setProgress(progress+1)
