@@ -2,7 +2,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Camera, CameraView } from 'expo-camera';
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   column:{
@@ -40,6 +40,7 @@ const styles=StyleSheet.create({
 })
 export default function Index() {
   let finalData=""
+  let timestampId=null
   const params=useLocalSearchParams();
   const [enableCamera,setEnableCamera]=React.useState(false)
   const [progress,setProgress]=React.useState(0)
@@ -52,7 +53,26 @@ export default function Index() {
     }
   }
   const handleBarCodeScanned = ({ type, data }) => {
-    console.log(data)
+    try{
+      const divider = data.indexOf('@');
+      if (divider === -1) return Alert.alert('Invalid QR code','')
+      const header = data.substring(0, divider).split('-')
+      const qrTimestampId=header[0]
+      const qrTotal=header[1]
+      const qrIndex=header[2]
+      if(!(qrTimestampId && qrTotal && qrIndex)) return Alert.alert('Invalid QR code','')
+      if(!timestampId)timestampId=qrTimestampId
+      if(timestampId!==qrTimestampId) return Alert.alert('Invalid QR code','')
+      if(total===0 && qrIndex!==0) return Alert.alert('Please scan in order','')
+      if(total===0)setTotal(parseInt(qrTotal))
+      if(qrIndex!==progress+1) return Alert.alert('Please scan in order','')
+      setProgress(parseInt(qrIndex+1))
+      const payload = data.substring(divider + 1)
+      finalData+=payload
+      setProgress(progress+1)
+    }catch(error){
+      Alert.alert('Invalid QR code','')
+    }
   }
   useEffect(() => {
     finalData=""
@@ -90,15 +110,21 @@ export default function Index() {
           />
         </View>
         <View style={styles.buttonInput}>
-          {!enableCamera && <TouchableOpacity style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}}>
-            <Text style={styles.boldText} onPress={requestScanner}>Enable Camera</Text>
+          {!enableCamera && <TouchableOpacity 
+            style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}} 
+            onPress={requestScanner}
+          >
+            <Text style={styles.boldText}>Enable Camera</Text>
           </TouchableOpacity>}
-          {enableCamera && total!==0 && <TouchableOpacity style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}}>
+          {enableCamera && total!==0 && <View style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}}>
             <Text style={{...styles.boldText,flex:1,marginRight:10}}>{progress}</Text>
             <Text style={styles.boldText}>/</Text>
             <Text style={{...styles.boldText,flex:1,marginLeft:10}}>{total}</Text>
-          </TouchableOpacity>}
-          {enableCamera && total!==0 && total===progress && <TouchableOpacity style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}}>
+          </View>}
+          {enableCamera && total!==0 && total===progress && <TouchableOpacity 
+            style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}}
+            onPress={()=>{console.log(finalData)}}
+          >
             <Text style={styles.boldText}>Done</Text>
           </TouchableOpacity>}
         </View>
