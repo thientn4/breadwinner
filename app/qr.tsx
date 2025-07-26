@@ -37,9 +37,9 @@ const styles=StyleSheet.create({
     color:'white'
   }
 })
+const timestampId=Date.now()+Math.floor(Math.random()*1000000)
 export default function Index() {
   const params=useLocalSearchParams();
-  const timestampId=Date.now()+Math.floor(Math.random()*1000000)
   let codeData = params?.codeData
   let splitSize = Math.ceil(codeData.length/Math.ceil(codeData.length/750))
   codeData = codeData?.match(new RegExp(`.{1,${splitSize}}`, 'g'));

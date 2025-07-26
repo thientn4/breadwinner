@@ -71,27 +71,29 @@ export default function Index() {
   const handleBarCodeScanned = ({ type, data }) => {
     if(scanned)return
     scanned = true;
-    scanned = true;
     try{
       const divider = data.indexOf('@');
-      if (divider === -1) return alert('Invalid QR code')
+      if (divider === -1) return alert('Invalid QR code 1')
       const header = data.substring(0, divider).split('-')
       const qrTimestampId=header[0]
       const qrTotal=parseInt(header[1])
       const qrIndex=parseInt(header[2])+1
-      if(!(qrTimestampId && qrTotal && qrIndex)) return alert('Invalid QR code')
+      console.log(qrTimestampId,qrTotal,qrIndex)
+      console.log("-->",timestampId,total,progress)
+      if(!(qrTimestampId && qrTotal && qrIndex)) return alert('Invalid QR code 2')
       if(!timestampId)timestampId=qrTimestampId
-      if(timestampId!==qrTimestampId) return alert('Invalid QR code')
-      if(total===0 && qrIndex!==0) return alert('Please scan in order')
+      if(timestampId!==qrTimestampId) return alert('Invalid QR code 3')
+      if(total===0 && qrIndex!==1) return alert('Please scan in order 1')
       if(total===0)setTotal(parseInt(qrTotal))
-      if(qrIndex!==progress+1) return alert('Please scan in order')
-      setProgress(qrIndex+1)
-      const payload = data.substring(divider + 1)
-      finalData+=payload
-      setProgress(progress+1)
-      alert('Scan success')
+      if(qrIndex!==progress+1) return alert('Please scan in order 2')
+      else{
+        const payload = data.substring(divider + 1)
+        finalData+=payload
+        setProgress(progress+1)
+        return alert('Scan success')
+      }
     }catch(error){
-      alert('Invalid QR code')
+      alert('Invalid QR code 4')
     }
   }
   useEffect(() => {
