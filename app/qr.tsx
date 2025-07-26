@@ -22,9 +22,6 @@ const styles=StyleSheet.create({
     backgroundColor:'white',
     borderRadius:20,
     height:40,
-    overflow:'hidden',
-    borderColor:'white',
-    borderWidth:2,
     textAlign:'center',
     display:'flex',
     flexDirection:'row'
