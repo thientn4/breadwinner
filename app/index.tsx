@@ -6,7 +6,7 @@ export default function Index() {
   useEffect(() => {
     // Navigate to '/menu' after 3 seconds
     const timer = setTimeout(() => {
-      router.navigate('/menu');
+      router.replace('/menu')
     }, 1000); // 3000 milliseconds = 3 seconds
 
     // Clear the timeout if the component unmounts
