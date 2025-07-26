@@ -38,11 +38,11 @@ const styles=StyleSheet.create({
     color:'white'
   }
 })
+let finalData=""
+let timestampId=null
+let scanned = false
 export default function Index() {
-  let finalData=""
-  let timestampId=null
   const params=useLocalSearchParams();
-  let scanned = false
   const [enableCamera,setEnableCamera]=React.useState(false)
   const [progress,setProgress]=React.useState(0)
   const [total,setTotal]=React.useState(0)
@@ -78,26 +78,21 @@ export default function Index() {
       const qrTimestampId=header[0]
       const qrTotal=parseInt(header[1])
       const qrIndex=parseInt(header[2])+1
-      console.log(qrTimestampId,qrTotal,qrIndex)
-      console.log("-->",timestampId,total,progress)
       if(!(qrTimestampId && qrTotal && qrIndex)) return alert('Invalid QR code 2')
       if(!timestampId)timestampId=qrTimestampId
       if(timestampId!==qrTimestampId) return alert('Invalid QR code 3')
       if(total===0 && qrIndex!==1) return alert('Please scan in order 1')
       if(total===0)setTotal(parseInt(qrTotal))
       if(qrIndex!==progress+1) return alert('Please scan in order 2')
-      else{
-        const payload = data.substring(divider + 1)
-        finalData+=payload
-        setProgress(progress+1)
-        return alert('Scan success')
-      }
+      const payload = data.substring(divider + 1)
+      finalData+=payload
+      setProgress(progress+1)
+      return alert('Scan success')
     }catch(error){
       alert('Invalid QR code 4')
     }
   }
   useEffect(() => {
-    finalData=""
     requestScanner()
   },[useIsFocused()])
   return (
@@ -138,7 +133,7 @@ export default function Index() {
           >
             <Text style={styles.boldText}>Enable Camera</Text>
           </TouchableOpacity>}
-          {enableCamera && total!==0 && <View style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}}>
+          {enableCamera && total!==0 && total!==progress && <View style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}}>
             <Text style={{...styles.boldText,flex:1,marginRight:10}}>{progress}</Text>
             <Text style={styles.boldText}>/</Text>
             <Text style={{...styles.boldText,flex:1,marginLeft:10}}>{total}</Text>
