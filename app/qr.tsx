@@ -62,7 +62,7 @@ export default function Index() {
           <Text suppressHighlighting={true} style={{...styles.boldText,flex:1,color:index===codeData.length-1?'grey':'white',textAlign:'right',marginRight:10}} onPress={()=>{setIndex(index===codeData.length-1?index:index+1)}}>▶</Text>
         </View>
       </View>
-      <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
+      <View style={{...styles.row,backgroundColor: 'white',paddingBottom:20}}>
         <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.back()}}><Text style={{...styles.boldText,color:'black'}}>{'Back'}</Text></TouchableOpacity>
       </View>
     </SafeAreaView>

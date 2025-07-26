@@ -2,7 +2,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Camera, CameraView } from 'expo-camera';
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect } from 'react';
-import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   column:{
@@ -73,23 +73,24 @@ export default function Index() {
     scanned = true;
     try{
       const divider = data.indexOf('@');
-      if (divider === -1) return alert('Invalid QR code 1')
+      if (divider === -1) return alert('Invalid QR code')
       const header = data.substring(0, divider).split('-')
       const qrTimestampId=header[0]
       const qrTotal=parseInt(header[1])
       const qrIndex=parseInt(header[2])+1
-      if(!(qrTimestampId && qrTotal && qrIndex)) return alert('Invalid QR code 2')
+      if(!(qrTimestampId && qrTotal && qrIndex)) return alert('Invalid QR code')
       if(!timestampId)timestampId=qrTimestampId
-      if(timestampId!==qrTimestampId) return alert('Invalid QR code 3')
-      if(total===0 && qrIndex!==1) return alert('Please scan in order 1')
+      if(timestampId!==qrTimestampId) return alert('This QR code does not match your previous codes')
+      if(total===0 && qrIndex!==1) return alert('Please start with the first QR code')
       if(total===0)setTotal(parseInt(qrTotal))
-      if(qrIndex!==progress+1) return alert('Please scan in order 2')
+      if(qrIndex<progress+1) return alert(`QR code #${qrIndex} is already scanned. Please use #${progress+1}`)
+      if(qrIndex>progress+1) return alert(`This is QR code #${qrIndex}. Please use #${progress+1}`)
       const payload = data.substring(divider + 1)
       finalData+=payload
       setProgress(progress+1)
-      return alert('Scan success')
+      return alert(total===progress+1?'Scan success for final QR code':`Scan success for QR code #${qrIndex}. Let's continue with #${qrIndex+1}`)
     }catch(error){
-      alert('Invalid QR code 4')
+      alert('Invalid QR code')
     }
   }
   useEffect(() => {
@@ -104,7 +105,7 @@ export default function Index() {
         alignItems: 'center',
         backgroundColor: 'white'
       }}>
-        <View style={{
+        {(total===0 || total!==progress) && <View style={{
           width: '75%',
           aspectRatio: 1, // this will make the view square
           display:'flex',
@@ -125,7 +126,27 @@ export default function Index() {
               justifyContent:'space-around'
             }}
           />
-        </View>
+        </View>}
+        {!(total===0 || total!==progress) && <View style={{
+          width: '75%',
+          aspectRatio: 1, // this will make the view square
+          display:'flex',
+          flexDirection:'column',
+          justifyContent:'center',
+          backgroundColor:'white',
+          borderRadius:20,
+          overflow:'hidden',
+          alignItems: 'center'
+        }}>
+          <Image
+            style={{
+              width: '40%',
+              height: undefined,
+              aspectRatio: 1,
+            }}
+            source={require('../assets/images/icon.png')}
+          />
+        </View>}
         <View style={styles.buttonInput}>
           {!enableCamera && <TouchableOpacity 
             style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}} 
@@ -146,7 +167,7 @@ export default function Index() {
           </TouchableOpacity>}
         </View>
       </View>
-      <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
+      <View style={{...styles.row,backgroundColor: 'white',paddingBottom:20}}>
         <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.back()}}><Text style={{...styles.boldText,color:'black'}}>Cancel</Text></TouchableOpacity>
       </View>
     </SafeAreaView>
