@@ -46,6 +46,7 @@ export default function Index() {
   const [enableCamera,setEnableCamera]=React.useState(false)
   const [progress,setProgress]=React.useState(0)
   const [total,setTotal]=React.useState(0)
+  const [screenAlert,setScreenAlert]=React.useState('Let\'s start with the first QR code')
   const requestScanner=async ()=>{
     const { status } = await Camera.requestCameraPermissionsAsync();
     setEnableCamera(status === 'granted')
@@ -54,19 +55,8 @@ export default function Index() {
     }
   }
   const alert=(warning)=>{
-    Alert.alert(
-      warning, // Title
-      '',
-      [
-        {
-          text: 'OK', // Text for the button
-          onPress: () => {
-            scanned=false
-          },
-        },
-      ],
-      { cancelable: false } // Optional: prevents closing by tapping outside or back button
-    );
+    setScreenAlert(warning)
+    scanned=false
   }
   const handleBarCodeScanned = ({ type, data }) => {
     if(scanned)return
@@ -79,16 +69,29 @@ export default function Index() {
       const qrTotal=parseInt(header[1])
       const qrIndex=parseInt(header[2])+1
       if(!(qrTimestampId && qrTotal && qrIndex)) return alert('Invalid QR code')
-      if(!timestampId)timestampId=qrTimestampId
-      if(timestampId!==qrTimestampId) return alert('This QR code does not match your previous codes')
+      if(timestampId && timestampId!==qrTimestampId) return alert('This QR code does not match your previous codes')
       if(total===0 && qrIndex!==1) return alert('Please start with the first QR code')
-      if(total===0)setTotal(parseInt(qrTotal))
       if(qrIndex<progress+1) return alert(`QR code #${qrIndex} is already scanned. Please use #${progress+1}`)
       if(qrIndex>progress+1) return alert(`This is QR code #${qrIndex}. Please continue with #${progress+1}`)
+      if(!timestampId)timestampId=qrTimestampId
+      if(total===0)setTotal(qrTotal)
       const payload = data.substring(divider + 1)
       finalData+=payload
       setProgress(progress+1)
-      return alert(total===progress+1?'Scan success for final QR code':`Scan success for QR code #${qrIndex}. Let's continue with #${qrIndex+1}`)
+      setScreenAlert('')
+      Alert.alert(
+        (total===progress+1?'Scan success for final QR code':`Scan success for QR code #${qrIndex}. Let's continue with #${qrIndex+1}`), // Title
+        '',
+        [
+          {
+            text: 'OK', // Text for the button
+            onPress: () => {
+              scanned=false
+            },
+          },
+        ],
+        { cancelable: false } // Optional: prevents closing by tapping outside or back button
+      );
     }catch(error){
       alert('Invalid QR code')
     }
@@ -105,6 +108,26 @@ export default function Index() {
         alignItems: 'center',
         backgroundColor: 'white'
       }}>
+        {!(total===0 || total!==progress) && <View style={{
+          width: '75%',
+          aspectRatio: 1, // this will make the view square
+          display:'flex',
+          flexDirection:'column',
+          justifyContent:'center',
+          backgroundColor:'white',
+          borderRadius:20,
+          overflow:'hidden',
+          alignItems: 'center'
+        }}>
+          <Image
+            style={{
+              width: '40%',
+              height: undefined,
+              aspectRatio: 1,
+            }}
+            source={require('../assets/images/icon.png')}
+          />
+        </View>}
         {(total===0 || total!==progress) && <View style={{
           width: '75%',
           aspectRatio: 1, // this will make the view square
@@ -127,26 +150,7 @@ export default function Index() {
             }}
           />
         </View>}
-        {!(total===0 || total!==progress) && <View style={{
-          width: '75%',
-          aspectRatio: 1, // this will make the view square
-          display:'flex',
-          flexDirection:'column',
-          justifyContent:'center',
-          backgroundColor:'white',
-          borderRadius:20,
-          overflow:'hidden',
-          alignItems: 'center'
-        }}>
-          <Image
-            style={{
-              width: '40%',
-              height: undefined,
-              aspectRatio: 1,
-            }}
-            source={require('../assets/images/icon.png')}
-          />
-        </View>}
+        <Text style={{color:'grey',paddingTop:20,width: '75%',textAlign:'center',height:100}}>{screenAlert}</Text>
         <View style={styles.buttonInput}>
           {!enableCamera && <TouchableOpacity 
             style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}} 
