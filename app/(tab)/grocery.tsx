@@ -23,7 +23,7 @@ const styles=StyleSheet.create({
     alignItems: "center",
     backgroundColor:'white',
     borderRadius:20,
-    height:40,
+    height:35,
     overflow:'hidden',
     borderColor:'white',
     borderWidth:2,
@@ -110,7 +110,7 @@ export default function Index() {
           {grocery.length!==0 && <FlatList 
             ref={flatListRef}
             style={styles.column}
-            contentContainerStyle ={{paddingBottom:60}}
+            contentContainerStyle ={{paddingBottom:55}}
             showsVerticalScrollIndicator={false}
             data={grocery}
             renderItem={({ item, index }) => (

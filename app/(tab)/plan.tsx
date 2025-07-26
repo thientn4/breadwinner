@@ -23,7 +23,7 @@ const styles=StyleSheet.create({
     alignItems: "center",
     backgroundColor:'white',
     borderRadius:20,
-    height:40,
+    height:35,
     overflow:'hidden',
     borderColor:'white',
     borderWidth:2,
@@ -101,7 +101,7 @@ export default function Index() {
           showsVerticalScrollIndicator={false}
         >
           {['Clear','MON','TUE','WED','THU','FRI','SAT','SUN'].map((weekday, index) => 
-            <View key = {index} style={index===0?styles.row:{...styles.row,minHeight:screenHeight/8-10}}>
+            <View key = {index} style={index===0?styles.row:{...styles.row,minHeight:screenHeight/8}}>
               <View style={{...styles.cell,borderTopWidth:index===0?0:2}}>
                 <Text style={{...styles.boldText,color:'grey',padding:10,textDecorationLine:index===0?'underline':'none'}} onPress={()=>{if(index===0)clearPlan()}}>{weekday}</Text>
               </View>

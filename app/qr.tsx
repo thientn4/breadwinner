@@ -21,7 +21,7 @@ const styles=StyleSheet.create({
     alignItems: "center",
     backgroundColor:'white',
     borderRadius:20,
-    height:40,
+    height:35,
     textAlign:'center',
     display:'flex',
     flexDirection:'row'
