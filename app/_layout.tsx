@@ -58,6 +58,10 @@ export default function RootLayout() {
           name="qr"
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="scanner"
+          options={{headerShown: false}}
+        />
       </Stack>
     </>
   );
