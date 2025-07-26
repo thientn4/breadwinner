@@ -44,7 +44,8 @@ export default function Index() {
   const params=useLocalSearchParams();
   const timestampId=Date.now()+Math.floor(Math.random()*1000000)
   let codeData = params?.codeData
-  codeData = codeData?.match(/(.{1,500})/g);
+  let splitSize = Math.ceil(codeData.length/Math.ceil(codeData.length/500))
+  codeData = codeData?.match(new RegExp(`.{1,${splitSize}}`, 'g'));
   const [index,setIndex]=useState(0)
   return (
     //ignore system bar for iOS (SafeAreaView) & android (margin & padding)
