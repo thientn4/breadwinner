@@ -78,7 +78,7 @@ export default function Index() {
       return Alert.alert('A recipe must have its name, ingredients, instruction','')
     for(let i=0; i<recipes.length; i++)
       if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
-        return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
+        return Alert.alert(`Please pick another name.\nYou already have a recipe for '${recipes[i].name}'`,'')
     recipes.push({
       "image": (await updateImage()),
       "name": processedName,
