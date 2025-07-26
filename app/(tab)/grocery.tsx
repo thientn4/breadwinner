@@ -1,5 +1,6 @@
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useIsFocused } from '@react-navigation/native';
+import { router } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import { Alert, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import * as longTermStorage from '../../support/longTermStorage';
@@ -68,7 +69,7 @@ export default function Index() {
     <View style={styles.column}>
       <View style={{flex:1}}>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{Keyboard.dismiss;Alert.alert("We are still working on\ngrocery QR code scanner.\nCheck back later!",'')}}>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}   onPress={()=>{router.push({pathname:'/qr',params:{codeData:JSON.stringify(grocery)}})}}>
             <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/qr_btn.png')}/>
           </TouchableOpacity>
           <View style={{...styles.buttonInput, flex:1}}>

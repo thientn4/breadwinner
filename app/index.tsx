@@ -1,10 +1,8 @@
-import { useRouter } from 'expo-router';
+import { router } from 'expo-router';
 import React, { useEffect } from 'react';
-import { Animated, Image, Text } from 'react-native';
+import { Image, Text, View } from 'react-native';
 
 export default function Index() {
-  const router = useRouter();
-
   useEffect(() => {
     // Navigate to '/menu' after 3 seconds
     const timer = setTimeout(() => {
@@ -14,9 +12,8 @@ export default function Index() {
     // Clear the timeout if the component unmounts
     return () => clearTimeout(timer);
   }, []); // Depend on fadeAnim and router
-
   return (
-    <Animated.View // Use Animated.View for fade effect
+    <View // Use Animated.View for fade effect
       style={{
         flex: 1,
         justifyContent: 'center',
@@ -33,6 +30,6 @@ export default function Index() {
         source={require('../assets/images/icon.png')}
       />
       <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Breadwinner</Text>
-    </Animated.View>
+    </View>
   );
 }

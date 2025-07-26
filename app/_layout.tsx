@@ -1,4 +1,4 @@
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import { Image, SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 
 const styles=StyleSheet.create({
@@ -27,7 +27,6 @@ const styles=StyleSheet.create({
   }
 })
 export default function RootLayout() {
-  const router = useRouter();
   return (
     <>
       <StatusBar style="dark" />
@@ -53,6 +52,10 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="recipe"
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="qr"
           options={{headerShown: false}}
         />
       </Stack>

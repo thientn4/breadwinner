@@ -1,6 +1,6 @@
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useIsFocused } from '@react-navigation/native';
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import defaultData from '../../support/defaultData';
@@ -49,7 +49,6 @@ const styles=StyleSheet.create({
 const weekdays=['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
 const meals=['Breakfast','Lunch','Dinner']
 export default function Index() {
-  const router = useRouter();
   const [dishTypeFilter,setDishTypeFilter]=useState(-1)
   const [weekday,setWeekday]=useState(0)
   const [meal,setMeal]=useState(0)

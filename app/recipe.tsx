@@ -1,6 +1,6 @@
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from 'react';
 import { Alert, Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as longTermStorage from '../support/longTermStorage';
@@ -58,7 +58,6 @@ const styles=StyleSheet.create({
 const dishTypes=['Appetizer', 'Main', 'Dessert', 'Other']
 export default function Index() {
   const screenHeight = Dimensions.get('window').height;
-  const router = useRouter();
   const params=useLocalSearchParams();
   const recipe = params?.recipe?JSON.parse(params.recipe):null;
   const [dishType,setDishType]=useState(recipe?recipe.type:0)
@@ -231,7 +230,7 @@ export default function Index() {
                   <Text style={styles.boldText}>▶</Text>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{Alert.alert('We are still working on\nQR code generator.\nCheck back later for more!','')}}>
+              <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1}} onPress={()=>{router.push({pathname:'/qr',params:{codeData:JSON.stringify(recipe)}})}}>
                 <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../assets/images/qr_btn.png')}/>
               </TouchableOpacity>
             </View>

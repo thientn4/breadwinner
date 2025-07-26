@@ -1,5 +1,5 @@
 import { useIsFocused } from "@react-navigation/native";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import React, { useEffect, useState } from 'react';
 import { Alert, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import defaultData from "../../support/defaultData";
@@ -58,7 +58,6 @@ const styles=StyleSheet.create({
 export default function Index() {
   const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;
-  const router = useRouter();
   const [planItems,setPlanItems]=useState([[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]])
   useEffect(()=>{
     const getPlan = async()=>{
