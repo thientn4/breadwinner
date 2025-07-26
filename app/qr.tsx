@@ -41,7 +41,7 @@ export default function Index() {
   const params=useLocalSearchParams();
   const timestampId=Date.now()+Math.floor(Math.random()*1000000)
   let codeData = params?.codeData
-  let splitSize = Math.ceil(codeData.length/Math.ceil(codeData.length/500))
+  let splitSize = Math.ceil(codeData.length/Math.ceil(codeData.length/750))
   codeData = codeData?.match(new RegExp(`.{1,${splitSize}}`, 'g'));
   const [index,setIndex]=useState(0)
   return (
@@ -55,11 +55,11 @@ export default function Index() {
       }}>
         <QRCode value={`${timestampId}-${codeData.length}-${index}@${codeData[index]}`}/>
         <View style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',maxWidth:'50%',marginTop:100}}>
-          <Text suppressHighlighting={true} style={{...styles.boldText,flex:1,color:index===0?'grey':'white'}} onPress={()=>{setIndex(index===0?index:index-1)}}>◀</Text>
-          <Text suppressHighlighting={true} style={{...styles.boldText,flex:1}}>{index+1}</Text>
+          <Text suppressHighlighting={true} style={{...styles.boldText,flex:1,color:index===0?'grey':'white',textAlign:'left',marginLeft:10}} onPress={()=>{setIndex(index===0?index:index-1)}}>◀</Text>
+          <Text suppressHighlighting={true} style={{...styles.boldText,marginRight:10}}>{index+1}</Text>
           <Text style={styles.boldText}>/</Text>
-          <Text suppressHighlighting={true} style={{...styles.boldText,flex:1}}>{codeData.length}</Text>
-          <Text suppressHighlighting={true} style={{...styles.boldText,flex:1,color:index===codeData.length-1?'grey':'white'}} onPress={()=>{setIndex(index===codeData.length-1?index:index+1)}}>▶</Text>
+          <Text suppressHighlighting={true} style={{...styles.boldText,marginLeft:10}}>{codeData.length}</Text>
+          <Text suppressHighlighting={true} style={{...styles.boldText,flex:1,color:index===codeData.length-1?'grey':'white',textAlign:'right',marginRight:10}} onPress={()=>{setIndex(index===codeData.length-1?index:index+1)}}>▶</Text>
         </View>
       </View>
       <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
