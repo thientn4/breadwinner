@@ -3,6 +3,7 @@ import { Camera, CameraView } from 'expo-camera';
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect } from 'react';
 import { Alert, Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import * as Progress from 'react-native-progress';
 
 const styles=StyleSheet.create({
   column:{
@@ -155,21 +156,17 @@ export default function Index() {
             }}
           />
         </View>}
-        <Text style={{color:'grey',paddingTop:20,width: '75%',textAlign:'center',height:100}}>{screenAlert}</Text>
+        <Text style={{color:'grey',paddingTop:20,width: '75%',textAlign:'center',height:100,marginBottom:30}}>{screenAlert}</Text>
         <View style={styles.buttonInput}>
           {!enableCamera && <TouchableOpacity 
-            style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}} 
+            style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',paddingLeft:20,paddingRight:20}} 
             onPress={requestScanner}
           >
             <Text style={styles.boldText}>Enable Camera</Text>
           </TouchableOpacity>}
-          {enableCamera && total!==0 && total!==progress && <View style={{...styles.buttonInput, height:31, backgroundColor:'white',width:'50%',marginTop:50,borderWidth:2,borderColor:'rgb(58,58,58)',justifyContent:'flex-start'}}>
-            <View style={{margin:2, flex:1, overflow:'hidden'}}>
-              <View style={{borderRadius:23,backgroundColor:'rgb(58,58,58)',height:'100%',width:`${Math.ceil(progress/total*100)}%`}}></View>
-            </View>
-          </View>}
-          {enableCamera && total!==0 && total===progress && <TouchableOpacity 
-            style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}}
+          {enableCamera && (total!==progress || total ===0) && <Progress.Bar progress={total?progress/total:0} color='rgb(58,58,58)'/>}
+          {enableCamera && (total!==0 && total===progress) && <TouchableOpacity 
+            style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',paddingLeft:30,paddingRight:30}}
             onPress={()=>{console.log(finalData)}}
           >
             <Text style={styles.boldText}>Continue</Text>
