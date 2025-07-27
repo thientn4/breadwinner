@@ -114,6 +114,7 @@ export default function Index() {
   }
   const processRecipe=()=>{
     try{
+      let finalCheck=JSON.parse(finalData)
       router.replace({pathname:'/recipe',params:{recipe:finalData,add:true}})
     }catch(error){
       return Alert.alert('Unable to validate QR codes. Please try again!')
