@@ -69,22 +69,22 @@ export default function Index() {
       const qrTotal=parseInt(header[1])
       const qrIndex=parseInt(header[2])+1
       if(!(qrTimestampId && qrTotal && qrIndex)) return alert('Invalid QR code')
-      if(timestampId && timestampId!==qrTimestampId) return alert('This QR code does not match your previous codes')
-      if(total===0 && qrIndex!==1) return alert('Please start with the first QR code')
-      if(qrIndex<progress+1) return alert(`QR code #${qrIndex} is already scanned. Please use #${progress+1}`)
-      if(qrIndex>progress+1) return alert(`This is QR code #${qrIndex}. Please continue with #${progress+1}`)
+      if(timestampId && timestampId!==qrTimestampId) return alert("This QR code doesn't match previous codes")
+      if(total===0 && qrIndex!==1) return alert('This is not the first QR code')
+      if(qrIndex<progress+1) return alert(`Already scanned QR code #${qrIndex}. Please use #${progress+1}`)
+      if(qrIndex>progress+1) return alert(`This is QR code #${qrIndex}. Please use #${progress+1} first`)
       if(!timestampId)timestampId=qrTimestampId
       if(total===0)setTotal(qrTotal)
       const payload = data.substring(divider + 1)
       finalData+=payload
       setProgress(progress+1)
       setScreenAlert('')
-      Alert.alert(
-        (total===progress+1?'Scan success for final QR code':`Scan success for QR code #${qrIndex}. Let's continue with #${qrIndex+1}`), // Title
+      if(total!==progress+1)Alert.alert(
+        `Let's continue with\nQR code #${qrIndex+1}`, // Title
         '',
         [
           {
-            text: 'OK', // Text for the button
+            text: 'Continue', // Text for the button
             onPress: () => {
               scanned=false
             },
@@ -92,11 +92,15 @@ export default function Index() {
         ],
         { cancelable: false } // Optional: prevents closing by tapping outside or back button
       );
+      else scanned=false
     }catch(error){
       alert('Invalid QR code')
     }
   }
   useEffect(() => {
+    finalData=""
+    timestampId=null
+    scanned = false
     requestScanner()
   },[useIsFocused()])
   return (
@@ -125,8 +129,9 @@ export default function Index() {
               height: undefined,
               aspectRatio: 1,
             }}
-            source={require('../assets/images/icon.png')}
+            source={require('../assets/images/checkmark.png')}
           />
+          <Text style={{color:'grey',paddingTop:20,width: '75%',textAlign:'center'}}>Successfully scanned all codes</Text>
         </View>}
         {(total===0 || total!==progress) && <View style={{
           width: '75%',
@@ -158,16 +163,16 @@ export default function Index() {
           >
             <Text style={styles.boldText}>Enable Camera</Text>
           </TouchableOpacity>}
-          {enableCamera && total!==0 && total!==progress && <View style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}}>
-            <Text style={{...styles.boldText,flex:1,marginRight:10}}>{progress}</Text>
-            <Text style={styles.boldText}>/</Text>
-            <Text style={{...styles.boldText,flex:1,marginLeft:10}}>{total}</Text>
+          {enableCamera && total!==0 && total!==progress && <View style={{...styles.buttonInput, height:31, backgroundColor:'white',width:'50%',marginTop:50,borderWidth:2,borderColor:'rgb(58,58,58)',justifyContent:'flex-start'}}>
+            <View style={{margin:2, flex:1, overflow:'hidden'}}>
+              <View style={{borderRadius:23,backgroundColor:'rgb(58,58,58)',height:'100%',width:`${Math.ceil(progress/total*100)}%`}}></View>
+            </View>
           </View>}
           {enableCamera && total!==0 && total===progress && <TouchableOpacity 
             style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',marginTop:50}}
             onPress={()=>{console.log(finalData)}}
           >
-            <Text style={styles.boldText}>Done</Text>
+            <Text style={styles.boldText}>Continue</Text>
           </TouchableOpacity>}
         </View>
       </View>
