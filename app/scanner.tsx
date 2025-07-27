@@ -100,16 +100,24 @@ export default function Index() {
     }
   }
   const processGrocery=async ()=>{
-    let groceries = await longTermStorage.retrieve('groceries')
-    if(!groceries) return Alert.alert('Unable to validate QR codes. Please try again!')
-    groceries=JSON.parse(groceries)
-    groceries[groceryIndex]=JSON.parse(finalData)
-    groceries[groceryIndex].sort((a,b)=>a.name.localeCompare(b.name))
-    longTermStorage.store('groceries',JSON.stringify(groceries))
-    router.back()
+    try{
+      let groceries = await longTermStorage.retrieve('groceries')
+      if(!groceries) return Alert.alert('Unable to validate QR codes. Please try again!')
+      groceries=JSON.parse(groceries)
+      groceries[groceryIndex]=JSON.parse(finalData)
+      groceries[groceryIndex].sort((a,b)=>a.name.localeCompare(b.name))
+      longTermStorage.store('groceries',JSON.stringify(groceries))
+      router.back()
+    }catch(error){
+      return Alert.alert('Unable to validate QR codes. Please try again!')
+    }
   }
   const processRecipe=()=>{
-    router.replace({pathname:'/recipe',params:{recipe:finalData,add:true}})
+    try{
+      router.replace({pathname:'/recipe',params:{recipe:finalData,add:true}})
+    }catch(error){
+      return Alert.alert('Unable to validate QR codes. Please try again!')
+    }
   }
   useEffect(() => {
     finalData=""
