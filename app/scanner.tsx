@@ -190,7 +190,7 @@ export default function Index() {
           {enableCamera && (total!==0 && total===progress) && <TouchableOpacity 
             style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',paddingLeft:30,paddingRight:30}}
             onPress={()=>{
-              if(groceryIndex)processGrocery()
+              if(groceryIndex !== undefined && groceryIndex !== null)processGrocery()
               else processRecipe()
             }}
           >
