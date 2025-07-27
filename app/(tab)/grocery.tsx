@@ -69,8 +69,8 @@ export default function Index() {
     <View style={styles.column}>
       <View style={{flex:1}}>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}   onPress={()=>{router.push({pathname:'/qr',params:{codeData:JSON.stringify(grocery)}})}}>
-            <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/qr_btn.png')}/>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{router.push({pathname:'/scanner',params:{groceryIndex:groceryIndex}})}}>
+            <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
           </TouchableOpacity>
           <View style={{...styles.buttonInput, flex:1}}>
             <TextInput maxLength={50} style={{...styles.buttonInput, flex:1,paddingLeft:20}} placeholder="Add to list" placeholderTextColor="grey" value={newItem} onChangeText={(text)=>{setNewItem(text)}}/>
@@ -98,8 +98,8 @@ export default function Index() {
               <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
           </TouchableOpacity>
           </View>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{router.push({pathname:'/scanner',params:{groceryIndex:groceryIndex}})}}>
-            <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}   onPress={()=>{router.push({pathname:'/qr',params:{codeData:JSON.stringify(grocery)}})}}>
+            <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/qr_btn.png')}/>
           </TouchableOpacity>
         </View>
         <KeyboardAvoidingView 
