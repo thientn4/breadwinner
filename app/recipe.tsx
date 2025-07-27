@@ -60,6 +60,7 @@ export default function Index() {
   const screenHeight = Dimensions.get('window').height;
   const params=useLocalSearchParams();
   const recipe = params?.recipe?JSON.parse(params.recipe):null;
+  const isAdd = params?.add
   const [dishType,setDishType]=useState(recipe?recipe.type:0)
   const [recipeName,setRecipeName]=useState(recipe?recipe.name:'')
   const [ingredients,setIngredients]=useState(recipe?recipe.ingredients.sort((a,b)=>a.name.localeCompare(b.name)):[])
@@ -328,7 +329,7 @@ export default function Index() {
       {!instructionActive && <View style={{...styles.row,backgroundColor: 'white',paddingTop:10,borderTopWidth:2}}>
         <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.back()}}><Text style={styles.boldText}>{'Back'}</Text></TouchableOpacity>
         <View style={{borderColor:'black',borderRightWidth:2}}></View>
-        {recipe && <TouchableOpacity style={styles.typeFilter} onPress={()=>{
+        {recipe && !isAdd && <TouchableOpacity style={styles.typeFilter} onPress={()=>{
           Alert.alert(
             "Are you sure you want to delete this recipe?","",
             [
@@ -343,11 +344,11 @@ export default function Index() {
             { cancelable: false } // Optional: prevents dismissing the alert by tapping outside (Android only)
           );
         }}><Text style={styles.boldText}>Delete</Text></TouchableOpacity>}
-        {recipe && <View style={{borderColor:'black',borderRightWidth:2}}></View>}
+        {recipe && !isAdd && <View style={{borderColor:'black',borderRightWidth:2}}></View>}
         <TouchableOpacity style={{...styles.typeFilter,borderRightWidth:0}} onPress={()=>{
-          if(!recipe)addRecipe()
+          if(!recipe ||  isAdd )addRecipe()
           else updateRecipe()
-        }}><Text style={styles.boldText}>{recipe?'Update':'Add'}</Text></TouchableOpacity>
+        }}><Text style={styles.boldText}>{(recipe && !isAdd)?'Update':'Add'}</Text></TouchableOpacity>
       </View>}
     </SafeAreaView>
   );

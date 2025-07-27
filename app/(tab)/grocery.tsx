@@ -98,7 +98,7 @@ export default function Index() {
               <Image style={{...styles.buttonIcon, height:'45%'}} source={require('../../assets/images/add_btn.png')}/>
           </TouchableOpacity>
           </View>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{router.navigate('/scanner')}}>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={()=>{router.push({pathname:'/scanner',params:{groceryIndex:groceryIndex}})}}>
             <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
           </TouchableOpacity>
         </View>

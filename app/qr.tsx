@@ -41,7 +41,7 @@ const timestampId=Date.now()+Math.floor(Math.random()*1000000)
 export default function Index() {
   const params=useLocalSearchParams();
   let codeData = params?.codeData
-  let splitSize = Math.ceil(codeData.length/Math.ceil(codeData.length/750))
+  let splitSize = Math.ceil(codeData.length/Math.ceil(codeData.length/500))
   codeData = codeData?.match(new RegExp(`.{1,${splitSize}}`, 'g'));
   const [index,setIndex]=useState(0)
   return (

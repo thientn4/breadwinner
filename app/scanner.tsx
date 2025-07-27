@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect } from 'react';
 import { Alert, Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as Progress from 'react-native-progress';
+import * as longTermStorage from '../support/longTermStorage';
 
 const styles=StyleSheet.create({
   column:{
@@ -43,7 +44,7 @@ let finalData=""
 let timestampId=null
 let scanned = false
 export default function Index() {
-  const params=useLocalSearchParams();
+  const groceryIndex = useLocalSearchParams().groceryIndex;
   const [enableCamera,setEnableCamera]=React.useState(false)
   const [progress,setProgress]=React.useState(0)
   const [total,setTotal]=React.useState(0)
@@ -97,6 +98,18 @@ export default function Index() {
     }catch(error){
       alert('Invalid QR code')
     }
+  }
+  const processGrocery=async ()=>{
+    let groceries = await longTermStorage.retrieve('groceries')
+    if(!groceries) return Alert.alert('Unable to validate QR codes. Please try again!')
+    groceries=JSON.parse(groceries)
+    groceries[groceryIndex]=JSON.parse(finalData)
+    groceries[groceryIndex].sort((a,b)=>a.name.localeCompare(b.name))
+    longTermStorage.store('groceries',JSON.stringify(groceries))
+    router.back()
+  }
+  const processRecipe=()=>{
+    router.replace({pathname:'/recipe',params:{recipe:finalData,add:true}})
   }
   useEffect(() => {
     finalData=""
@@ -167,7 +180,10 @@ export default function Index() {
           {enableCamera && (total!==progress || total ===0) && <Progress.Bar progress={total?progress/total:0} color='rgb(58,58,58)'/>}
           {enableCamera && (total!==0 && total===progress) && <TouchableOpacity 
             style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',paddingLeft:30,paddingRight:30}}
-            onPress={()=>{console.log(finalData)}}
+            onPress={()=>{
+              if(groceryIndex)processGrocery()
+              else processRecipe()
+            }}
           >
             <Text style={styles.boldText}>Continue</Text>
           </TouchableOpacity>}
