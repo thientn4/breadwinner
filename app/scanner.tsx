@@ -81,8 +81,8 @@ export default function Index() {
       finalData+=payload
       setProgress(progress+1)
       setScreenAlert('')
-      if(total!==progress+1)Alert.alert(
-        `Let's continue with\nQR code #${qrIndex+1}`, // Title
+      Alert.alert(
+        (total!==progress+1)?`Let's continue with\nQR code #${qrIndex+1}`:'You have scanned all codes',
         '',
         [
           {
@@ -94,7 +94,6 @@ export default function Index() {
         ],
         { cancelable: false } // Optional: prevents closing by tapping outside or back button
       );
-      else scanned=false
     }catch(error){
       alert('Invalid QR code')
     }
