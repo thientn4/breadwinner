@@ -81,8 +81,8 @@ export default function Index() {
       finalData+=payload
       setProgress(progress+1)
       setScreenAlert('')
-      Alert.alert(
-        (total!==progress+1)?`Let's continue with\nQR code #${qrIndex+1}`:'You have scanned all codes',
+      if(qrIndex<qrTotal)Alert.alert(
+        `Let's continue with\nQR code #${qrIndex+1}`,
         '',
         [
           {
