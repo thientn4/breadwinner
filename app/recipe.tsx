@@ -71,15 +71,15 @@ export default function Index() {
   const [instructionActive,setInstructionActive]=useState(false)
   const addRecipe=async ()=>{
     let recipes = await longTermStorage.retrieve('recipes')
-    if(!recipes) return Alert.alert('There was an error. Please try again later.','')
+    if(!recipes) return Alert.alert('Breadwinner','There was an error. Please try again later.')
     recipes=JSON.parse(recipes)
     let processedName=recipeName.trim().replace(/\s+/g, ' ')
     let processedInstruction=instruction.trim().replace(/\s+/g, ' ')
     if(processedName==='' || processedInstruction==='' || ingredients.length===0)
-      return Alert.alert('A recipe must have its name, ingredients, instruction','')
+      return Alert.alert('Breadwinner','A recipe must have its name, ingredients, instruction')
     for(let i=0; i<recipes.length; i++)
       if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
-        return Alert.alert(`Please pick another name.\nYou already have a recipe for '${recipes[i].name}'`,'')
+        return Alert.alert('Breadwinner',`Please pick another name.\nYou already have a recipe for '${recipes[i].name}'`)
     recipes.push({
       "image": (await updateImage()),
       "name": processedName,
@@ -89,17 +89,17 @@ export default function Index() {
     })
     recipes.sort((a,b)=>a.name.localeCompare(b.name))
     longTermStorage.store('recipes',JSON.stringify(recipes))
-    Alert.alert('New recipe added!','')
+    Alert.alert('Breadwinner','New recipe added!')
     router.back()
   }
   const deleteRecipe=async ()=>{
     let recipes = await longTermStorage.retrieve('recipes')
-    if(!recipes) return Alert.alert('There was an error. Please try again later.','')
+    if(!recipes) return Alert.alert('Breadwinner','There was an error. Please try again later.')
     if (recipe?.image && recipe?.image?.startsWith('file://')) {
       try {
         await FileSystem.deleteAsync(recipe?.image, { idempotent: true });
       } catch (error) {
-        return Alert.alert('There was an error. Please try again later.','')
+        return Alert.alert('Breadwinner','There was an error. Please try again later.')
       }
     }
     recipes=JSON.parse(recipes)
@@ -118,17 +118,17 @@ export default function Index() {
   }
   const updateRecipe=async ()=>{
     let recipes = await longTermStorage.retrieve('recipes')
-    if(!recipes)return Alert.alert('There was an error. Please try again later.','')
+    if(!recipes)return Alert.alert('Breadwinner','There was an error. Please try again later.')
     recipes=JSON.parse(recipes)
     ///////////////////////////////////// VALIDATE INPUT TEXT UPDATE ///////////////////////////////////////
     let processedName=recipeName.trim().replace(/\s+/g, ' ')
     let processedInstruction=instruction.trim().replace(/(\s)\1+/g, '$1')
     if(processedName==='' || processedInstruction==='' || ingredients.length===0)
-      return Alert.alert('a recipe must have its name, ingredients, instruction','')
+      return Alert.alert('Breadwinner','A recipe must have its name, ingredients, instruction')
     if(processedName.toLowerCase()!==recipe.name.toLowerCase())
       for(let i=0; i<recipes.length; i++)
         if(recipes[i].name.toLowerCase()===processedName.toLowerCase())
-          return Alert.alert(`You already have a recipe for '${recipes[i].name}'`,'')
+          return Alert.alert('Breadwinner',`You already have a recipe for '${recipes[i].name}'`)
     ///////////////////////////////////////// UPDATE RECIPE ///////////////////////////////////////////////
     recipes=recipes.filter((item)=>item.name!==recipe.name)
     recipes.push({
@@ -149,7 +149,7 @@ export default function Index() {
             if(plan[i][j][k].name===recipe.name)plan[i][j][k].name=processedName
       longTermStorage.store('plan',JSON.stringify(plan))
     }
-    Alert.alert('Recipe updated!','')
+    Alert.alert('Breadwinner','Recipe updated!')
   }
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -260,7 +260,7 @@ export default function Index() {
                 <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{
                   let processedIngredientName=ingredient.toLowerCase().trim().replace(/\s+/g, ' ')
                   if(processedIngredientName==='')return
-                  if(ingredient!==ingredient.replace(/[^\p{L}\s]/gu, ''))return Alert.alert("Keep ingredient name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'",'')
+                  if(ingredient!==ingredient.replace(/[^\p{L}\s]/gu, ''))return Alert.alert('Breadwinner',"Keep ingredient name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'")
                   let newIngredients=[
                     {name:processedIngredientName,quantity:quantity.toLowerCase().trim().replace(/\s+/g, ' ')},
                     ...ingredients.filter((item)=>item.name!==processedIngredientName)
@@ -331,7 +331,8 @@ export default function Index() {
         <View style={{borderColor:'black',borderRightWidth:2}}></View>
         {recipe && !isAdd && <TouchableOpacity style={styles.typeFilter} onPress={()=>{
           Alert.alert(
-            "Are you sure you want to delete this recipe?","",
+            'Breadwinner',
+            "Are you sure you want to delete this recipe?",
             [
               {
                 text: "No",

@@ -79,10 +79,10 @@ export default function Index() {
               Keyboard.dismiss()
               let processedItem=newItem.trim().replace(/\s+/g, ' ').toLowerCase()
               if(processedItem==='')return
-              if(processedItem!==processedItem.replace(/[^\p{L}\s]/gu, ''))return Alert.alert("Keep item name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'",'')
+              if(processedItem!==processedItem.replace(/[^\p{L}\s]/gu, ''))return Alert.alert('Breadwinner',"Keep item name simple (alphabetical only)\n\n👍 'Garlic'\n\n👎 'Minced garlic (3 gloves)'")
               for(let i=0; i<grocery.length; i++)
                 if(grocery[i].name===processedItem)
-                  return Alert.alert(`You have already added '${grocery[i].name}'`,'')
+                  return Alert.alert('Breadwinner',`You have already added '${grocery[i].name}'`)
               let newItemObj={
                 name:processedItem,
                 recipes:[],
@@ -176,7 +176,8 @@ export default function Index() {
       <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10}}>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{
           Alert.alert(
-            `Are you sure you want to delete grocery list #${groceryIndex+1}?`,"",
+            'Breadwinner',
+            `Are you sure you want to delete grocery list #${groceryIndex+1}?`,
             [
               {
                 text: "No",
@@ -226,7 +227,7 @@ export default function Index() {
               if(groceries[i].length===0){
                 setGrocery(groceries[i])
                 setGroceryIndex(i)
-                return Alert.alert(`List #${i+1} is still empty. Please use it first!`)
+                return Alert.alert('Breadwinner',`List #${i+1} is still empty. Please use it first!`)
               }
             }
             groceries.push([])
@@ -240,7 +241,8 @@ export default function Index() {
         </View>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={async ()=>{
           Alert.alert(
-            "Are you sure, you want to rebuild this grocery list?","",
+            'Breadwinner',
+            "Are you sure, you want to rebuild this grocery list?",
             [
               {
                 text: "No",
@@ -250,7 +252,7 @@ export default function Index() {
                 onPress: async () => {
                   let recipes=await longTermStorage.retrieve('recipes')
                   let plan=await longTermStorage.retrieve('plan')
-                  if(!recipes || !plan)return Alert.alert("Failed to collect recipes and plan to build grocery list. Try again later!",'')
+                  if(!recipes || !plan)return Alert.alert('Breadwinner',"Failed to collect recipes and plan to build grocery list. Try again later!")
                   recipes=JSON.parse(recipes)
                   plan=JSON.parse(plan)
                   let plannedServings={}
@@ -283,7 +285,7 @@ export default function Index() {
                       }
                     }
                   }
-                  if(groceryList.length===0)return Alert.alert("We found no meal plan to build grocery list",'')
+                  if(groceryList.length===0)return Alert.alert('Breadwinner',"We found no meal plan to build grocery list")
                   groceries[groceryIndex]=groceryList
                   setGrocery(groceryList)
                   longTermStorage.store('groceries',JSON.stringify(groceries))

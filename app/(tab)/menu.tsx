@@ -57,21 +57,21 @@ export default function Index() {
   const [searchQuery,setSearchQuery]=useState('')
   const addPlan=async (recipeName)=>{
     let plan=await longTermStorage.retrieve('plan')
-    if(!plan) return Alert.alert('There was an error. Please try again later.','')
+    if(!plan) return Alert.alert('Breadwinner','There was an error. Please try again later.')
     plan=JSON.parse(plan)
     let planSlot=plan[weekday][meal]
     for(let i=0; i<planSlot.length; i++)
       if(planSlot[i].name===recipeName){
         plan[weekday][meal][i].serving+=parseInt(serving)
         longTermStorage.store('plan',JSON.stringify(plan))
-        Alert.alert('plan updated!','')
+        Alert.alert('Breadwinner','plan updated!')
         return
       }
-    if(plan[weekday][meal].length>=5)return Alert.alert('You reached the limit of 5 recipes per meal','')
-    if(serving==='' || parseInt(serving)<=0)return Alert.alert('Number of servings cannot be 0','')
+    if(plan[weekday][meal].length>=5)return Alert.alert('Breadwinner','You reached the limit of 5 recipes per meal')
+    if(serving==='' || parseInt(serving)<=0)return Alert.alert('Breadwinner','Number of servings cannot be 0')
     plan[weekday][meal].push({name:recipeName, serving:parseInt(serving)})
     longTermStorage.store('plan',JSON.stringify(plan))
-    Alert.alert('Plan updated!','')
+    Alert.alert('Breadwinner','Plan updated!')
   }
   const filter=(dishType)=>{
     setSearchQuery('')
