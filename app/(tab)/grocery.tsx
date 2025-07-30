@@ -286,6 +286,7 @@ export default function Index() {
                     }
                   }
                   if(groceryList.length===0)return Alert.alert('Breadwinner',"We found no meal plan to build grocery list")
+                  groceryList=groceryList.sort((a,b)=>a.name.localeCompare(b.name))
                   groceries[groceryIndex]=groceryList
                   setGrocery(groceryList)
                   longTermStorage.store('groceries',JSON.stringify(groceries))
