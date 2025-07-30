@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { Image, SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
+import { Image, SafeAreaView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
   row:{
@@ -14,7 +14,7 @@ const styles=StyleSheet.create({
     alignItems: "center",
     backgroundColor:'white',
     borderRadius:20,
-    height:40,
+    height:35,
     overflow:'hidden',
     borderColor:'white',
     borderWidth:2,
@@ -35,14 +35,15 @@ export default function RootLayout() {
         header: () => (
           // ignore system bar for iOS (SafeAreaView) & android (margin & padding)
           <SafeAreaView style={styles.row}>
-            <View></View>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{alert("hello")}}>
+              <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../assets/images/setting_btn.png')}/>
+            </TouchableOpacity>
             <View style={{...styles.buttonInput,borderRadius:0}}>
               <Image style={{height:'100%',width:undefined, aspectRatio:1.2}} source={require('../assets/images/transparent_icon.png')}/>
             </View>
-            <View></View>
-            {/* <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{alert("hello")}}>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{alert("hello")}}>
               <Image style={styles.buttonIcon} source={require('../assets/images/question_btn.png')}/>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </SafeAreaView>
         ),
       }}>
