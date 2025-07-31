@@ -244,14 +244,16 @@ export default function Index() {
           let expiration=await longTermStorage.retrieve('expiration')
           if(expiration)expiration=parseInt(expiration)
           else{
-            expiration=Date.now()+2 * 24 * 60 * 60 * 1000 // 50 days in milliseconds
+            expiration=Date.now()+1 * 24 * 60 * 60 * 1000 // 1 days in milliseconds
             longTermStorage.store('expiration',`${expiration}`)
           }
+          //console.log(expiration, Date.now())
           let now = new Date()
           now=`${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}`
           let lastUse=await longTermStorage.retrieve('lastUse')
           let freeCount=await longTermStorage.retrieve('freeCount')
           freeCount=freeCount?parseInt(freeCount):2
+          if(lastUse!==now)freeCount=2
           if(expiration<Date.now() && lastUse===now && freeCount===0)return Alert.alert('Breadwinner','You have used all free build attempts for this month.\nGo premium for unlimited access!')
           ////////////////////////////////////////////////////////////////////////////////////////////////////
 
