@@ -69,7 +69,26 @@ export default function Index() {
     <View style={styles.column}>
       <View style={{flex:1}}>
         <View style={{...styles.row,backgroundColor:'rgb(58,58,58)',padding:10,borderTopLeftRadius:20,borderTopRightRadius:20}}>
-          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{router.push({pathname:'/scanner',params:{groceryIndex:groceryIndex}})}}>
+          <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginRight:10}}  onPress={()=>{
+            if(grocery.length===0){
+              router.push({pathname:'/scanner',params:{groceryIndex:groceryIndex}})
+              return
+            }
+            Alert.alert(
+              'Breadwinner',
+              `Scan and rebuild grocery list #${groceryIndex+1}?`,
+              [
+                {
+                  text: "No"
+                },
+                {
+                  text: "Yes",
+                  onPress: async () => {router.push({pathname:'/scanner',params:{groceryIndex:groceryIndex}})},
+                },
+              ],
+              { cancelable: false } // Optional: prevents dismissing the alert by tapping outside (Android only)
+            );
+          }}>
             <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../../assets/images/scan_btn.png')}/>
           </TouchableOpacity>
           <View style={{...styles.buttonInput, flex:1}}>
@@ -259,7 +278,7 @@ export default function Index() {
 
           Alert.alert(
             'Breadwinner',
-            `${grocery.length===0?'Build this grocery list from your meal plan?':'Clear and rebuild this grocery list?'} ${(expiration<Date.now()?`\nYou have ${freeCount} free build attempt${freeCount>1?'s':''} left!`:'')}`,
+            `${grocery.length===0?`Build grocery list #${groceryIndex+1} from your meal plan?`:`Clear and rebuild grocery list #${groceryIndex+1}?`} ${(expiration<Date.now()?`\nYou have ${freeCount} free build attempt${freeCount>1?'s':''} left!`:'')}`,
             [
               {
                 text: "No",
