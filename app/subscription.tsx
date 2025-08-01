@@ -53,11 +53,11 @@ export default function Index() {
         <View style={{borderColor:'rgb(58,58,58)',borderWidth:3,height:'50%',borderRadius:25,padding:10}}>
           <Image
             style={{
-              height: 60,
+              height: 40,
               aspectRatio: 1,
               margin:'auto'
             }}
-            source={require('../assets/images/icon.png')}
+            source={require('../assets/images/premium_btn.png')}
           />
           <View style={{
             flex:1,
@@ -78,11 +78,13 @@ export default function Index() {
             {/* <Text style={{fontSize:20,margin:20}}>until</Text>
             <Text style={{fontWeight:'bold',fontSize:20}}>02/02/2032</Text> */}
           </View>
-          <TouchableOpacity style={{...styles.buttonInput,backgroundColor:'rgb(58,58,58)'}}><Text style={styles.boldText}>Unlock</Text></TouchableOpacity>
+            <TouchableOpacity style={{...styles.buttonInput,backgroundColor:'rgb(58,58,58)'}} onPress={async ()=>{
+              
+            }}><Text style={styles.boldText}>Unlock</Text></TouchableOpacity>
         </View>
       </View>
       <View style={{...styles.row,backgroundColor: 'white',paddingBottom:20}}>
-        <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.back()}}><Text style={{...styles.boldText,color:'black'}}>{'Back'}</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.typeFilter} onPress={()=>{router.back()}}><Text style={{...styles.boldText,color:'black'}}>Back</Text></TouchableOpacity>
       </View>
     </SafeAreaView>
   );
