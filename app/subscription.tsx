@@ -72,7 +72,7 @@ export default function Index() {
             <Text style={{fontSize:65}}>$6</Text>
             <Text style={{fontSize:20,margin:20}}>30 days</Text>
             <View>
-              <View style={{height:'50%',backgroundColor:'rgb(204,255,102)',width:'100%',position:'absolute',bottom:0}}/>
+              <View style={{height:'50%',backgroundColor:'rgb(254, 204, 109)',width:'100%',position:'absolute',bottom:0}}/>
               <Text style={{fontWeight:'bold',fontSize:20}}>Unlimited Access</Text>
             </View>
             {/* <Text style={{fontSize:20,margin:20}}>until</Text>
