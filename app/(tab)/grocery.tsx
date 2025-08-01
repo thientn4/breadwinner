@@ -273,7 +273,18 @@ export default function Index() {
           let freeCount=await longTermStorage.retrieve('freeCount')
           freeCount=freeCount?parseInt(freeCount):2
           if(lastUse!==now)freeCount=2
-          if(expiration<Date.now() && lastUse===now && freeCount===0)return Alert.alert('Breadwinner','You have used all 2 free build attempts for this month.\nGo premium for unlimited access!')
+          if(expiration<Date.now() && lastUse===now && freeCount===0)return Alert.alert(
+            'Breadwinner',
+            'You have used all 2 free build attempts for this month.\nGo premium for unlimited access!',[
+              {
+                text: "Later",
+              },
+              {
+                text: "Premium",
+                onPress: () => {router.navigate('/subscription')}
+              }
+            ]
+          )
           ////////////////////////////////////////////////////////////////////////////////////////////////////
 
           Alert.alert(

@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { Image, SafeAreaView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 
 const styles=StyleSheet.create({
@@ -36,13 +36,13 @@ export default function RootLayout() {
           // ignore system bar for iOS (SafeAreaView) & android (margin & padding)
           <SafeAreaView style={styles.row}>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{alert("hello")}}>
-              <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../assets/images/setting_btn.png')}/>
+              <Image style={{...styles.buttonIcon, height:'50%'}} source={require('../assets/images/question_btn.png')}/>
             </TouchableOpacity>
             <View style={{...styles.buttonInput,borderRadius:0}}>
               <Image style={{height:'100%',width:undefined, aspectRatio:1.2}} source={require('../assets/images/transparent_icon.png')}/>
             </View>
-            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{alert("hello")}}>
-              <Image style={styles.buttonIcon} source={require('../assets/images/question_btn.png')}/>
+            <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{router.navigate('/subscription')}}>
+              <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../assets/images/setting_btn.png')}/>
             </TouchableOpacity>
           </SafeAreaView>
         ),
@@ -61,6 +61,10 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="scanner"
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="subscription"
           options={{headerShown: false}}
         />
       </Stack>
