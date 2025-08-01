@@ -42,7 +42,7 @@ export default function RootLayout() {
               <Image style={{height:'100%',width:undefined, aspectRatio:1.2}} source={require('../assets/images/transparent_icon.png')}/>
             </View>
             <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,borderColor:'black'}} onPress={()=>{router.navigate('/subscription')}}>
-              <Image style={{...styles.buttonIcon, height:'60%'}} source={require('../assets/images/setting_btn.png')}/>
+              <Image style={{...styles.buttonIcon, height:'70%'}} source={require('../assets/images/premium_btn.png')}/>
             </TouchableOpacity>
           </SafeAreaView>
         ),
