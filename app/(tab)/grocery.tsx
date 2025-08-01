@@ -246,23 +246,20 @@ export default function Index() {
           else{
             expiration=Date.now()+1 * 24 * 60 * 60 * 1000 // 1 days in milliseconds
             longTermStorage.store('expiration',`${expiration}`)
+            longTermStorage.remove('freeCount') //freeCount and premium must be reset at the same time
           }
-          //console.log(expiration, Date.now())
           let now = new Date()
           now=`${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}`
           let lastUse=await longTermStorage.retrieve('lastUse')
           let freeCount=await longTermStorage.retrieve('freeCount')
           freeCount=freeCount?parseInt(freeCount):2
           if(lastUse!==now)freeCount=2
-          if(expiration<Date.now() && lastUse===now && freeCount===0)return Alert.alert('Breadwinner','You have used all free build attempts for this month.\nGo premium for unlimited access!')
+          if(expiration<Date.now() && lastUse===now && freeCount===0)return Alert.alert('Breadwinner','You have used all 2 free build attempts for this month.\nGo premium for unlimited access!')
           ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-          
           Alert.alert(
             'Breadwinner',
-            expiration<Date.now()
-            ?`Are you sure you want to rebuild this grocery list? You have ${freeCount} free build attempt${freeCount>1?'s':''} left!`
-            :'Are you sure you want to rebuild this grocery list?',
+            `${grocery.length===0?'Build this grocery list from your meal plan?':'Clear and rebuild this grocery list?'} ${(expiration<Date.now()?`\nYou have ${freeCount} free build attempt${freeCount>1?'s':''} left!`:'')}`,
             [
               {
                 text: "No",
