@@ -82,7 +82,7 @@ export default function Index() {
             paddingTop:0
           }}>
             {((expiration||0)<now) && <Text style={{fontSize:65}}>$6</Text>}
-            {((expiration||0)<now) && <Text style={{fontSize:20,margin:20}}>30 days</Text>}
+            {((expiration||0)<now) && <Text style={{fontSize:20,margin:20}}>{`${defaultData.premiumLength/(24 * 60 * 60 * 1000)} days`}</Text>}
             <View>
               <View style={{height:'50%',backgroundColor:'rgb(254, 204, 109)',width:'100%',position:'absolute',bottom:0}}/>
               <Text style={{fontWeight:'bold',fontSize:20}}>Unlimited Access</Text>
@@ -91,11 +91,19 @@ export default function Index() {
             {((expiration||0)>=now) && <Text style={{fontWeight:'bold',fontSize:20}}>{(new Date(expiration)).toLocaleDateString()}</Text>}
           </View>
           <TouchableOpacity style={{...styles.buttonInput,backgroundColor:'rgb(58,58,58)', opacity:((expiration||0)<now)?1:0.3}} onPress={async ()=>{
+            if(!(await longTermStorage.retrieve('expiration'))){
+              longTermStorage.store('expiration',`${Date.now()+defaultData.premiumLength}`)
+              longTermStorage.remove('freeCount') //freeCount and premium must be reset at the same time
+              alert('Premium successfully unlocked for this phone!')
+              getExpriation()
+              return
+            }
             if(((expiration||0)>=now)) return
             longTermStorage.store('expiration',`${Date.now()+defaultData.premiumLength}`)
             longTermStorage.remove('freeCount') //freeCount and premium must be reset at the same time
             alert('Premium successfully unlocked for this phone!')
-          }}><Text style={styles.boldText}>Unlock</Text></TouchableOpacity>
+            getExpriation()
+          }}><Text style={styles.boldText}>{expiration===null?'Start free trial':'Unlock'}</Text></TouchableOpacity>
         </View>
       </View>
       <View style={{...styles.row,backgroundColor: 'white',paddingBottom:20}}>
