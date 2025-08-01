@@ -54,6 +54,7 @@ export default function Index() {
         backgroundColor: 'white'
       }}>
         <QRCode value={`${timestampId}-${codeData.length}-${index}@${codeData[index]}`}/>
+        <Text style={{...styles.boldText,marginTop:20,color:'black'}}>{codeData[0][0]==='{'?'Recipe':'Grocery'}</Text>
         <View style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',maxWidth:'50%',marginTop:100}}>
           <Text suppressHighlighting={true} style={{...styles.boldText,flex:1,color:index===0?'grey':'white',textAlign:'left',marginLeft:10}} onPress={()=>{setIndex(index===0?index:index-1)}}>◀</Text>
           <Text suppressHighlighting={true} style={{...styles.boldText,marginRight:10}}>{index+1}</Text>
