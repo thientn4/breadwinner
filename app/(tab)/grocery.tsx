@@ -55,6 +55,11 @@ export default function Index() {
   const [groceryIndex,setGroceryIndex] = React.useState(0); 
   const [groceriesCount,setGroceriesCount] = React.useState(groceries.length); 
   const [todoOnly,setTodoOnly] = React.useState(false); 
+  let roundDownEpoch=(timestamp)=>{
+    const date = new Date(timestamp);
+    date.setHours(0, 0, 0, 0);
+    return date.getTime();
+  }
   useEffect(() => {
     const getGroceries = async()=>{
       let data = await longTermStorage.retrieve('groceries')
@@ -264,7 +269,7 @@ export default function Index() {
           let expiration=await longTermStorage.retrieve('expiration')
           if(expiration)expiration=parseInt(expiration)
           else{
-            expiration=Date.now()+defaultData.premiumLength
+            expiration=roundDownEpoch(Date.now()+defaultData.premiumLength)
             longTermStorage.store('expiration',`${expiration}`)
             longTermStorage.remove('freeCount') //freeCount and premium must be reset at the same time
           }

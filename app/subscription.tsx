@@ -47,6 +47,11 @@ export default function Index() {
     let data=await longTermStorage.retrieve('expiration')
     if(data)setExpiration(parseInt(data))
   }
+  let roundDownEpoch=(timestamp)=>{
+    const date = new Date(timestamp);
+    date.setHours(0, 0, 0, 0);
+    return date.getTime();
+  }
   useEffect(()=>{
     getExpriation()
   },[useIsFocused()])
@@ -92,14 +97,14 @@ export default function Index() {
           </View>
           <TouchableOpacity style={{...styles.buttonInput,backgroundColor:'rgb(58,58,58)', opacity:((expiration||0)<now)?1:0.3}} onPress={async ()=>{
             if(!(await longTermStorage.retrieve('expiration'))){
-              longTermStorage.store('expiration',`${Date.now()+defaultData.premiumLength}`)
+              longTermStorage.store('expiration',`${roundDownEpoch(Date.now()+defaultData.premiumLength)}`)
               longTermStorage.remove('freeCount') //freeCount and premium must be reset at the same time
               alert('Premium successfully unlocked for this phone!')
               getExpriation()
               return
             }
             if(((expiration||0)>=now)) return
-            longTermStorage.store('expiration',`${Date.now()+defaultData.premiumLength}`)
+            longTermStorage.store('expiration',`${roundDownEpoch(Date.now()+defaultData.premiumLength)}`)
             longTermStorage.remove('freeCount') //freeCount and premium must be reset at the same time
             alert('Premium successfully unlocked for this phone!')
             getExpriation()
