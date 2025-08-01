@@ -1,4 +1,5 @@
 export default {
+    premiumLength:1 * 24 * 60 * 60 * 1000,
     defaultRecipes:[
         {
             "name": "Chile Verde",

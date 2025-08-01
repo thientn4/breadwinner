@@ -3,6 +3,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import { Alert, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import defaultData from "../../support/defaultData";
 import * as longTermStorage from '../../support/longTermStorage';
 
 const styles=StyleSheet.create({
@@ -263,7 +264,7 @@ export default function Index() {
           let expiration=await longTermStorage.retrieve('expiration')
           if(expiration)expiration=parseInt(expiration)
           else{
-            expiration=Date.now()+1 * 24 * 60 * 60 * 1000 // 1 days in milliseconds
+            expiration=Date.now()+defaultData.premiumLength
             longTermStorage.store('expiration',`${expiration}`)
             longTermStorage.remove('freeCount') //freeCount and premium must be reset at the same time
           }

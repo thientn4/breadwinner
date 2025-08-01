@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import React, { useEffect, useState } from 'react';
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import defaultData from "../support/defaultData";
 import * as longTermStorage from '../support/longTermStorage';
 
 const styles=StyleSheet.create({
@@ -91,7 +92,7 @@ export default function Index() {
           </View>
           <TouchableOpacity style={{...styles.buttonInput,backgroundColor:'rgb(58,58,58)', opacity:((expiration||0)<now)?1:0.3}} onPress={async ()=>{
             if(((expiration||0)>=now)) return
-            longTermStorage.store('expiration',`${Date.now()+1 * 24 * 60 * 60 * 1000 }`)
+            longTermStorage.store('expiration',`${Date.now()+defaultData.premiumLength}`)
             longTermStorage.remove('freeCount') //freeCount and premium must be reset at the same time
             alert('Premium successfully unlocked for this phone!')
           }}><Text style={styles.boldText}>Unlock</Text></TouchableOpacity>
