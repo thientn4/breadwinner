@@ -70,6 +70,11 @@ export default function Index() {
       const qrTimestampId=header[0]
       const qrTotal=parseInt(header[1])
       const qrIndex=parseInt(header[2])+1
+      const payload = data.substring(divider + 1)
+      if(qrIndex===1){
+        if(groceryIndex && payload[0]!=='[') return alert('This is not QR code for a grocery list')
+        if(!groceryIndex && payload[0]!=='{') return alert('This is not QR code for a recipe')
+      }
       if(!(qrTimestampId && qrTotal && qrIndex)) return alert('Invalid QR code')
       if(timestampId && timestampId!==qrTimestampId) return alert("This QR code doesn't match previous codes")
       if(total===0 && qrIndex!==1) return alert('This is not the first QR code')
@@ -77,7 +82,6 @@ export default function Index() {
       if(qrIndex>progress+1) return alert(`This is QR code #${qrIndex}. Please use #${progress+1} first`)
       if(!timestampId)timestampId=qrTimestampId
       if(total===0)setTotal(qrTotal)
-      const payload = data.substring(divider + 1)
       finalData+=payload
       setProgress(progress+1)
       setScreenAlert('')
