@@ -41,13 +41,12 @@ const styles=StyleSheet.create({
 })
 export default function Index() {
   const now=Date.now()
-  const [expirationDate,setExpirationDate]=useState(null)
+  const [expiration,setExpiration]=useState(null)
+  let getExpriation=async ()=>{
+    let data=await longTermStorage.retrieve('expiration')
+    if(data)setExpiration(parseInt(data))
+  }
   useEffect(()=>{
-    let getExpriation=async ()=>{
-      let data=await longTermStorage.retrieve('expiration')
-      console.log(data,now)
-      if(data)setExpirationDate(parseInt(expiration))
-    }
     getExpriation()
   },[useIsFocused()])
   return (
@@ -81,20 +80,21 @@ export default function Index() {
             padding:20,
             paddingTop:0
           }}>
-            {((expirationDate||0)<now) && <Text style={{fontSize:65}}>$6</Text>}
-            {((expirationDate||0)<now) && <Text style={{fontSize:20,margin:20}}>30 days</Text>}
+            {((expiration||0)<now) && <Text style={{fontSize:65}}>$6</Text>}
+            {((expiration||0)<now) && <Text style={{fontSize:20,margin:20}}>30 days</Text>}
             <View>
               <View style={{height:'50%',backgroundColor:'rgb(254, 204, 109)',width:'100%',position:'absolute',bottom:0}}/>
               <Text style={{fontWeight:'bold',fontSize:20}}>Unlimited Access</Text>
             </View>
-            {((expirationDate||0)>=now) && <Text style={{fontSize:20,margin:20}}>until</Text>}
-            {((expirationDate||0)>=now) && <Text style={{fontWeight:'bold',fontSize:20}}>{expirationDate}</Text>}
+            {((expiration||0)>=now) && <Text style={{fontSize:20,margin:20}}>until</Text>}
+            {((expiration||0)>=now) && <Text style={{fontWeight:'bold',fontSize:20}}>{(new Date(expiration)).toLocaleDateString()}</Text>}
           </View>
-          {((expirationDate||0)<now) && <TouchableOpacity style={{...styles.buttonInput,backgroundColor:'rgb(58,58,58)'}} onPress={async ()=>{
+          <TouchableOpacity style={{...styles.buttonInput,backgroundColor:'rgb(58,58,58)', opacity:((expiration||0)<now)?1:0.3}} onPress={async ()=>{
+            if(((expiration||0)>=now)) return
             longTermStorage.store('expiration',`${Date.now()+1 * 24 * 60 * 60 * 1000 }`)
             longTermStorage.remove('freeCount') //freeCount and premium must be reset at the same time
             alert('Premium successfully unlocked for this phone!')
-          }}><Text style={styles.boldText}>Unlock</Text></TouchableOpacity>}
+          }}><Text style={styles.boldText}>Unlock</Text></TouchableOpacity>
         </View>
       </View>
       <View style={{...styles.row,backgroundColor: 'white',paddingBottom:20}}>
