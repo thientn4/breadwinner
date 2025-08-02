@@ -67,7 +67,23 @@ export default function Index() {
         Alert.alert('Breadwinner','plan updated!')
         return
       }
-    if(plan[weekday][meal].length>=defaultData.mealLimit)return Alert.alert('Breadwinner','You reached the limit of 5 recipes per meal')
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    let mealLimit=defaultData.mealLimit
+    let expiration=await longTermStorage.retrieve('expiration')
+    if(expiration)expiration=parseInt(expiration)
+    if((expiration || 0)>Date.now())mealLimit=mealLimit*5
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    if(plan[weekday][meal].length>=mealLimit)return Alert.alert(
+      'Breadwinner',
+      `You reached the limit of ${mealLimit} recipes per meal.${(expiration || 0)>Date.now()?'':`\n Go premium ${expiration?'':`with ${defaultData.premiumLength/(24 * 60 * 60 * 1000)-1}-day free trial `}to add up to ${defaultData.mealLimit*5}!`}`,[
+      {
+        text: (expiration || 0)<=Date.now()?"Later":'Ok',
+      },
+      (expiration || 0)<=Date.now() ? {
+        text: "Premium",
+        onPress: () => {router.navigate('/subscription')}
+      }:{}
+    ])
     if(serving==='' || parseInt(serving)<=0)return Alert.alert('Breadwinner','Number of servings cannot be 0')
     plan[weekday][meal].push({name:recipeName, serving:parseInt(serving)})
     longTermStorage.store('plan',JSON.stringify(plan))
