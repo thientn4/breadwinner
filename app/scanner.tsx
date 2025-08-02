@@ -2,7 +2,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Camera, CameraView } from 'expo-camera';
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect } from 'react';
-import { Alert, Image, Linking, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Linking, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as Progress from 'react-native-progress';
 import * as longTermStorage from '../support/longTermStorage';
 
@@ -184,15 +184,7 @@ export default function Index() {
         <View style={styles.buttonInput}>
           {!enableCamera && <TouchableOpacity 
             style={{...styles.buttonInput, backgroundColor:'rgb(58,58,58)',width:'50%',paddingLeft:20,paddingRight:20}} 
-            onPress={()=>{
-              if (Platform.OS === 'ios') {
-                Linking.openURL('app-settings:'); // iOS specific settings URL
-              } else {
-                // Android: You might need to use a library like react-native-permissions
-                // or IntentLauncherAndroid (if using bare workflow) for more specific settings
-                // For a general app settings page on Android, you can use:
-                Linking.openSettings(); // Opens general app settings on Android
-              }}
+            onPress={()=>{Linking.openSettings()}
             }
           >
             <Text style={styles.boldText}>Enable Camera</Text>
