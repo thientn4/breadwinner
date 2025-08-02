@@ -1,9 +1,9 @@
+import defaultData from '@/support/defaultData';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useIsFocused } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import { Alert, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import defaultData from "../../support/defaultData";
 import * as longTermStorage from '../../support/longTermStorage';
 
 const styles=StyleSheet.create({
@@ -266,22 +266,17 @@ export default function Index() {
         </View>
         <TouchableOpacity style={{...styles.buttonInput,aspectRatio:1,marginLeft:10}}  onPress={async ()=>{
           /////////////////////////////////////////////////////////////////////////////////////////////////////
-          let expiration=await longTermStorage.retrieve('expiration')
-          if(expiration)expiration=parseInt(expiration)
-          else{
-            expiration=roundDownEpoch(Date.now()+defaultData.premiumLength)
-            longTermStorage.store('expiration',`${expiration}`)
-            longTermStorage.remove('freeCount') //freeCount and premium must be reset at the same time
-          }
           let now = new Date()
           now=`${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}`
           let lastUse=await longTermStorage.retrieve('lastUse')
           let freeCount=await longTermStorage.retrieve('freeCount')
-          freeCount=freeCount?parseInt(freeCount):2
-          if(lastUse!==now)freeCount=2
-          if(expiration<Date.now() && lastUse===now && freeCount===0)return Alert.alert(
+          freeCount=freeCount?parseInt(freeCount):defaultData.monthlyFreeCount
+          if(lastUse!==now)freeCount=defaultData.monthlyFreeCount
+          let expiration=await longTermStorage.retrieve('expiration')
+          if(expiration)expiration=parseInt(expiration)
+          if((expiration || 0)<Date.now() && lastUse===now && freeCount===0)return Alert.alert(
             'Breadwinner',
-            'You have used all 2 free build attempts for this month.\nGo premium for unlimited access!',[
+            `You have used all 2 free build attempts this month.\n Go premium ${expiration?'':`with ${defaultData.premiumLength/(24 * 60 * 60 * 1000)-1}-day free trial `}for unlimited grocery build!`,[
               {
                 text: "Later",
               },
@@ -295,7 +290,7 @@ export default function Index() {
 
           Alert.alert(
             'Breadwinner',
-            `${grocery.length===0?`Build grocery list #${groceryIndex+1} from your meal plan?`:`Clear and rebuild grocery list #${groceryIndex+1}?`} ${(expiration<Date.now()?`\nYou have ${freeCount} free build attempt${freeCount>1?'s':''} left!`:'')}`,
+            `${grocery.length===0?`Build grocery list #${groceryIndex+1} from your meal plan?`:`Clear and rebuild grocery list #${groceryIndex+1}?`} ${(expiration<Date.now()?`\nYou have ${freeCount} free build attempt${freeCount>1?'s':''} left this month!`:'')}`,
             [
               {
                 text: "No",
@@ -344,7 +339,7 @@ export default function Index() {
                   setGrocery(groceryList)
                   longTermStorage.store('groceries',JSON.stringify(groceries))
                   ////////////////////////////////////////////////////////////////////////////////////////////////////
-                  if(expiration<Date.now()){
+                  if((expiration || 0)<Date.now()){
                     longTermStorage.store('lastUse',now)
                     longTermStorage.store('freeCount',JSON.stringify(Math.max(freeCount-1,0)))
                   }
