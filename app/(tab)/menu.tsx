@@ -67,7 +67,7 @@ export default function Index() {
         Alert.alert('Breadwinner','plan updated!')
         return
       }
-    if(plan[weekday][meal].length>=5)return Alert.alert('Breadwinner','You reached the limit of 5 recipes per meal')
+    if(plan[weekday][meal].length>=defaultData.mealLimit)return Alert.alert('Breadwinner','You reached the limit of 5 recipes per meal')
     if(serving==='' || parseInt(serving)<=0)return Alert.alert('Breadwinner','Number of servings cannot be 0')
     plan[weekday][meal].push({name:recipeName, serving:parseInt(serving)})
     longTermStorage.store('plan',JSON.stringify(plan))

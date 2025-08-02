@@ -1,4 +1,5 @@
 export default {
+    mealLimit:2,
     monthlyFreeCount:2,
     premiumLength:2 * 24 * 60 * 60 * 1000,
     defaultRecipes:[
