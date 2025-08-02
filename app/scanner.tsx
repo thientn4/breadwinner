@@ -168,7 +168,7 @@ export default function Index() {
           borderRadius:20,
           overflow:'hidden'
         }}>
-          <CameraView
+          {enableCamera && <CameraView
             onBarcodeScanned={handleBarCodeScanned}
             barcodeScannerSettings={{
               barcodeTypes: ["qr"],
@@ -178,7 +178,7 @@ export default function Index() {
               alignItems:'center',
               justifyContent:'space-around'
             }}
-          />
+          />}
         </View>}
         <Text style={{color:'grey',paddingTop:20,width: '75%',textAlign:'center',height:100,marginBottom:30}}>{screenAlert}</Text>
         <View style={styles.buttonInput}>
